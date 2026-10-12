@@ -36,7 +36,16 @@ One zip file, uploaded to Claude. No server, no API key, no cost.
    investor's document list, your own policy. Each item is marked met, missing, unknown or
    needs review, with the evidence and the fix.
 6. **Builds a financial model** if the company has none: a 5-year, three-statement Excel model
-   with live formulas and a funding check.
+   with live formulas and a funding check. It also:
+   - **Switches scenarios.** One cell moves the whole model between the base plan, a bad year and
+     a good year.
+   - **Runs stress tests.** Prices −10%, volumes −20%, costs up, customers paying later, rates up,
+     and a 30% currency fall.
+   - **Finds breaking points,** e.g. "a 2% price fall leaves repayments uncovered".
+   - **Handles currency risk.** It models in local currency with loans or export sales in dollars
+     or euros, shows exchange losses, and spots natural hedges.
+   - **Suggests loan structures.** It finds the tenor, grace period, amount or currency that would
+     pass the lender's test, both in the plan and in a bad year.
 7. **Reviews an existing model** in two ways:
    - **Mechanics:** formula errors, numbers typed over formulas, broken patterns, hidden
      assumptions, and a balance sheet that doesn't balance.
@@ -45,8 +54,10 @@ One zip file, uploaded to Claude. No server, no API key, no cost.
 8. **Writes an investor-targeting memo** with a readiness plan and next steps.
 
 Example from the included sample company: it plans to raise **$500K**, but its own cash flow
-shows a peak need of about **$182K**. Debt service cover also falls to **1.04x** in 2028,
-against a 1.25x lender minimum. The agent flags both and suggests fixes.
+shows a peak need of about **$182K**. Debt service cover is **1.04x** in 2028, against a 1.25x
+lender minimum, and a **2%** fall in prices would leave repayments uncovered. The same business
+modelled in cedis, with a dollar loan and dollar exports, holds up better: its export revenue
+hedges the loan. Borrowing **55%** of the amount would pass even in a bad year.
 
 ## Install
 
@@ -102,7 +113,7 @@ For structured input, use the templates in
 | `match_funders.py` | Rank funders from your list, the built-in list and live research. Shows score breakdown, readiness gaps, documents, sources and conflicts |
 | `pre_mortem.py` | Likely objections for one funder or funder type, with how to answer and evidence to prepare |
 | `check_checklist.py` | Test the company against any checklist |
-| `build_model.py` | Build the Excel financial model from assumptions |
+| `build_model.py` | Build the Excel financial model from assumptions, with scenarios, stress tests, breaking points and loan options |
 | `review_model.py` | Mechanical review of any Excel model, or a funder-style review of its numbers |
 
 ### Matching method
@@ -117,7 +128,10 @@ unlock it). Regions cover every country.
 ### Financial model conventions
 
 Annual periods, 3–10 years. Loans are drawn at the start of the drawdown year and repaid in equal
-instalments after the grace period. Interest is charged on the balance outstanding during the
+instalments after the grace period. Items in a foreign currency use each year's exchange rate, and
+loans are revalued each year, with the change shown as an exchange loss. Scenario shocks apply to
+every year; the Excel file and the agent's stress tests use the same engine and are checked
+against each other. Interest is charged on the balance outstanding during the
 year, so there are no circular references. Depreciation is straight line. Tax is charged only on
 positive profit, with no loss carry-forward. No dividends. Full list:
 `skill/investor-fit-advisor/references/assumptions.md`.
@@ -135,7 +149,7 @@ A new version of the zip picks up the changes.
 ```bash
 git clone https://github.com/EMMANUEL-LAMPTEY-96/investor-fit && cd investor-fit
 pip install -r requirements.txt pytest
-pytest -q                          # 64 tests (Excel recalculation tests need LibreOffice)
+pytest -q                          # 85 tests (Excel recalculation tests need LibreOffice)
 python scripts/package_skill.py    # rebuild the skill zip and the Claude Code plugin (commit both)
 ```
 

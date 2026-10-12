@@ -14,6 +14,7 @@ Optional company facts used here (beyond the profile; leave out what is unknown)
   dscr_min                                      lowest debt service cover in the model
   debt_to_ebitda, debt_to_equity                after the new funding
   revenue_currency, loan_currency               e.g. "GHS", "USD"
+  foreign_revenue_share                         share of revenue earned in foreign currency, e.g. 0.8
   revenue_cagr                                  projected average growth, e.g. 0.6
   loan_tenor_years
   has_board, founder_dependent, management_team_size, tax_clearance_current, esg_policy,
@@ -141,8 +142,15 @@ def _rules() -> dict[str, Rule]:
         rc, lc = (_f(c, "revenue_currency") or "").upper(), (_f(c, "loan_currency") or "").upper()
         if not rc or not lc:
             return "to_prepare", "Currency of revenue and of the loan not stated"
-        if lc in HARD_CURRENCIES and rc != lc and not c.get("has_export_history"):
-            return "flagged", f"Loan in {lc} but revenue in {rc}; a currency fall raises the repayments"
+        share = _f(c, "foreign_revenue_share")  # share of revenue earned in foreign currency, if known
+        if lc in HARD_CURRENCIES and rc != lc:
+            if share is not None:
+                if share < 0.5:
+                    return "flagged", (f"Loan in {lc} but only {share:.0%} of revenue is in foreign currency; "
+                                       f"a fall of the {rc} raises the repayments")
+                return None, None
+            if not c.get("has_export_history"):
+                return "flagged", f"Loan in {lc} but revenue in {rc}; a currency fall raises the repayments"
         return None, None
 
     def ticket(c, f, ins):

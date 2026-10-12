@@ -1,6 +1,6 @@
 [project]
 name = "investor-fit-agent"
-version = "0.4.0"
+version = "0.5.0"
 description = "Capital-raising advisor for Claude: match companies to funders worldwide, check any checklist, and build or review financial models."
 readme = "README.md"
 requires-python = ">=3.11"

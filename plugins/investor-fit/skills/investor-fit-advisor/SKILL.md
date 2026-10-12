@@ -119,15 +119,34 @@ from public sources: DFIs, SME finance research and lender guidance.
 
 ### No model yet: build one
 
-1. Collect assumptions (questions and format: [references/assumptions.md](references/assumptions.md)). Use uploaded accounts
-   for the opening balance sheet and history. Ask a few questions at a time. If the user does not
-   know a value, propose one, say why, and mark it as your suggestion.
+1. Collect assumptions (questions and format: [references/assumptions.md](references/assumptions.md)).
+   Use uploaded accounts for the opening balance sheet and history. Ask a few questions at a time.
+   If the user does not know a value, propose one, say why, and mark it as your suggestion.
+   - **Currency:** model in the company's own currency. If the loan, or some sales, are in another
+     currency, set that item's `currency`, and `fx.rate` (local per 1 foreign unit today) and
+     `fx.depreciation` (expected yearly fall; use the currency's recent history and say so).
+   - **Scenarios:** the default downside is a realistic bad year (prices −10%, volumes −15%,
+     direct costs +3 points, fixed costs +5%, customers 15 days slower, rates +2 points, a 20%
+     currency fall). Adjust `scenarios` to the sector if the user or the evidence suggests it.
 2. Save `assumptions.json`, then run
    `python3 ${CLAUDE_SKILL_DIR}/scripts/build_model.py assumptions.json "<Company> financial model.xlsx"`.
-   (`python3 ${CLAUDE_SKILL_DIR}/scripts/build_model.py --example example.json` writes a filled-in example.)
-3. Give the user the Excel file. Explain plainly: what the model shows, whether the amount asked
-   matches the funding need, whether a loan can be repaid (DSCR against the funder's minimum), and
-   the review findings with fixes. Offer to change assumptions and rebuild.
+   (`--example` / `--example-fx` write filled-in examples.)
+3. Read the output and give the user the Excel file. Explain plainly:
+   - what the plan shows, and whether the amount asked matches the funding need;
+   - **can the loan be repaid** (debt cover against the lender minimum) in the base case;
+   - **scenarios and stress tests**: which shocks break the plan, and the **breaking points**
+     (e.g. "a 2% price fall leaves repayments uncovered");
+   - **currency risk**: exchange losses and debt cover if the local currency falls; whether export
+     revenue in the loan's currency protects the company (a natural hedge);
+   - **loan options** that would pass (base case at the lender minimum, downside at 1.00x) —
+     longer tenor, grace period, smaller amount, or local-currency borrowing if a local rate is
+     given in `new_debt.local_currency_rate`;
+   - the review findings, with fixes. Offer to change assumptions and rebuild.
+4. The Excel file has a **Scenarios** sheet: setting cell C4 to 1, 2 or 3 switches the whole model
+   between base, downside and upside. The **Stress tests** sheet lists the results above.
+5. `build_model.py` also writes `<file>_facts.json`. Pass it to `pre_mortem.py --facts` or
+   `match_funders.py --facts` so the objections use the model's own debt cover, currencies and
+   growth.
 
 ### Has a model: review it
 

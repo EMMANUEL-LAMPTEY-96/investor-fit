@@ -57,7 +57,7 @@ mcp = MCPServer(
     description="Match companies to funders worldwide, check readiness, and build or review financial models.",
     instructions=INSTRUCTIONS,
     website_url="https://github.com/EMMANUEL-LAMPTEY-96/investor-fit",
-    version="0.4.0",
+    version="0.5.0",
 )
 
 READ_ONLY = ToolAnnotations(readOnlyHint=True, openWorldHint=False, idempotentHint=True)
@@ -171,6 +171,7 @@ def project_financials(assumptions: dict[str, Any]) -> dict[str, Any]:
     from .finmodel.assumptions import AssumptionError
     from .finmodel.engine import funding_analysis, run
     from .finmodel.review import assess_projections, from_engine
+    from .finmodel.stress import facts_from_model, full_analysis, stress_findings
 
     try:
         result = run(assumptions)
@@ -188,7 +189,10 @@ def project_financials(assumptions: dict[str, Any]) -> dict[str, Any]:
         "cash_flow": {k: r(cf[k]) for k in ("operating", "investing", "financing")},
         "ratios": {k: r(v) for k, v in result["ratios"].items()},
         "funding_analysis": funding_analysis(assumptions),
-        "review": assess_projections(from_engine(result)),
+        **full_analysis(assumptions),
+        "review": {**(rv := assess_projections(from_engine(result))),
+                   "findings": rv["findings"] + stress_findings(assumptions)},
+        "facts_for_pre_mortem": facts_from_model(assumptions),
         "disclaimer": "Projections built from the company's own assumptions. Not audited; not financial advice.",
     }
 

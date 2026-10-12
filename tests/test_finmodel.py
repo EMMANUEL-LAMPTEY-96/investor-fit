@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from investor_fit.finmodel.assumptions import EXAMPLE, AssumptionError, normalize
+from investor_fit.finmodel.assumptions import EXAMPLE, EXAMPLE_FX, AssumptionError, normalize
 from investor_fit.finmodel.engine import funding_analysis, run
 from investor_fit.finmodel.review import assess_projections, from_engine, scan_workbook
 
@@ -63,17 +63,35 @@ def test_bad_assumptions_are_explained():
 
 # ---------- Excel matches the engine
 
+CASES = [("seed1", 1), ("seed7", 7), ("fx", "fx")]
+
+
+def _case(key):
+    if key == "fx":
+        return copy.deepcopy(EXAMPLE_FX)
+    a = random_assumptions(key)
+    if key == 7:  # also exercise a foreign-currency loan on a random case
+        a.update(currency="KES", fx={"rate": 130, "depreciation": 0.06})
+        a["new_debt"]["currency"] = "USD"
+        a["new_debt"]["amount"] = 4000
+    return a
+
+
 @pytest.mark.skipif(not SOFFICE, reason="LibreOffice not installed")
-@pytest.mark.parametrize("seed", [1, 7, 13])
-def test_excel_formulas_match_engine(tmp_path, seed):
-    a = random_assumptions(seed)
+@pytest.mark.parametrize("name,key", CASES)
+@pytest.mark.parametrize("selector,scenario", [(1, "base"), (2, "downside"), (3, "upside")])
+def test_excel_formulas_match_engine(tmp_path, name, key, selector, scenario):
+    a = _case(key)
     src = tmp_path / "model.xlsx"
     build_workbook(a, str(src))
+    wb = openpyxl.load_workbook(src)
+    wb["Scenarios"]["C4"] = selector
+    wb.save(src)
     out = tmp_path / "out"
     subprocess.run([SOFFICE, "--headless", "--calc", "--convert-to", "xlsx:Calc MS Excel 2007 XML",
                     "--outdir", str(out), str(src)], check=True, capture_output=True, timeout=180)
     wb = openpyxl.load_workbook(out / "model.xlsx", data_only=True)
-    e = run(a)
+    e = run(a, scenario=scenario)
     n = e["assumptions"]["years"]
 
     def row(sheet, label):
@@ -87,16 +105,23 @@ def test_excel_formulas_match_engine(tmp_path, seed):
         ("Income", "Total revenue", e["income_statement"]["revenue"]),
         ("Income", "Total depreciation", e["income_statement"]["depreciation"]),
         ("Income", "Interest", e["income_statement"]["interest"]),
+        ("Income", "Exchange loss on foreign-currency loans", e["income_statement"]["fx_loss"]),
         ("Income", "Net profit", e["income_statement"]["net_income"]),
         ("Balance", "Cash", e["balance_sheet"]["cash"]),
         ("Balance", "Debt", e["balance_sheet"]["debt"]),
         ("Balance", "Check (should be zero)", [0] * n),
+        ("Ratios", "Debt service cover (DSCR)", [x if x is not None else "n/a" for x in e["ratios"]["dscr"]]),
     ]:
         got = row(sheet, label)
-        assert got == pytest.approx(expected, abs=0.01), f"{sheet}/{label}"
+        if label.startswith("Debt service"):
+            assert [g if isinstance(g, str) else round(g, 6) for g in got] == \
+                   [x if isinstance(x, str) else round(x, 6) for x in expected], f"{sheet}/{label}"
+        else:
+            assert got == pytest.approx(expected, abs=0.01), f"{sheet}/{label}"
 
-    # The reviewer finds nothing wrong with a model we built.
-    assert scan_workbook(str(out / "model.xlsx"))["findings"] == []
+    if scenario == "base" and name != "fx":
+        # The reviewer finds nothing wrong with a model we built.
+        assert scan_workbook(str(out / "model.xlsx"))["findings"] == []
 
 
 # ---------- reviewer
