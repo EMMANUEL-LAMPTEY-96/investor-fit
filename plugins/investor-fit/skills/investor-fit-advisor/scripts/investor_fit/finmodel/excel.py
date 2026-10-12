@@ -17,7 +17,7 @@ from openpyxl.comments import Comment
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
-from .assumptions import normalize
+from .assumptions import SHOCK_KEYS, normalize
 
 FONT = "Arial"
 BLUE = Font(name=FONT, size=10, color="0000FF")
@@ -38,6 +38,24 @@ NUM2 = '#,##0.00;(#,##0.00);"-"'
 PCT = '0.0%;(0.0%);"-"'
 MULT = '0.00"x";(0.00"x");"-"'
 INT = "0"
+TXT = "@"
+
+SC = "Scenarios"
+SHOCK_ROW0 = 8  # first shock row on the Scenarios sheet
+SHOCK_LABELS = {
+    "price": ("Selling prices", "% change", PCT),
+    "volume": ("Volumes sold", "% change", PCT),
+    "cogs_pts": ("Direct costs, % of revenue", "+ points", PCT),
+    "fixed_costs": ("Fixed costs", "% change", PCT),
+    "receivable_days": ("Customer payment days", "+ days", INT),
+    "interest_pts": ("Interest rates", "+ points", PCT),
+    "fx_devaluation": ("Fall of the local currency in year 1", "%", PCT),
+}
+
+
+def SH(key: str) -> str:
+    """Absolute address of the shock in use (Scenarios sheet, column F)."""
+    return f"{SC}!$F${SHOCK_ROW0 + SHOCK_KEYS.index(key)}"
 
 FIRST_YEAR_COL = 4  # column D = year 1; column C = scalar input or opening balance
 
@@ -75,8 +93,13 @@ class Layout:
         return r if sheet == here else f"{sheet}!{r}"
 
 
-def build_workbook(raw: dict[str, Any], path: str) -> str:
+def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None) -> str:
+    """analysis: output of stress.full_analysis(raw); computed here if not given."""
     a = normalize(raw)
+    if analysis is None:
+        from .stress import full_analysis
+
+        analysis = full_analysis(raw)
     n = a["years"]
     L = Layout(n)
     S = "Assumptions"
@@ -92,10 +115,20 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         ("line", "first_year", "First projection year", "year", ("C", a["first_year"], INT), None),
         ("line", "idx", "Year number", "#", None, ("const", list(range(1, n + 1)), INT)),
         ("line", "tax_rate", "Corporate tax rate", "%", ("C", a["tax_rate"], PCT), None),
+        ("section", "Currency (rows below only matter if a loan or a sale is in a foreign currency)"),
+        ("line", "ccy", "Model currency (all figures are in this)", "code", ("C", a["currency"], TXT), None),
+        ("line", "fccy", "Foreign currency", "code", ("C", a["foreign_currency"] or a["currency"], TXT), None),
+        ("line", "fx_spot", "Exchange rate at start (model currency per 1 foreign)", "rate",
+         ("C", a["fx"]["rate"], NUM2), None),
+        ("line", "fx_dep", "Expected yearly fall of the model currency", "%", None, ("inputs", a["fx"]["depreciation"], PCT)),
+        ("line", "fx", "Exchange rate used (includes the scenario)", "rate", None,
+         ("formula", lambda t, r: (f"=$C${L.rows[(S, 'fx_spot')]}*(1+{SH('fx_devaluation')})*(1+{col(1)}{L.rows[(S, 'fx_dep')]})"
+                                   if t == 1 else f"={col(t - 1)}{r}*(1+{col(t)}{L.rows[(S, 'fx_dep')]})"), NUM2)),
         ("section", "Revenue"),
     ]
     for i, s in enumerate(a["revenue_streams"], 1):
         asum += [
+            ("line", f"s{i}_ccy", f"{s['name']}: currency of the price", "code", ("C", s["currency"], TXT), None),
             ("line", f"s{i}_vol_g", f"{s['name']}: volume growth", "%", None, ("growth", s["volume_growth"], PCT)),
             ("line", f"s{i}_vol", f"{s['name']}: volume", s["unit"], None, ("grow", s["volume"], f"s{i}_vol_g", NUM)),
             ("line", f"s{i}_price_g", f"{s['name']}: price growth", "%", None, ("growth", s["price_growth"], PCT)),
@@ -132,11 +165,13 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         ("line", "ob_ppe", "Property, plant and equipment (net)", a["currency"], ("C", a["opening_balance"]["ppe_net"], NUM), None),
         ("line", "ob_ap", "Payables", a["currency"], ("C", a["opening_balance"]["payables"], NUM), None),
         ("section", "Existing debt"),
-        ("line", "ed_bal", "Outstanding balance", a["currency"], ("C", a["existing_debt"]["balance"], NUM), None),
+        ("line", "ed_bal", "Outstanding balance (in the loan's currency)", "loan ccy", ("C", a["existing_debt"]["balance"], NUM), None),
+        ("line", "ed_ccy", "Currency of the loan", "code", ("C", a["existing_debt"]["currency"], TXT), None),
         ("line", "ed_rate", "Interest rate", "%", ("C", a["existing_debt"]["interest_rate"], PCT), None),
         ("line", "ed_rem", "Years left to repay", "years", ("C", a["existing_debt"]["remaining_years"], INT), None),
         ("section", "New funding sought"),
-        ("line", "nd_amt", "New loan amount", a["currency"], ("C", a["new_debt"]["amount"], NUM), None),
+        ("line", "nd_ccy", "Currency of the new loan", "code", ("C", a["new_debt"]["currency"], TXT), None),
+        ("line", "nd_amt", "New loan amount (in the loan's currency)", "loan ccy", ("C", a["new_debt"]["amount"], NUM), None),
         ("line", "nd_rate", "New loan interest rate", "%", ("C", a["new_debt"]["interest_rate"], PCT), None),
         ("line", "nd_tenor", "New loan tenor (incl. grace)", "years", ("C", a["new_debt"]["tenor_years"], INT), None),
         ("line", "nd_grace", "Grace period (interest only)", "years", ("C", a["new_debt"]["grace_years"], INT), None),
@@ -160,18 +195,21 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
     I = "Income"
     inc: list = [("section", "Revenue")]
     for i, s in enumerate(a["revenue_streams"], 1):
-        inc.append(("line", f"rev{i}", s["name"], lambda t, i=i: f"={A(f's{i}_vol', t, I)}*{A(f's{i}_price', t, I)}", NUM, None))
+        inc.append(("line", f"rev{i}", s["name"], lambda t, i=i: (
+            f"={A(f's{i}_vol', t, I)}*(1+{SH('volume')})*{A(f's{i}_price', t, I)}*(1+{SH('price')})"
+            f"*IF({A(f's{i}_ccy', None, I)}={A('ccy', None, I)},1,{A('fx', t, I)})"), NUM, None))
     rev_keys = [f"rev{i}" for i in range(1, len(a["revenue_streams"]) + 1)]
     inc += [
         ("line", "revenue", "Total revenue", lambda t: "=" + "+".join(L.a(I, k, t, I) for k in rev_keys), NUM, "total"),
-        ("line", "cogs", "Direct costs (COGS)", lambda t: f"={L.a(I, 'revenue', t, I)}*{A('cogs_pct', t, I)}", NUM, None),
+        ("line", "cogs", "Direct costs (COGS)",
+         lambda t: f"={L.a(I, 'revenue', t, I)}*({A('cogs_pct', t, I)}+{SH('cogs_pts')})", NUM, None),
         ("line", "gross", "Gross profit", lambda t: f"={L.a(I, 'revenue', t, I)}-{L.a(I, 'cogs', t, I)}", NUM, "total"),
         ("section", "Operating costs"),
         ("line", "varopex", "Variable operating costs", lambda t: f"={L.a(I, 'revenue', t, I)}*{A('varopex_pct', t, I)}", NUM, None),
     ]
     fkeys = []
     for i, f in enumerate(a["fixed_costs"], 1):
-        inc.append(("line", f"fix{i}", f["name"], lambda t, i=i: f"={A(f'f{i}_amt', t, I)}", NUM, "link"))
+        inc.append(("line", f"fix{i}", f["name"], lambda t, i=i: f"={A(f'f{i}_amt', t, I)}*(1+{SH('fixed_costs')})", NUM, "link"))
         fkeys.append(f"fix{i}")
     inc += [
         ("line", "opex", "Total operating costs",
@@ -185,7 +223,9 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         ("line", "dep", "Total depreciation", lambda t: f"={L.a(I, 'dep_old', t, I)}+{L.a(I, 'dep_new', t, I)}", NUM, None),
         ("line", "ebit", "Operating profit (EBIT)", lambda t: f"={L.a(I, 'ebitda', t, I)}-{L.a(I, 'dep', t, I)}", NUM, "total"),
         ("line", "interest", "Interest", lambda t: f"={L.a('Debt', 'int_total', t, I)}", NUM, "link"),
-        ("line", "ebt", "Profit before tax", lambda t: f"={L.a(I, 'ebit', t, I)}-{L.a(I, 'interest', t, I)}", NUM, "total"),
+        ("line", "fxloss", "Exchange loss on foreign-currency loans", lambda t: f"={L.a('Debt', 'fx_total', t, I)}", NUM, "link"),
+        ("line", "ebt", "Profit before tax",
+         lambda t: f"={L.a(I, 'ebit', t, I)}-{L.a(I, 'interest', t, I)}-{L.a(I, 'fxloss', t, I)}", NUM, "total"),
         ("line", "tax", "Tax", lambda t: f"=MAX(0,{L.a(I, 'ebt', t, I)})*{A('tax_rate', None, I)}", NUM, None),
         ("line", "ni", "Net profit", lambda t: f"={L.a(I, 'ebt', t, I)}-{L.a(I, 'tax', t, I)}", NUM, "grand"),
     ]
@@ -194,8 +234,29 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
     # ------------------------------------------------------------------ Debt
     D = "Debt"
     prev = lambda key, t: (None if t == 1 else L.a(D, key, t - 1, D))  # noqa: E731
+    def rates(prefix):
+        """Exchange-rate rows for one loan: start-of-year and during-year rates (1 if same currency)."""
+        same = f"{A(prefix + '_ccy', None, D)}={A('ccy', None, D)}"
+        return [
+            ("line", f"{prefix}_f0", "Exchange rate at start of year",
+             lambda t: (f"=IF({same},1,{A('fx_spot', None, D)})" if t == 1
+                        else f"=IF({same},1,{A('fx', t - 1, D)})"), NUM2, None),
+            ("line", f"{prefix}_f", "Exchange rate during year", lambda t: f"=IF({same},1,{A('fx', t, D)})", NUM2, None),
+        ]
+
+    def local(prefix):
+        g = lambda k, t: L.a(D, f"{prefix}_{k}", t, D)  # noqa: E731
+        return [
+            ("line", f"{prefix}_draw_l", "Drawdown", lambda t: f"={g('draw', t)}*{g('f0', t)}", NUM, None),
+            ("line", f"{prefix}_int_l", "Interest", lambda t: f"={g('int', t)}*{g('f', t)}", NUM, None),
+            ("line", f"{prefix}_rep_l", "Repayment", lambda t: f"={g('rep', t)}*{g('f', t)}", NUM, None),
+            ("line", f"{prefix}_close_l", "Closing balance", lambda t: f"={g('close', t)}*{g('f', t)}", NUM, "total"),
+            ("line", f"{prefix}_fx", "Exchange loss (revaluation)",
+             lambda t: f"=({g('open', t)}+{g('draw', t)})*({g('f', t)}-{g('f0', t)})", NUM, None),
+        ]
+
     debt: list = [
-        ("section", "New loan"),
+        ("section", "New loan, in the loan's currency"),
         ("line", "nd_open", "Opening balance", lambda t: "=0" if t == 1 else f"={prev('nd_close', t)}", NUM, None),
         ("line", "nd_draw", "Drawdown", lambda t: f"=IF({idx(t, D)}={A('nd_year', None, D)},{A('nd_amt', None, D)},0)", NUM, None),
         ("line", "nd_due", "Scheduled repayment",
@@ -205,19 +266,29 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         ("line", "nd_rep", "Repayment", lambda t: f"=MIN({L.a(D, 'nd_open', t, D)}+{L.a(D, 'nd_draw', t, D)},{L.a(D, 'nd_due', t, D)})", NUM, None),
         ("line", "nd_close", "Closing balance",
          lambda t: f"={L.a(D, 'nd_open', t, D)}+{L.a(D, 'nd_draw', t, D)}-{L.a(D, 'nd_rep', t, D)}", NUM, "total"),
-        ("line", "nd_int", "Interest", lambda t: f"=({L.a(D, 'nd_open', t, D)}+{L.a(D, 'nd_draw', t, D)})*{A('nd_rate', None, D)}", NUM, None),
-        ("section", "Existing debt"),
+        ("line", "nd_int", "Interest",
+         lambda t: f"=({L.a(D, 'nd_open', t, D)}+{L.a(D, 'nd_draw', t, D)})*MAX(0,{A('nd_rate', None, D)}+{SH('interest_pts')})", NUM, None),
+        *rates("nd"),
+        ("section", "New loan, in the model currency"),
+        *local("nd"),
+        ("section", "Existing debt, in the loan's currency"),
         ("line", "ed_open", "Opening balance", lambda t: f"={A('ed_bal', None, D)}" if t == 1 else f"={prev('ed_close', t)}", NUM, None),
+        ("line", "ed_draw", "Drawdown", lambda t: "=0", NUM, None),
         ("line", "ed_rep", "Repayment",
          lambda t: (f"=MIN({L.a(D, 'ed_open', t, D)},IF(AND({A('ed_rem', None, D)}>0,{idx(t, D)}<={A('ed_rem', None, D)}),"
                     f"{A('ed_bal', None, D)}/{A('ed_rem', None, D)},0))"), NUM, None),
         ("line", "ed_close", "Closing balance", lambda t: f"={L.a(D, 'ed_open', t, D)}-{L.a(D, 'ed_rep', t, D)}", NUM, "total"),
-        ("line", "ed_int", "Interest", lambda t: f"={L.a(D, 'ed_open', t, D)}*{A('ed_rate', None, D)}", NUM, None),
-        ("section", "Totals"),
-        ("line", "int_total", "Total interest", lambda t: f"={L.a(D, 'nd_int', t, D)}+{L.a(D, 'ed_int', t, D)}", NUM, None),
-        ("line", "prin_total", "Total principal repaid", lambda t: f"={L.a(D, 'nd_rep', t, D)}+{L.a(D, 'ed_rep', t, D)}", NUM, None),
+        ("line", "ed_int", "Interest",
+         lambda t: f"={L.a(D, 'ed_open', t, D)}*MAX(0,{A('ed_rate', None, D)}+{SH('interest_pts')})", NUM, None),
+        *rates("ed"),
+        ("section", "Existing debt, in the model currency"),
+        *local("ed"),
+        ("section", "Totals, in the model currency"),
+        ("line", "int_total", "Total interest", lambda t: f"={L.a(D, 'nd_int_l', t, D)}+{L.a(D, 'ed_int_l', t, D)}", NUM, None),
+        ("line", "prin_total", "Total principal repaid", lambda t: f"={L.a(D, 'nd_rep_l', t, D)}+{L.a(D, 'ed_rep_l', t, D)}", NUM, None),
         ("line", "ds_total", "Total debt service", lambda t: f"={L.a(D, 'int_total', t, D)}+{L.a(D, 'prin_total', t, D)}", NUM, "total"),
-        ("line", "debt_total", "Total debt outstanding", lambda t: f"={L.a(D, 'nd_close', t, D)}+{L.a(D, 'ed_close', t, D)}", NUM, "grand"),
+        ("line", "fx_total", "Total exchange loss", lambda t: f"={L.a(D, 'nd_fx', t, D)}+{L.a(D, 'ed_fx', t, D)}", NUM, None),
+        ("line", "debt_total", "Total debt outstanding", lambda t: f"={L.a(D, 'nd_close_l', t, D)}+{L.a(D, 'ed_close_l', t, D)}", NUM, "grand"),
     ]
     L.plan(D, debt)
 
@@ -230,7 +301,8 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
     bal: list = [
         ("section", "Assets"),
         ("line", "cash", "Cash", lambda t: f"={L.a('CashFlow', 'close_cash', t, B)}", NUM, "link", lambda: f"={A('ob_cash', None, B)}"),
-        ("line", "ar", "Receivables", lambda t: f"={L.a(I, 'revenue', t, B)}*{A('ar_days', None, B)}/365", NUM, None, lambda: f"={A('ob_ar', None, B)}"),
+        ("line", "ar", "Receivables", lambda t: f"={L.a(I, 'revenue', t, B)}*({A('ar_days', None, B)}+{SH('receivable_days')})/365",
+         NUM, None, lambda: f"={A('ob_ar', None, B)}"),
         ("line", "inv", "Inventory", lambda t: f"={L.a(I, 'cogs', t, B)}*{A('inv_days', None, B)}/365", NUM, None, lambda: f"={A('ob_inv', None, B)}"),
         ("line", "ppe", "Property, plant and equipment (net)",
          lambda t: f"={bprev('ppe', t)}+{A('capex_total', t, B)}-{L.a(I, 'dep', t, B)}", NUM, None, lambda: f"={A('ob_ppe', None, B)}"),
@@ -239,7 +311,7 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
          lambda: f"=SUM(C{L.rows[(B, 'cash')]}:C{L.rows[(B, 'ppe')]})"),
         ("section", "Liabilities and equity"),
         ("line", "ap", "Payables", lambda t: f"={L.a(I, 'cogs', t, B)}*{A('ap_days', None, B)}/365", NUM, None, lambda: f"={A('ob_ap', None, B)}"),
-        ("line", "debt", "Debt", lambda t: f"={L.a(D, 'debt_total', t, B)}", NUM, "link", lambda: f"={A('ed_bal', None, B)}"),
+        ("line", "debt", "Debt", lambda t: f"={L.a(D, 'debt_total', t, B)}", NUM, "link", lambda: f"={A('ed_bal', None, B)}*IF({A('ed_ccy', None, B)}={A('ccy', None, B)},1,{A('fx_spot', None, B)})"),
         ("line", "equity", "Equity",
          lambda t: f"={bprev('equity', t)}+{L.a('CashFlow', 'eq_in', t, B)}+{L.a(I, 'ni', t, B)}", NUM, None,
          lambda: f"=C{L.rows[(B, 'ta')]}-C{L.rows[(B, 'ap')]}-C{L.rows[(B, 'debt')]}"),
@@ -261,6 +333,7 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         ("section", "Operating activities"),
         ("line", "ni", "Net profit", lambda t: f"={L.a(I, 'ni', t, C)}", NUM, "link"),
         ("line", "dep", "Add back depreciation", lambda t: f"={L.a(I, 'dep', t, C)}", NUM, "link"),
+        ("line", "fxadd", "Add back exchange loss (not cash)", lambda t: f"={L.a(I, 'fxloss', t, C)}", NUM, "link"),
         ("line", "d_ar", "(Increase) in receivables", lambda t: f"=-({delta('ar', t)})", NUM, None),
         ("line", "d_inv", "(Increase) in inventory", lambda t: f"=-({delta('inv', t)})", NUM, None),
         ("line", "d_ap", "Increase in payables", lambda t: f"={delta('ap', t)}", NUM, None),
@@ -270,9 +343,9 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         ("line", "capex", "Capital expenditure", lambda t: f"=-{A('capex_total', t, C)}", NUM, None),
         ("line", "cfi", "Cash from investing", lambda t: f"={L.a(C, 'capex', t, C)}", NUM, "total"),
         ("section", "Financing activities"),
-        ("line", "draw", "New loan drawn", lambda t: f"={L.a(D, 'nd_draw', t, C)}", NUM, "link"),
-        ("line", "nd_rep", "New loan repaid", lambda t: f"=-{L.a(D, 'nd_rep', t, C)}", NUM, "link"),
-        ("line", "ed_rep", "Existing debt repaid", lambda t: f"=-{L.a(D, 'ed_rep', t, C)}", NUM, "link"),
+        ("line", "draw", "New loan drawn", lambda t: f"={L.a(D, 'nd_draw_l', t, C)}", NUM, "link"),
+        ("line", "nd_rep", "New loan repaid", lambda t: f"=-{L.a(D, 'nd_rep_l', t, C)}", NUM, "link"),
+        ("line", "ed_rep", "Existing debt repaid", lambda t: f"=-{L.a(D, 'ed_rep_l', t, C)}", NUM, "link"),
         ("line", "eq_in", "New equity received", lambda t: f"=IF({idx(t, C)}={A('ne_year', None, C)},{A('ne_amt', None, C)},0)", NUM, None),
         ("line", "cff", "Cash from financing",
          lambda t: f"=SUM({col(t)}{L.rows[(C, 'draw')]}:{col(t)}{L.rows[(C, 'eq_in')]})", NUM, "total"),
@@ -286,7 +359,7 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
          lambda t: (f"={L.a(C, 'close_cash', t, C)}-SUM(${col(1)}${L.rows[(C, 'draw')]}:{col(t)}{L.rows[(C, 'draw')]})"
                     f"-SUM(${col(1)}${L.rows[(C, 'nd_rep')]}:{col(t)}{L.rows[(C, 'nd_rep')]})"
                     f"-SUM(${col(1)}${L.rows[(C, 'eq_in')]}:{col(t)}{L.rows[(C, 'eq_in')]})"
-                    f"+SUM({D}!${col(1)}${L.rows[(D, 'nd_int')]}:{D}!{col(t)}{L.rows[(D, 'nd_int')]})"), NUM, None),
+                    f"+SUM({D}!${col(1)}${L.rows[(D, 'nd_int_l')]}:{D}!{col(t)}{L.rows[(D, 'nd_int_l')]})"), NUM, None),
     ]
     L.plan(C, cf)
 
@@ -406,6 +479,8 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
                             else:
                                 cell.value = f"={col(t - 1)}{r}*(1+{col(t)}{L.rows[(S, gkey)]})"
                                 cell.font = BLACK
+                        elif kind == "formula":
+                            cell.value, cell.font, fmt = per_year[1](t, r), BLACK, per_year[2]
                         elif kind == "sum":
                             keys, fmt = per_year[1], per_year[2]
                             cell.value = ("=" + "+".join(f"{col(t)}{L.rows[(S, k)]}" for k in keys)) if keys else 0
@@ -447,6 +522,8 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
     sm["A1"].font = TITLE
     sm["A2"] = f"Summary  ·  {a['currency']}"
     sm["A2"].font = GREY
+    sm["A3"] = f'="Scenario shown: "&{SC}!$D$4&"  (change it on the Scenarios sheet)"'
+    sm["A3"].font = BOLD
     for c in range(1, FIRST_YEAR_COL + n):
         sm.cell(row=4, column=c).fill = HEAD_FILL
         sm.cell(row=4, column=c).font = HEAD
@@ -471,7 +548,8 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         sm.cell(row=r, column=c).fill = SECTION_FILL
     r += 1
     checks = [
-        ("New money raised (loan + equity)", f"={A('nd_amt')}+{A('ne_amt')}", NUM),
+        ("New money raised (loan + equity, at the starting exchange rate)",
+         f"={A('nd_amt')}*IF({A('nd_ccy')}={A('ccy')},1,{A('fx_spot')})+{A('ne_amt')}", NUM),
         ("Total use of funds", f"={A('uof_total')}", NUM),
         ("Raised minus use of funds", f"=C{r}-C{r + 1}", NUM),
         ("Lowest cash without the new funding (approx.)", f"=MIN({L.rng(C, 'cash_ex')})", NUM),
@@ -492,6 +570,116 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
             cell.alignment = Alignment(horizontal="right")
         r += 1
 
+    # ------------------------------------------------------------------ Scenarios (live switch)
+    sc = wb.create_sheet(SC, 2)
+    sc.sheet_view.showGridLines = False
+    for colname, w in zip("ABCDEF", (44, 11, 13, 13, 13, 13)):
+        sc.column_dimensions[colname].width = w
+    sc["A1"] = a["company_name"]
+    sc["A1"].font = TITLE
+    sc["A2"] = "Scenarios: switch the whole model between the base plan, a bad year and a good year"
+    sc["A2"].font = GREY
+    sc["A4"] = "Scenario in use (1 = Base, 2 = Downside, 3 = Upside)"
+    sc["A4"].font = BOLD
+    sc["C4"] = 1
+    sc["C4"].font, sc["C4"].fill = BLUE, INPUT_FILL
+    sc["D4"] = '=CHOOSE($C$4,"Base","Downside","Upside")'
+    sc["D4"].font = BOLD
+    for c, h in enumerate(["Shock", "Unit", "Base", "Downside", "Upside", "In use"], 1):
+        cell = sc.cell(row=SHOCK_ROW0 - 1, column=c, value=h)
+        cell.fill, cell.font = HEAD_FILL, HEAD
+    for i, key in enumerate(SHOCK_KEYS):
+        r = SHOCK_ROW0 + i
+        label, unit, fmt = SHOCK_LABELS[key]
+        sc.cell(row=r, column=1, value=label).font = BLACK
+        sc.cell(row=r, column=2, value=unit).font = GREY
+        for c, name in ((3, "base"), (4, "downside"), (5, "upside")):
+            cell = sc.cell(row=r, column=c, value=a["scenarios"][name][key])
+            cell.font, cell.number_format = BLUE, fmt
+            if c > 3:
+                cell.fill = INPUT_FILL
+        cell = sc.cell(row=r, column=6, value=f"=INDEX(C{r}:E{r},1,$C$4)")
+        cell.font, cell.number_format = BOLD, fmt
+    note_r = SHOCK_ROW0 + len(SHOCK_KEYS) + 1
+    for i, text in enumerate([
+        "Every sheet uses the 'In use' column. Set C4 to 2 to see the whole model in the downside case.",
+        "Edit the downside and upside shocks to suit the business; keep Base at zero.",
+        "Price and volume shocks change revenue; direct-cost and interest shocks add percentage points;",
+        "the currency shock is a one-off fall in year 1 and only matters for foreign-currency loans or sales.",
+    ]):
+        sc.cell(row=note_r + i, column=1, value=text).font = GREY
+
+    # ------------------------------------------------------------------ Stress tests (values)
+    st = wb.create_sheet("Stress tests")
+    st.sheet_view.showGridLines = False
+    for colname, w in zip("ABCDEFGH", (64, 14, 10, 16, 10, 16, 14, 14)):
+        st.column_dimensions[colname].width = w
+    st["A1"] = a["company_name"]
+    st["A1"].font = TITLE
+    st["A2"] = ("Stress tests, breaking points and loan options. These are values calculated by the agent when the "
+                "model was built; they do not update. Use the Scenarios sheet to see any case live.")
+    st["A2"].font = GREY
+    row = 4
+
+    def header(cols):
+        nonlocal row
+        for c, h in enumerate(cols, 1):
+            cell = st.cell(row=row, column=c, value=h)
+            cell.fill, cell.font = HEAD_FILL, HEAD
+        row += 1
+
+    def section(title):
+        nonlocal row
+        st.cell(row=row, column=1, value=title).font = SECTION
+        row += 1
+
+    def put(values, fmts):
+        nonlocal row
+        for c, (v, f) in enumerate(zip(values, fmts), 1):
+            if c == 1 and isinstance(v, str) and v:
+                v = v[0].upper() + v[1:]
+            cell = st.cell(row=row, column=c, value=v)
+            cell.font = BLACK
+            if c == 1:
+                cell.alignment = Alignment(wrap_text=True, vertical="top")
+            if f:
+                cell.number_format = f
+            if v in ("PASS", "FAIL"):
+                cell.font = Font(name=FONT, size=10, bold=True, color="008000" if v == "PASS" else "C00000")
+        row += 1
+
+    ccy = a["currency"]
+    section(f"Scenarios (lender minimum DSCR {a['minimum_dscr']:.2f}x)")
+    header(["Scenario", "Lowest DSCR", "Year", f"Lowest cash ({ccy})", "Year", f"Final-year profit ({ccy})", "Lender test", "Cash test"])
+    for name, v in analysis["scenarios"].items():
+        put([name.capitalize(), v["min_dscr"], v["min_dscr_year"], v["lowest_cash"], v["lowest_cash_year"],
+             v["final_year_net_income"], "PASS" if v["passes_lender_test"] else "FAIL",
+             "PASS" if v["cash_stays_above_minimum"] else "FAIL"], [None, MULT, INT, NUM, INT, NUM, None, None])
+    row += 1
+    section("Stress tests: one shock at a time")
+    header(["Test", "Lowest DSCR", "Year", f"Lowest cash ({ccy})", "Year", f"Final-year profit ({ccy})", "Lender test", "Cash test"])
+    for v in analysis["stress_tests"]:
+        put([v["test"], v["min_dscr"], v["min_dscr_year"], v["lowest_cash"], v["lowest_cash_year"],
+             v["final_year_net_income"], "PASS" if v["passes_lender_test"] else "FAIL",
+             "PASS" if v["cash_stays_above_minimum"] else "FAIL"], [None, MULT, INT, NUM, INT, NUM, None, None])
+    row += 1
+    section("Breaking points: how big a shock the plan can take")
+    header(["Shock", "Breaks at", "What fails"])
+    for b in analysis["breaking_points"]:
+        put([b["shock"].capitalize(), b["breaks_at"], b["fails"]], [None, None, None])
+    row += 1
+    ls = analysis["loan_structures"]
+    section("Loan options that pass" + (f": {ls['test']}" if ls.get("test") else ""))
+    if ls.get("requested_result"):
+        rr = ls["requested_result"]
+        put([f"As requested: base DSCR {rr['base_min_dscr']:.2f}x, downside {rr['downside_min_dscr']:.2f}x",
+             "PASS" if rr["passes"] else "FAIL"], [None, None])
+    if ls.get("options"):
+        header(["Option", "Base DSCR", "Downside DSCR"])
+        for o in ls["options"]:
+            put([o["description"], o["base_min_dscr"], o["downside_min_dscr"]], [None, MULT, MULT])
+    put([ls.get("note", "")], [None])
+
     # ------------------------------------------------------------------ Cover
     cover.sheet_view.showGridLines = False
     cover.column_dimensions["A"].width = 3
@@ -508,7 +696,9 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         ("", None),
         ("Sheets", SECTION),
         ("Summary: headline numbers and the funding check (is the amount raised right, can the loan be repaid?)", BLACK),
+        ("Scenarios: one switch moves the whole model between the base plan, a downside and an upside case", BLACK),
         ("Assumptions · Income · Debt · Balance · CashFlow · Ratios", BLACK),
+        ("Stress tests: what happens under each shock, where the plan breaks, and loan terms that would pass", BLACK),
         ("", None),
         ("Conventions", SECTION),
         ("Annual periods. New loans are drawn at the start of the drawdown year; repayments at year end.", BLACK),
@@ -516,6 +706,8 @@ def build_workbook(raw: dict[str, Any], path: str) -> str:
         ("Depreciation is straight line, a full year in the year of purchase.", BLACK),
         ("Tax is charged on positive profit only; losses are not carried forward (a conservative simplification).", BLACK),
         ("No dividends. Working capital is driven by customer, stock and supplier days.", BLACK),
+        (f"All figures in {a['currency']}. Loans or sales in another currency use the exchange-rate rows on the "
+         "Assumptions sheet; loans are revalued each year and the change is shown as an exchange loss.", BLACK),
         ("", None),
         ("This model is a planning tool built from the company's own assumptions. It is not audited and is not "
          "financial or investment advice. Check every assumption before sharing it with a funder.", GREY),

@@ -3,8 +3,16 @@
 Plain Python (no third-party imports) so the same code runs on the connector server and inside
 the user's Claude code-execution sandbox.
 
-All money is in one currency (the model's `currency`). Rates are fractions: 0.15 means 15%.
+The model reports in one currency (`currency`, normally the company's local currency). A loan or a
+revenue stream can be in another currency (e.g. a USD loan, or export sales priced in USD); it is
+converted with `fx`: `rate` = local units per 1 foreign unit at the start, `depreciation` = expected
+yearly fall of the local currency (0.08 = 8% a year). Rates are fractions: 0.15 means 15%.
 A value that varies by year can be a single number (same every year) or a list, one per year.
+
+Scenarios: `scenarios` sets the shocks for "downside" and "upside" (defaults below). Shock keys:
+price, volume, fixed_costs (fractions, e.g. -0.10), cogs_pts and interest_pts (added to the
+rates, e.g. 0.03), receivable_days (added days), fx_devaluation (one-off fall of the local
+currency in year 1, e.g. 0.20).
 """
 
 from __future__ import annotations
@@ -15,6 +23,7 @@ from typing import Any
 EXAMPLE: dict[str, Any] = {
     "company_name": "Example Cashew Processing Ltd",
     "currency": "USD",
+    # To model in local currency with a foreign-currency loan, see EXAMPLE_FX below.
     "first_year": 2027,
     "years": 5,
     "revenue_streams": [
@@ -53,6 +62,45 @@ EXAMPLE: dict[str, Any] = {
     "minimum_cash": 25000,
 }
 
+# The same business modelled in Ghana cedis, borrowing in US dollars, with kernels exported in USD.
+EXAMPLE_FX: dict[str, Any] = {
+    **EXAMPLE,
+    "currency": "GHS",
+    "fx": {"rate": 12.0, "depreciation": 0.08},
+    "revenue_streams": [
+        {"name": "Cashew kernels (export)", "unit": "tonnes", "volume": 400, "volume_growth": 0.20,
+         "price": 3500, "price_growth": 0.03, "currency": "USD"},
+        {"name": "Cashew shell oil (local)", "unit": "tonnes", "volume": 120, "volume_growth": 0.15,
+         "price": 7200, "price_growth": 0.10},
+    ],
+    "fixed_costs": [
+        {"name": "Salaries", "amount": 2160000, "growth": 0.15},
+        {"name": "Rent and utilities", "amount": 720000, "growth": 0.12},
+        {"name": "Admin and other", "amount": 480000, "growth": 0.12},
+    ],
+    "capex": [{"name": "Processing line upgrade", "amounts": [3000000, 0, 0, 1200000, 0]}],
+    "opening_balance": {"cash": 600000, "receivables": 1440000, "inventory": 1800000, "ppe_net": 4800000,
+                        "payables": 960000},
+    "existing_debt": {"balance": 1200000, "interest_rate": 0.28, "remaining_years": 2},
+    "new_debt": {"amount": 500000, "interest_rate": 0.11, "tenor_years": 5, "grace_years": 1,
+                 "drawdown_year": 1, "currency": "USD"},
+    "use_of_funds": [
+        {"item": "Processing line upgrade", "amount": 3000000},
+        {"item": "Raw cashew stock (working capital)", "amount": 3000000},
+    ],
+    "minimum_cash": 300000,
+}
+
+SHOCK_KEYS = ("price", "volume", "cogs_pts", "fixed_costs", "receivable_days", "interest_pts", "fx_devaluation")
+
+DEFAULT_SCENARIOS: dict[str, dict[str, float]] = {
+    "base": {},
+    # A realistic bad year; edit to suit the sector. fx_devaluation only bites if something is in foreign currency.
+    "downside": {"price": -0.10, "volume": -0.15, "cogs_pts": 0.03, "fixed_costs": 0.05,
+                 "receivable_days": 15, "interest_pts": 0.02, "fx_devaluation": 0.20},
+    "upside": {"price": 0.05, "volume": 0.10},
+}
+
 DEFAULTS: dict[str, Any] = {
     "currency": "USD",
     "years": 5,
@@ -71,6 +119,7 @@ DEFAULTS: dict[str, Any] = {
     "use_of_funds": [],
     "minimum_dscr": 1.25,
     "minimum_cash": 0,
+    "fx": {"rate": 1.0, "depreciation": 0.0},
 }
 
 OPENING_KEYS = ("cash", "receivables", "inventory", "ppe_net", "payables")
@@ -124,6 +173,7 @@ def normalize(raw: dict[str, Any]) -> dict[str, Any]:
             problems.append(f"revenue stream {i + 1} needs a year-1 volume and price")
             continue
         streams.append({
+            "currency": (s.get("currency") or a.get("currency") or "USD").upper(),
             "name": s.get("name") or f"Revenue stream {i + 1}",
             "unit": s.get("unit") or "units",
             "volume": float(s["volume"]),
@@ -178,6 +228,30 @@ def normalize(raw: dict[str, Any]) -> dict[str, Any]:
     for r in ("interest_rate",):
         if nd[r] > 1 or ed[r] > 1:
             problems.append("interest rates should be fractions such as 0.14, not 14")
+
+    home = (a.get("currency") or "USD").upper()
+    a["currency"] = home
+    ed["currency"] = (ed.get("currency") or home).upper()
+    nd["currency"] = (nd.get("currency") or home).upper()
+    foreign = {c for c in [ed["currency"], nd["currency"]] + [s["currency"] for s in streams] if c != home}
+    if len(foreign) > 1:
+        problems.append(f"only one foreign currency is supported per model (found {', '.join(sorted(foreign))})")
+    fx = a.get("fx") or {}
+    a["foreign_currency"] = next(iter(foreign), None)
+    a["fx"] = {"rate": float(fx.get("rate") or 0) if foreign else 1.0,
+               "depreciation": series(fx.get("depreciation", 0), n, "fx depreciation")}
+    if foreign and a["fx"]["rate"] <= 0:
+        problems.append(f"fx.rate is required: {home} per 1 {a['foreign_currency']} at the start of the first year")
+
+    sc = {k: dict(v) for k, v in DEFAULT_SCENARIOS.items()}
+    for name, shocks in (a.get("scenarios") or {}).items():
+        sc[name] = {**sc.get(name, {}), **(shocks or {})}
+    for name, shocks in sc.items():
+        bad = [k for k in shocks if k not in SHOCK_KEYS]
+        if bad:
+            problems.append(f"scenario '{name}' has unknown shocks {bad}; use {', '.join(SHOCK_KEYS)}")
+        sc[name] = {k: float(shocks.get(k, 0) or 0) for k in SHOCK_KEYS}
+    a["scenarios"] = sc
 
     a["use_of_funds"] = [{"item": u.get("item") or "Item", "amount": float(u.get("amount") or 0)}
                          for u in a.get("use_of_funds") or []]

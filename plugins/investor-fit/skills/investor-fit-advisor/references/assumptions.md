@@ -20,6 +20,11 @@ one number (same every year) or a list with one value per year.
 | `new_debt` | `amount`, `interest_rate`, `tenor_years`, `grace_years`, `drawdown_year` | The loan being sought |
 | `new_equity` | `amount`, `year` | Equity being sought |
 | `use_of_funds[]` | `item`, `amount` | What exactly the money pays for |
+| `currency` | The model's currency, normally local (e.g. GHS) | |
+| `revenue_streams[].currency`, `new_debt.currency`, `existing_debt.currency` | Set when that item is in a foreign currency (e.g. USD) | Is the loan or any sale priced in dollars or euros? |
+| `fx` | `rate`: local per 1 foreign unit today; `depreciation`: expected yearly fall (per year) | Current rate; use the currency's recent trend for the fall |
+| `new_debt.local_currency_rate` | Interest rate if the same loan were taken in local currency (lets the agent test that option) | Ask local banks or use the central bank's lending-rate data |
+| `scenarios` | Shocks for `downside` and `upside`: price, volume, fixed_costs (fractions), cogs_pts, interest_pts (added points), receivable_days, fx_devaluation (one-off fall in year 1) | What does a bad year look like in this sector? |
 | `minimum_dscr` | Lender's debt service cover test (default 1.25) | From the funder's terms if known |
 | `minimum_cash` | Cash buffer to keep (default 0) | |
 
@@ -50,9 +55,16 @@ one number (same every year) or a list with one value per year.
 }
 ```
 
+## Example with a foreign-currency loan
+
+`build_model.py --example-fx example.json` writes the same business modelled in
+Ghana cedis, with a USD 500,000 loan and kernel exports priced in USD (`fx.rate` 12, falling 8% a year).
+
 ## Model conventions
 
 Annual periods. New loans are drawn at the start of the drawdown year and repaid at year end, in
 equal instalments after the grace period. Interest is charged on the balance outstanding during the
 year (no circular references). Straight-line depreciation, full year in the year of purchase. Tax on
-positive profit only, no loss carry-forward. No dividends.
+positive profit only, no loss carry-forward. No dividends. Foreign-currency items use each year's
+exchange rate; a loan drawn at the start of a year converts at the opening rate, and loans are
+revalued each year (the change is an exchange loss, not cash). Scenario shocks apply to every year.
