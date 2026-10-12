@@ -12,4 +12,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libreoffice-calc
       - run: pip install -r requirements.txt openpyxl pytest
       - run: pytest -q
-      - run: python scripts/package_skill.py
+      - name: Skill zip and Claude Code plugin are up to date
+        run: |
+          python scripts/package_skill.py
+          git status --porcelain plugins .claude-plugin skill/investor-fit-advisor/references
+          test -z "$(git status --porcelain plugins .claude-plugin skill/investor-fit-advisor/references)" || (echo "Run python scripts/package_skill.py and commit the result" && exit 1)

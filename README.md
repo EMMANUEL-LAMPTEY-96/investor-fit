@@ -50,13 +50,26 @@ against a 1.25x lender minimum. The agent flags both and suggests fixes.
 
 ## Install
 
-1. Download [`dist/investor-fit-advisor.zip`](dist/investor-fit-advisor.zip).
+**In Claude (web, desktop or mobile), for founders, advisors and anyone else:**
+
+1. Download the skill: **[investor-fit-advisor.zip](https://github.com/EMMANUEL-LAMPTEY-96/investor-fit/releases/latest/download/investor-fit-advisor.zip)**
 2. In Claude, go to **Settings → Capabilities** and switch on **Code execution and file
    creation**. Keep web search on for live funder research.
 3. Go to **Customize → Skills → + → Create skill → Upload a skill** and choose the zip.
 4. Start a chat: *"Help me find funding for my company"*, and attach your documents.
 
-This works on claude.ai and Claude Desktop, on every plan including Free.
+This works on every plan, including Free.
+
+**In Claude Code, one command:**
+
+```
+/plugin install investor-fit --marketplace EMMANUEL-LAMPTEY-96/investor-fit
+```
+
+On older Claude Code versions:
+`/plugin marketplace add EMMANUEL-LAMPTEY-96/investor-fit`, then
+`/plugin install investor-fit@investor-fit-marketplace`. The Excel features need
+`pip install openpyxl`.
 
 ### Bring your own lists
 
@@ -122,9 +135,15 @@ A new version of the zip picks up the changes.
 ```bash
 git clone https://github.com/EMMANUEL-LAMPTEY-96/investor-fit && cd investor-fit
 pip install -r requirements.txt pytest
-pytest -q                          # 63 tests (Excel recalculation tests need LibreOffice)
-python scripts/package_skill.py    # rebuild dist/investor-fit-advisor.zip
+pytest -q                          # 64 tests (Excel recalculation tests need LibreOffice)
+python scripts/package_skill.py    # rebuild the skill zip and the Claude Code plugin (commit both)
 ```
+
+**Project layout.** `skill/investor-fit-advisor/` is the source of the skill. `investor_fit/` holds
+the shared engine (matching, objections, checklists, financial models). `scripts/package_skill.py`
+builds `dist/investor-fit-advisor.zip` and the Claude Code plugin in `plugins/investor-fit/` (listed
+in `.claude-plugin/marketplace.json`). Pushing a tag such as `v0.4.0` publishes a GitHub release
+with the zip attached.
 
 **Optional connector (MCP server).** The same engine is also available as a remote connector for
 Claude, Claude Desktop and Claude Code (`investor_fit/server.py`). It offers 10 tools, including

@@ -1,0 +1,19 @@
+{
+  "name": "investor-fit",
+  "version": "0.4.0",
+  "description": "Capital-raising advisor: finds funders worldwide, checks readiness against funder criteria and any checklist, flags likely objections, and builds or reviews financial models.",
+  "author": {
+    "name": "Emmanuel Nii Lante Lamptey"
+  },
+  "homepage": "https://github.com/EMMANUEL-LAMPTEY-96/investor-fit",
+  "repository": "https://github.com/EMMANUEL-LAMPTEY-96/investor-fit",
+  "license": "MIT",
+  "keywords": [
+    "finance",
+    "fundraising",
+    "investors",
+    "financial-model",
+    "sme",
+    "development-finance"
+  ]
+}

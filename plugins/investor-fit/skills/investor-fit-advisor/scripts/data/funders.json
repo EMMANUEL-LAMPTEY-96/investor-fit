@@ -1,0 +1,742 @@
+[
+  {
+    "id": "agdevco",
+    "name": "AgDevCo",
+    "type": "impact_fund",
+    "hq": null,
+    "geographies": ["africa", "GH", "CI"],
+    "sectors": ["agribusiness", "agri_processing"],
+    "stages": ["growth", "mature"],
+    "instruments": ["debt", "quasi_equity", "equity"],
+    "ticket_min_usd": 2000000,
+    "ticket_max_usd": 10000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": true,
+      "other": [
+        "Proven business model; full business plan and financial operating history for larger investments",
+        "Strong management team and long-term growth potential",
+        "Structured plan towards international ESG good practice",
+        "Excludes tobacco and potable ethanol",
+        "Low- and middle-income sub-Saharan African countries (upper-middle-income only with strong impact case)"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Email a business overview to investment@agdevco.com.",
+    "apply_url": null,
+    "source_urls": [
+      "https://www.agdevco.com/our-approach/investment-criteria/",
+      "https://agdevco.com/our-investments/",
+      "https://www.norfund.no/wp-content/uploads/2022/02/AgDevCo-Press-Notice-February-2022.pdf",
+      "https://assets.publishing.service.gov.uk/media/654d37b0c0e068000e1b2d20/african-businesses-seeking-finance-from-the-uk-government.pdf"
+    ],
+    "notes": "Ticket range is from AgDevCo's 2022 press notice ('typically US$2m-10m'); a 2023 UK government guide cites $5-15m, so confirm. Portfolio includes Ghana and Côte d'Ivoire agribusinesses.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "root-capital",
+    "name": "Root Capital",
+    "type": "impact_lender",
+    "hq": null,
+    "geographies": ["GH", "KE", "UG", "RW", "CD", "MX", "GT", "HN", "CR", "NI", "CO", "PE", "ID"],
+    "sectors": ["agribusiness"],
+    "stages": ["early", "growth"],
+    "instruments": ["working_capital", "debt"],
+    "ticket_min_usd": 50000,
+    "ticket_max_usd": 2000000,
+    "requirements": {
+      "min_revenue_usd": 100000,
+      "min_years_operating": 1,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": true,
+      "other": [
+        "Agricultural business or grower organization creating positive social and environmental impact",
+        "Strong relationships with established buyers",
+        "Site visit and credit application after initial screening"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Submit the online inquiry form; eligible businesses then complete a credit application (decision typically 4-8 weeks).",
+    "apply_url": "https://rootcapital.org/for-clients/apply-for-services/",
+    "source_urls": [
+      "https://rootcapital.org/how-to-apply-for-a-loan/",
+      "https://rootcapital.org/?p=25096"
+    ],
+    "notes": "Ghana is the only West African country on the current eligibility list. Loan range ($50k-$2m) comes from Root Capital's West Africa programme press release, not the current apply page.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "shared-interest",
+    "name": "Shared Interest Society",
+    "type": "impact_lender",
+    "hq": null,
+    "geographies": ["global", "GH"],
+    "sectors": ["agribusiness", "trade_export"],
+    "stages": ["growth", "mature"],
+    "instruments": ["trade_finance", "working_capital", "debt"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": 3,
+      "audited_years": null,
+      "export_history_required": true,
+      "impact_required": true,
+      "other": [
+        "Producers must be registered with a Fair Trade body (e.g. Fairtrade International/FLO, WFTO)",
+        "Positive balance sheet",
+        "At least one export buyer (producers)",
+        "Lends to producer groups/organisations, not individuals"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Complete the Producer Finance or Buyer Finance application form; regional staff usually visit before approval.",
+    "apply_url": "https://shared-interest.com/finance/apply-finance",
+    "source_urls": [
+      "https://shared-interest.com/borrow/faqs",
+      "https://shared-interest.com/finance/apply-finance"
+    ],
+    "notes": "Offers export credit (up to 60% of order value for commodities), 1-5 year term loans and stock facilities. Has a regional office in Ghana.",
+    "confidence": "high",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "fmo-massif",
+    "name": "FMO – MASSIF (Dutch government fund)",
+    "type": "dfi",
+    "hq": null,
+    "geographies": ["emerging_markets"],
+    "sectors": ["financial_institutions", "agribusiness", "fintech"],
+    "stages": ["startup", "early", "growth"],
+    "instruments": ["on_lending", "debt", "quasi_equity", "equity", "grant"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": true,
+      "other": [
+        "Focus on mostly low and lower-middle income countries",
+        "Themes: the unbanked, agriculture and rural livelihoods, women and youth entrepreneurs, inclusive business innovation"
+      ]
+    },
+    "direct_application": false,
+    "how_to_apply": "SMEs access MASSIF funding through the local financial intermediaries and funds it backs; intermediaries contact FMO directly.",
+    "apply_url": null,
+    "source_urls": [
+      "https://www.fmo.nl/partner-with-us/massif",
+      "https://www.fmo.nl/agribusiness"
+    ],
+    "notes": "Instruments include seed capital, local-currency debt, mezzanine, direct equity, fund investments and capacity-development grants for investees. FMO also finances larger agribusinesses directly (long-term loans, equity, mezzanine, working capital); no ticket size is published.",
+    "confidence": "high",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "ifc",
+    "name": "International Finance Corporation (IFC)",
+    "type": "dfi",
+    "hq": "Washington, DC, United States",
+    "geographies": ["emerging_markets"],
+    "sectors": ["any"],
+    "stages": ["growth", "mature"],
+    "instruments": ["debt", "equity", "quasi_equity"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "Located in a developing member country of IFC; private sector",
+        "Technically sound with good prospects of profitability",
+        "Must benefit the local economy",
+        "Must meet IFC environmental and social standards",
+        "Does not lend directly to micro, small and medium enterprises"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "No standard form; send an investment proposal to the relevant IFC industry or regional office (see IFC contact directory).",
+    "apply_url": "https://www.ifc.org/en/what-we-do/products-and-services/how-to-apply-for-financing",
+    "source_urls": [
+      "https://www.ifc.org/en/what-we-do/products-and-services/how-to-apply-for-financing"
+    ],
+    "notes": "SMEs reach IFC money mainly through banks and financial intermediaries that IFC funds. Direct financing suits larger companies only.",
+    "confidence": "high",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "development-bank-ghana",
+    "name": "Development Bank Ghana (DBG)",
+    "type": "dfi",
+    "hq": "Accra, Ghana",
+    "geographies": ["GH"],
+    "sectors": ["agribusiness", "manufacturing", "technology"],
+    "stages": [],
+    "instruments": ["on_lending", "guarantee"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "Funds reach MSMEs and small corporates only via participating financial institutions (PFIs)"
+      ]
+    },
+    "direct_application": false,
+    "how_to_apply": "Apply for a loan at a DBG participating financial institution (partner bank), which on-lends DBG funds.",
+    "apply_url": null,
+    "source_urls": [
+      "https://en.wikipedia.org/wiki/Development_Bank_Ghana",
+      "https://www.graphic.com.gh/business/business-news/development-bank-pumps-gh-245m-into-smes.html"
+    ],
+    "notes": "Wholesale bank providing medium-to-long-term funding to PFIs. The DBG Guarantee subsidiary de-risks MSME loans via PFIs. Focus sectors also include tourism and housing. The official site (dbg.com.gh) could not be fetched.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "ghana-exim-bank",
+    "name": "Ghana Export-Import Bank (GEXIM)",
+    "type": "export_credit",
+    "hq": null,
+    "geographies": ["GH"],
+    "sectors": ["agribusiness", "agri_processing", "manufacturing", "trade_export"],
+    "stages": ["early", "growth", "mature"],
+    "instruments": ["trade_finance", "working_capital", "debt", "guarantee"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": 10000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "Ghanaian exporters and businesses in the export value chain",
+        "Show viable export activities or export contracts/orders",
+        "Business plan, financial statements, proof of registration"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Apply through GEXIM offices or its partner financial institutions; contact via the GEXIM website.",
+    "apply_url": "https://eximbankghana.com/contact-us/",
+    "source_urls": [
+      "https://eximbankghana.com/products/",
+      "https://www.pertamapartners.com/funding/ghana-exim-bank-export-financing-2026"
+    ],
+    "notes": "Products include SME banking, export trade working capital and guarantees for SMEs lacking collateral. The 'up to $10m per transaction' figure is from a third-party guide, not the GEXIM site.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "norfund",
+    "name": "Norfund",
+    "type": "dfi",
+    "hq": null,
+    "geographies": ["west_africa", "GH", "NG", "CI", "SN", "africa", "emerging_markets"],
+    "sectors": ["renewable_energy", "infrastructure", "financial_institutions", "agribusiness", "manufacturing"],
+    "stages": ["growth", "mature"],
+    "instruments": ["equity", "quasi_equity", "debt"],
+    "ticket_min_usd": 5000000,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "Sustainable, profitable private company in an ODA-eligible country within Norfund's sectors and geographies",
+        "Minority investor: equity USD 5-50m with max 35% ownership; loans from USD 5m (3-10 year tenor)",
+        "Detailed business plan/proposal required"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Use the Norfund contact form, choose 'Possible investment' and attach a business plan in English or Norwegian.",
+    "apply_url": "https://www.norfund.no/contact-us",
+    "source_urls": [
+      "https://www.norfund.no/contact-us",
+      "https://www.norway.no/en/ghana/services-info/doing-business-with-norway/norfund-and-west-africa/"
+    ],
+    "notes": "The Accra office covers West Africa, with focus countries Ghana, Nigeria, Côte d'Ivoire and Senegal. 'Scalable Enterprises' covers food, agribusiness and manufacturing.",
+    "confidence": "high",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "british-international-investment",
+    "name": "British International Investment (BII)",
+    "type": "dfi",
+    "hq": null,
+    "geographies": ["africa"],
+    "sectors": ["any"],
+    "stages": ["growth", "mature"],
+    "instruments": ["equity", "debt"],
+    "ticket_min_usd": 10000000,
+    "ticket_max_usd": 250000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "Successful track record or extensive relevant operational experience",
+        "Solid business plan and experienced management team",
+        "Does not provide start-up capital, grants, export finance or sovereign lending"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Approach BII directly for large deals; smaller businesses reach BII capital via the funds and banks it backs (e.g. AgDevCo).",
+    "apply_url": null,
+    "source_urls": [
+      "https://assets.publishing.service.gov.uk/media/654d37b0c0e068000e1b2d20/african-businesses-seeking-finance-from-the-uk-government.pdf",
+      "https://www.bii.co.uk/en/our-impact/fund/fund-for-agriculture-finance-in-nigeria-investment-01/"
+    ],
+    "notes": "Ticket sizes ($10m-$250m for direct equity and debt) are from a UK government guide, not the BII site. Debt and risk-sharing for SMEs flows through financial institutions.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "injaro-agri-fund",
+    "name": "Injaro Investments – agricultural SME fund",
+    "type": "impact_fund",
+    "hq": null,
+    "geographies": ["west_africa", "CI", "GH", "NE", "ML"],
+    "sectors": ["agribusiness", "agri_processing"],
+    "stages": ["early", "growth"],
+    "instruments": ["debt", "equity"],
+    "ticket_min_usd": 400000,
+    "ticket_max_usd": 4000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "Mainly family-owned West African SMEs across the agricultural value chain",
+        "Targets firms rarely eligible for traditional bank financing"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Contact Injaro Investments directly with a business plan.",
+    "apply_url": null,
+    "source_urls": [
+      "https://proparco.fr/en/carte-des-projets/injaro"
+    ],
+    "notes": "Injaro is a West Africa-focused manager set up in 2009 and is also investment advisor to the ABC Fund. This is an older fund vintage, so confirm it is still investing.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "investisseurs-et-partenaires",
+    "name": "Investisseurs & Partenaires (I&P)",
+    "type": "impact_fund",
+    "hq": null,
+    "geographies": ["africa", "west_africa", "CI", "GH", "SN", "BF", "ML", "NE", "CM", "KE", "UG", "MG"],
+    "sectors": ["agribusiness", "technology", "financial_institutions", "healthcare", "infrastructure", "education"],
+    "stages": ["startup", "early", "growth"],
+    "instruments": ["equity", "quasi_equity", "debt"],
+    "ticket_min_usd": 11000,
+    "ticket_max_usd": 5500000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": true,
+      "other": [
+        "Sustainable, profitable SMEs with high local added value",
+        "Minority investor"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Submit a business plan via the 'Submit a Business Plan' page on ietp.com.",
+    "apply_url": null,
+    "source_urls": [
+      "https://ietp.com/sites/default/files/Poster-2024-EN.pdf",
+      "https://ietp.com/en/node/2119",
+      "https://ietp.com/en/node/2105/",
+      "https://www.eib.org/en/products/equity/funds/i-et-p-afrique-entrepreneurs.htm"
+    ],
+    "notes": "The overall range is EUR 10k-5m (converted at ~1.1 USD/EUR): EUR 50k-500k via partner funds (e.g. Teranga Capital in Senegal, Comoé Capital in Côte d'Ivoire) and EUR 500k-5m direct via the IPAE funds. Teams are in Ghana, Senegal, Côte d'Ivoire and elsewhere.",
+    "confidence": "high",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "abc-fund",
+    "name": "Agri-Business Capital Fund (ABC Fund)",
+    "type": "impact_lender",
+    "hq": "Luxembourg",
+    "geographies": ["africa", "emerging_markets"],
+    "sectors": ["agribusiness", "financial_institutions"],
+    "stages": ["early", "growth"],
+    "instruments": ["debt", "equity", "on_lending"],
+    "ticket_min_usd": 220000,
+    "ticket_max_usd": 880000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "Rural SMEs, farmers' organisations and smallholder groups",
+        "Commercially viable ventures creating jobs, especially for youth and women",
+        "Climate-smart projects prioritised"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Contact the fund via its website (managed by Bamboo Capital Partners, with Injaro Investments as advisor).",
+    "apply_url": "http://agri-business-capital.com/",
+    "source_urls": [
+      "https://www.ifad.org/abcfund",
+      "https://www.ifad.org/web/latest/news-detail/asset/41022697"
+    ],
+    "notes": "IFAD-backed. Direct loans run EUR 200k-800k (~USD 220k-880k at ~1.1 USD/EUR); smaller EUR 20k-200k loans go via financial institutions. Ranges are from the fund's launch announcement.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "acumen-west-africa",
+    "name": "Acumen West Africa",
+    "type": "impact_fund",
+    "hq": null,
+    "geographies": ["NG", "GH", "SL", "west_africa"],
+    "sectors": ["any"],
+    "stages": ["early"],
+    "instruments": ["equity", "debt"],
+    "ticket_min_usd": 250000,
+    "ticket_max_usd": 750000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": true,
+      "other": [
+        "Validated business model with first customers",
+        "Impact on low-income people (breadth, depth, poverty focus)"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Apply via Acumen's West Africa page.",
+    "apply_url": "https://acumen.org/west-africa",
+    "source_urls": [
+      "https://www.startupguide.com/acumen-west-africa"
+    ],
+    "notes": "Figures (first investment $250k-$750k) are from a secondary profile of unknown date. Agriculture and renewable energy were earlier focus areas. Confirm the programme is still active.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "aruwa-capital",
+    "name": "Aruwa Capital Management",
+    "type": "pe",
+    "hq": null,
+    "geographies": ["NG", "GH"],
+    "sectors": ["healthcare", "fintech", "agri_processing", "consumer", "manufacturing", "education"],
+    "stages": ["growth"],
+    "instruments": ["equity"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": 5000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": true,
+      "other": [
+        "Small, rapidly growing businesses overlooked by larger PE firms",
+        "Gender-lens investor"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Contact Aruwa Capital directly.",
+    "apply_url": null,
+    "source_urls": [
+      "https://www.avca-africa.org/media/xmobawig/aruwa-capital-management-member-profile-final.pdf"
+    ],
+    "notes": "AVCA profile states an 'average ticket size range below US$5mn'. Growth equity in Nigeria and Ghana; FMCG manufacturing and agri-processing are listed sectors.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "verod-capital-growth-fund-iii",
+    "name": "Verod Capital Growth Fund III",
+    "type": "pe",
+    "hq": "Lagos, Nigeria",
+    "geographies": ["west_africa", "NG", "GH", "LR", "SL", "GM"],
+    "sectors": ["manufacturing", "consumer", "education", "financial_institutions", "agri_processing"],
+    "stages": ["growth", "mature"],
+    "instruments": ["equity"],
+    "ticket_min_usd": 5000000,
+    "ticket_max_usd": 20000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": ["High-growth middle-market companies in Anglophone West Africa"]
+    },
+    "direct_application": true,
+    "how_to_apply": "Contact Verod Capital Partners directly.",
+    "apply_url": null,
+    "source_urls": [
+      "https://allafrica.com/stories/201809100723.html"
+    ],
+    "notes": "Details come from the 2018 AfDB approval of a $15m commitment. The fund may now be fully invested, so check for a successor fund.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "verod-kepple-africa-ventures",
+    "name": "Verod-Kepple Africa Ventures",
+    "type": "vc",
+    "hq": null,
+    "geographies": ["africa", "NG"],
+    "sectors": ["technology", "fintech"],
+    "stages": ["early", "growth"],
+    "instruments": ["equity"],
+    "ticket_min_usd": 1000000,
+    "ticket_max_usd": 3000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": ["Series A and B tech startups"]
+    },
+    "direct_application": true,
+    "how_to_apply": "Contact the fund directly.",
+    "apply_url": null,
+    "source_urls": [
+      "https://techcabal.com/2024/03/06/verod-kepple/"
+    ],
+    "notes": "The $1m-$3m figure is the average ticket reported by TechCabal in 2024. The predecessor Kepple Africa Ventures wrote $50k-$150k pre-seed/seed cheques. The sector tag 'fintech' is inferred from portfolio examples (e.g. Julaya).",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "tlcom-capital",
+    "name": "TLcom Capital (TIDE Africa Fund II)",
+    "type": "vc",
+    "hq": null,
+    "geographies": ["africa", "NG", "KE"],
+    "sectors": ["fintech", "agribusiness", "healthcare", "education", "consumer", "technology"],
+    "stages": ["early", "growth"],
+    "instruments": ["equity"],
+    "ticket_min_usd": 1000000,
+    "ticket_max_usd": 3000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": ["Primarily seed and Series A tech-enabled companies"]
+    },
+    "direct_application": true,
+    "how_to_apply": "Contact TLcom directly.",
+    "apply_url": null,
+    "source_urls": [
+      "https://techcrunch.com/2024/04/22/tlcom-capital-closes-second-fund-at-154m-to-back-early-stage-startups-across-africa/"
+    ],
+    "notes": "Initial investments of $1m-$3m from the $154m fund; also runs a small pre-seed cheque strategy. Offices in Lagos and Nairobi.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "partech-africa",
+    "name": "Partech Africa II",
+    "type": "vc",
+    "hq": null,
+    "geographies": ["africa"],
+    "sectors": ["technology", "fintech", "healthcare", "education"],
+    "stages": ["early", "growth"],
+    "instruments": ["equity"],
+    "ticket_min_usd": 1000000,
+    "ticket_max_usd": 15000000,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": ["Technology-driven companies, Seed to Series B+"]
+    },
+    "direct_application": true,
+    "how_to_apply": "Contact Partech's Africa team directly.",
+    "apply_url": null,
+    "source_urls": [
+      "https://www.eib.org/en/products/equity/funds/partech-africa-ii",
+      "https://techcabal.com/2023/02/07/partech-africa-ii-fund/"
+    ],
+    "notes": "Initial tickets of USD 1m-15m (EIB fund page). EUR 245m+ fund covering sub-Saharan Africa. Logistics is also a target sector.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "bank-of-industry-nigeria",
+    "name": "Bank of Industry (BOI) Nigeria",
+    "type": "dfi",
+    "hq": null,
+    "geographies": ["NG"],
+    "sectors": ["manufacturing", "agri_processing", "technology"],
+    "stages": ["growth", "mature"],
+    "instruments": ["debt", "working_capital", "on_lending"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": 3,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "Registered company or enterprise (no individuals)",
+        "Manufacturing/processing activity (agro-processing, solid minerals, IT, oil & gas, creative industry)",
+        "Collateral required; funds paid to equipment vendors",
+        "Startups considered case by case",
+        "Direct loans start from NGN 5 million"
+      ]
+    },
+    "direct_application": true,
+    "how_to_apply": "Register and apply on the BOI online portal, uploading company registration and supporting documents.",
+    "apply_url": "https://apply.boi.ng/register",
+    "source_urls": [
+      "https://apply.boi.ng/register"
+    ],
+    "notes": "Finances equipment directly. Working capital goes via partner SME-friendly banks, and smaller loans via state matching funds or microfinance banks. The NGN 5m minimum is not converted because of FX volatility.",
+    "confidence": "high",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "development-bank-of-nigeria",
+    "name": "Development Bank of Nigeria (DBN)",
+    "type": "dfi",
+    "hq": null,
+    "geographies": ["NG"],
+    "sectors": ["any"],
+    "stages": ["startup", "early", "growth", "mature"],
+    "instruments": ["on_lending", "guarantee"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": [
+        "MSME in a productive enterprise (start-up or existing)",
+        "Must be a customer of a DBN participating financial institution"
+      ]
+    },
+    "direct_application": false,
+    "how_to_apply": "Ask a DBN participating bank or microfinance bank for a DBN-funded loan; the PFI assesses you and applies to DBN.",
+    "apply_url": "https://www.devbankng.com/get-a-Loan",
+    "source_urls": [
+      "https://www.devbankng.com/get-a-Loan",
+      "https://www.devbankng.com/"
+    ],
+    "notes": "Wholesale lender with 84 PFIs (Dec 2025). Tenor up to 10 years with up to 18 months moratorium. Also offers partial credit guarantees to PFIs.",
+    "confidence": "high",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "afdb-afawa",
+    "name": "African Development Bank – Affirmative Finance Action for Women in Africa (AFAWA)",
+    "type": "dfi",
+    "hq": null,
+    "geographies": ["africa"],
+    "sectors": ["any"],
+    "stages": ["early", "growth"],
+    "instruments": ["guarantee", "on_lending"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": ["Women-led SMEs"]
+    },
+    "direct_application": false,
+    "how_to_apply": "Women-led SMEs borrow from AFAWA partner banks and financial institutions, which receive AfDB risk-sharing guarantees.",
+    "apply_url": null,
+    "source_urls": [
+      "https://african.business/2024/04/partner-content/afawa-fast-tracks-lending-to-women-led-businesses"
+    ],
+    "notes": "The Guarantee for Growth programme covers up to 75% of lending risk for partner institutions in some cases. No partner banks in Ghana, Nigeria, Côte d'Ivoire or Senegal were named in the source.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  },
+  {
+    "id": "afreximbank-esdp",
+    "name": "Afreximbank – Export SME Development Programme (ESDP)",
+    "type": "dfi",
+    "hq": null,
+    "geographies": ["africa"],
+    "sectors": ["agribusiness", "manufacturing", "healthcare", "technology", "trade_export"],
+    "stages": ["growth", "mature"],
+    "instruments": ["on_lending", "working_capital"],
+    "ticket_min_usd": null,
+    "ticket_max_usd": null,
+    "requirements": {
+      "min_revenue_usd": null,
+      "min_years_operating": null,
+      "audited_years": null,
+      "export_history_required": null,
+      "impact_required": null,
+      "other": ["SMEs in export-oriented sectors"]
+    },
+    "direct_application": false,
+    "how_to_apply": "SMEs access ESDP funds through Afreximbank's local partner banks (e.g. Ecobank in Zimbabwe).",
+    "apply_url": null,
+    "source_urls": [
+      "https://www.gtreview.com/news/africa/afreximbank-expands-sme-trade-finance-push-with-zimbabwe-facility/",
+      "https://www.ecofinagency.com/news-finances/1905-55721-afreximbank-expands-zimbabwe-sme-export-financing-under-afcfta-push"
+    ],
+    "notes": "Provides working capital and capex lines to banks for export SMEs, plus export-readiness support. No West African partner banks were confirmed. The official site could not be fetched.",
+    "confidence": "medium",
+    "last_checked": "2026-10-12",
+    "verification_status": "needs_human_review"
+  }
+]

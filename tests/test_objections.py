@@ -79,3 +79,17 @@ def test_pre_mortem_script_runs_from_packaged_skill(tmp_path):
                          check=True, capture_output=True, text=True)
     r = json.loads(out.stdout)
     assert r["funder"] == "Root Capital" and "insufficient_collateral" in ids(r)
+
+
+def test_claude_code_plugin_matches_the_skill():
+    subprocess.run([sys.executable, str(ROOT / "scripts" / "package_skill.py")], check=True, capture_output=True)
+    plugin_skill = ROOT / "plugins" / "investor-fit" / "skills" / "investor-fit-advisor"
+    md = (plugin_skill / "SKILL.md").read_text()
+    assert "SKILL_DIR" not in md.replace("CLAUDE_SKILL_DIR", "")
+    assert "allowed-tools:" in md
+    for f in ("scripts/match_funders.py", "scripts/data/funders.json", "scripts/data/objections.json",
+              "scripts/investor_fit/objections.py", "references/objections.md", "templates/checklist_template.csv"):
+        assert (plugin_skill / f).exists(), f
+    market = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text())
+    manifest = json.loads((ROOT / "plugins" / "investor-fit" / ".claude-plugin" / "plugin.json").read_text())
+    assert market["plugins"][0]["name"] == manifest["name"] == "investor-fit"
