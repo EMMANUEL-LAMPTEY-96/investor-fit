@@ -1,0 +1,22 @@
+[project]
+name = "investor-fit-agent"
+version = "0.2.0"
+description = "Claude connector and skill: match companies to funders worldwide, check readiness, and build or review financial models."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Emmanuel Nii Lante Lamptey" }]
+dependencies = ["mcp>=2.2,<3", "pydantic>=2.7", "uvicorn>=0.30", "openpyxl>=3.1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+investor-fit-agent = "investor_fit.server:main"
+
+[tool.setuptools.packages.find]
+include = ["investor_fit*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

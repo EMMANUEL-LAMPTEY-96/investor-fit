@@ -1,0 +1,30 @@
+[
+  {
+    "label": "ghana-cashew-processor",
+    "note": "Growth-stage processor raising working capital, no exports yet but holds an order.",
+    "company": {"country": "GH", "sector": "agri_processing", "stage": "growth", "amount_usd": 500000,
+                "instruments_wanted": ["working_capital"], "annual_revenue_usd": 1200000,
+                "years_operating": 4, "audited_years": 1, "has_export_history": false,
+                "has_export_order": true, "impact_focus": true},
+    "expect_in_top_10": ["ghana-exim-bank", "root-capital", "injaro-agri-fund"],
+    "expect_excluded": ["british-international-investment", "partech-africa"]
+  },
+  {
+    "label": "nigeria-agri-fintech-series-a",
+    "note": "Early-stage tech company raising equity.",
+    "company": {"country": "NG", "sector": "agri_fintech", "stage": "early", "amount_usd": 2000000,
+                "instruments_wanted": ["equity"], "annual_revenue_usd": 400000, "years_operating": 2,
+                "impact_focus": true},
+    "expect_in_top_10": ["tlcom-capital", "partech-africa", "verod-kepple-africa-ventures"],
+    "expect_excluded": ["ghana-exim-bank", "root-capital"]
+  },
+  {
+    "label": "cote-divoire-cocoa-coop-small",
+    "note": "Small cooperative needing trade finance.",
+    "company": {"country": "CI", "sector": "agribusiness", "stage": "early", "amount_usd": 150000,
+                "instruments_wanted": ["trade_finance", "working_capital"], "annual_revenue_usd": 300000,
+                "years_operating": 2, "has_export_history": true, "impact_focus": true},
+    "expect_in_top_10": ["investisseurs-et-partenaires", "shared-interest"],
+    "expect_excluded": ["norfund", "british-international-investment", "root-capital"]
+  }
+]

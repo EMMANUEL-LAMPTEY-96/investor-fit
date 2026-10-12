@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "{data,investor_fit}/**"
+    }
+  },
+  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
+}

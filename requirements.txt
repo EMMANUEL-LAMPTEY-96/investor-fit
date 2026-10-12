@@ -1,0 +1,4 @@
+mcp>=2.2,<3
+pydantic>=2.7
+uvicorn>=0.30
+openpyxl>=3.1
