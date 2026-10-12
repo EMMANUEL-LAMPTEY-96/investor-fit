@@ -56,7 +56,7 @@ mcp = MCPServer(
     title="Investor-Fit Agent",
     description="Match companies to funders worldwide, check readiness, and build or review financial models.",
     instructions=INSTRUCTIONS,
-    website_url="https://github.com/",
+    website_url="https://github.com/EMMANUEL-LAMPTEY-96/investor-fit",
     version="0.2.0",
 )
 
@@ -310,7 +310,7 @@ async def home(request):
         "name": "Investor-Fit Agent",
         "connect": "Add this server's /mcp URL as a custom connector in Claude (Customize > Connectors).",
         "funders": len(data.load_funders()),
-        "source": "https://github.com/",
+        "source": "https://github.com/EMMANUEL-LAMPTEY-96/investor-fit",
     })
 
 

@@ -119,7 +119,7 @@ funder, see [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Run it yourself
 
 ```bash
-git clone https://github.com/<your-username>/investor-fit-agent && cd investor-fit-agent
+git clone https://github.com/EMMANUEL-LAMPTEY-96/investor-fit && cd investor-fit
 pip install -r requirements.txt
 
 python -m investor_fit.server                         # local (stdio) for Claude Desktop / Code
