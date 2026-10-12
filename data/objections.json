@@ -1,0 +1,1751 @@
+[
+ {
+  "id": "customer_concentration",
+  "title": "Revenue depends on one or a few customers",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "pe",
+   "vc"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "trade_finance",
+   "equity"
+  ],
+  "why_funders_care": "If one buyer leaves, pays late or squeezes prices, the company's ability to repay or grow can collapse. Receivables lenders often cap how much they will advance against any single debtor.",
+  "warning_signs": [
+   "Largest customer accounts for more than about 20-25% of revenue",
+   "Top 3-5 customers account for most of sales",
+   "Receivables ledger dominated by one debtor",
+   "No written contracts with the main customers"
+  ],
+  "mitigations": [
+   "Diversify into new customers, channels or regions and track concentration monthly",
+   "Put the key relationships under multi-year written contracts",
+   "Use credit insurance or ask for lender-approved concentration limits",
+   "Show the creditworthiness and payment record of the main buyers"
+  ],
+  "evidence_to_prepare": [
+   "Revenue by customer for the last 2-3 years",
+   "Aged receivables by debtor",
+   "Key customer contracts and payment history",
+   "Diversification plan with pipeline"
+  ],
+  "sources": [
+   {
+    "title": "Invoice Finance - some typical facility terms explained",
+    "publisher": "Macla Money",
+    "year": "2016",
+    "url": "https://www.macla.co.uk/blog/invoice-finance-some-typical-facility-terms-explained.html",
+    "supports": "Explains that invoice finance lenders apply concentration limits on any one debtor, that 'the more concentrated your ledger the greater the risk', and that 20% is a standard limit for many providers."
+   },
+   {
+    "title": "Into The Lender's Mind #11: The risk of customer concentration and how to dilute it",
+    "publisher": "Into The Lender's Mind (newsletter, ellcadofinance)",
+    "year": "n.d.",
+    "url": "https://into-the-lenders-mind.beehiiv.com/p/the-risk-of-customer-concentration-and-how-to-dilute-it",
+    "supports": "Practitioner newsletter describing a bank red-flagging a profitable company because it had one customer; it offers rule-of-thumb thresholds (e.g. largest customer above 25% of revenue) and mitigations. Informal source, not an official guideline."
+   },
+   {
+    "title": "Credit Risk I: Sample Loan Policy Outline (FDIC guidance outline for loan policies)",
+    "publisher": "CDFI Fund, U.S. Treasury",
+    "year": "n.d.",
+    "url": "https://www.cdfifund.gov/sites/cdfi/files/documents/fdic-guidance-outline-for-loan-policies.pdf",
+    "supports": "Sample loan policy outline lists 'Concentrations of Loans' (including common source of repayment) as a topic lender policies address; general support only, at portfolio level rather than borrower level."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "short_track_record",
+  "title": "Too little operating or credit history",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "export_credit"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "trade_finance"
+  ],
+  "why_funders_care": "Lenders rely on past performance and repayment behaviour to judge risk; young firms have short credit histories and new borrowers default more often in some portfolios.",
+  "warning_signs": [
+   "Company trading for less than 2-3 years",
+   "No prior loans or repayment record with any lender",
+   "Fewer than two years of filed accounts or tax returns",
+   "Recent change of business model or ownership"
+  ],
+  "mitigations": [
+   "Start with a smaller or shorter facility to build a repayment record",
+   "Use founders' track record, guarantees or a credit guarantee scheme",
+   "Bring in a co-lender or supplier credit with a record",
+   "Report to credit bureaus where available"
+  ],
+  "evidence_to_prepare": [
+   "All available historical accounts and management accounts",
+   "Bank statements for 12-24 months",
+   "Repayment history on any prior loans, supplier credit or leases",
+   "Founder CVs showing relevant prior experience"
+  ],
+  "sources": [
+   {
+    "title": "MSME Finance Gap: Assessment of the Shortfalls and Opportunities in Financing Micro, Small and Medium Enterprises in Emerging Markets",
+    "publisher": "International Finance Corporation (IFC)",
+    "year": "2017",
+    "url": "https://www.ifc.org/content/dam/ifc/doclink/2018/msme-finance-gap-report.pdf",
+    "supports": "States that younger firms face particular difficulty 'because they have shorter credit histories and typically do not have established relationships with lenders'."
+   },
+   {
+    "title": "Pathways to Prosperity: Rural and Agricultural Finance State of the Sector Report",
+    "publisher": "ISF Advisors and Mastercard Foundation Rural and Agricultural Finance Learning Lab",
+    "year": "2019",
+    "url": "https://smallfoundation.ie/wp-content/uploads/2022/10/2019_RAFState-of-the-Sector-1.pdf",
+    "supports": "Reports from a lender portfolio analysis that 'new borrowers' risk of default was twice as high as that of existing borrowers' in agri-SME lending."
+   },
+   {
+    "title": "Can I get a loan after three to five years of trading in the UK?",
+    "publisher": "Start Up Loans Company (British Business Bank)",
+    "year": "c. 2025",
+    "url": "https://www.startuploans.co.uk/support-and-guidance/business-guidance/business-inspiration/can-i-get-a-loan-after-three-to-five-years-of-trading-in-the-uk",
+    "supports": "British Business Bank subsidiary notes that trading history 'shows stability, experience, and proven performance' and that a few years of accounts can help an application."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "no_audited_accounts",
+  "title": "No audited or reliable financial statements",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "vc",
+   "pe",
+   "export_credit"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "trade_finance",
+   "equity",
+   "quasi_equity"
+  ],
+  "why_funders_care": "Funders need credible financial information to assess risk; where independent, credible accounts are missing, lenders face information asymmetry and either decline or price higher.",
+  "warning_signs": [
+   "Only unaudited or internally prepared accounts",
+   "Accounts prepared mainly for tax purposes and differing from management figures",
+   "Auditor not independent or with limited standing",
+   "Late or missing statutory filings"
+  ],
+  "mitigations": [
+   "Commission an audit or at least a review by a reputable independent accountant",
+   "Adopt a consistent accounting framework and monthly close",
+   "Reconcile tax, statutory and management accounts",
+   "Explain any qualified audit opinions"
+  ],
+  "evidence_to_prepare": [
+   "Audited or reviewed financial statements for 2-3 years",
+   "Monthly management accounts",
+   "Auditor's management letter",
+   "Reconciliation of statutory vs. management figures"
+  ],
+  "sources": [
+   {
+    "title": "Financing SMEs in a context of strong information asymmetry (J. Lefilleur, Private Sector & Development)",
+    "publisher": "Proparco",
+    "year": "2009",
+    "url": "https://proparco.fr/en/article/financing-smes-context-strong-information-asymmetry",
+    "supports": "Describes a lack of 'independent, competent and credible accounting firms' in Sub-Saharan Africa as affecting 'the quality of financial information transmitted to banks', which it calls a main stumbling block to SME finance."
+   },
+   {
+    "title": "Empirical study on financial information and cost of finance in Serbia (SME financial reporting quality)",
+    "publisher": "World Bank (Centre for Financial Reporting Reform)",
+    "year": "2017",
+    "url": "https://cfrr.worldbank.org/sites/default/files/2020-03/Emirical%20study%20on%20financial%20information%20%20and%20cost%20of%20finance%20in%20serbia%20PUBLICATION.pdf",
+    "supports": "World Bank study finds SME financial reporting quality is inversely related to the cost of debt (modest effect, about 24-33 basis points per standard deviation); it does not test audit status itself."
+   },
+   {
+    "title": "SME Finance",
+    "publisher": "Making Finance Work for Africa (MFW4A)",
+    "year": "2019",
+    "url": "https://www.mfw4a.org/our-work/sme-finance",
+    "supports": "Notes that the quality and reliability of SME financial statements 'varies across countries and firms' and that MSMEs often lack capacity to prepare sound statements."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "informal_or_inconsistent_records",
+  "title": "Informal, incomplete or inconsistent records",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "vc",
+   "pe"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "equity",
+   "grant"
+  ],
+  "why_funders_care": "Informal firms cannot document cash flows or ownership, so formal lenders largely cannot serve them; poor record keeping is cited as an internal risk factor by agri lenders.",
+  "warning_signs": [
+   "Business not formally registered or licences lapsed",
+   "Sales recorded in cash with no bank trail",
+   "Numbers differ between pitch deck, accounts and bank statements",
+   "Personal and business transactions mixed in one account"
+  ],
+  "mitigations": [
+   "Register the business and run all revenue through a business bank account",
+   "Adopt simple bookkeeping software and keep receipts",
+   "Reconcile records monthly to bank statements",
+   "Consider mobile-money or digital payment trails as evidence"
+  ],
+  "evidence_to_prepare": [
+   "Certificate of incorporation and licences",
+   "Business bank and mobile-money statements",
+   "Sales and purchase ledgers",
+   "Reconciliation of figures across documents"
+  ],
+  "sources": [
+   {
+    "title": "MSME Finance Gap: Assessment of the Shortfalls and Opportunities in Financing Micro, Small and Medium Enterprises in Emerging Markets",
+    "publisher": "International Finance Corporation (IFC)",
+    "year": "2017",
+    "url": "https://www.ifc.org/content/dam/ifc/doclink/2018/msme-finance-gap-report.pdf",
+    "supports": "States that 'the amount of formal lending to informal firms is close to zero' and that MSMEs find it difficult to ensure transparency about their creditworthiness."
+   },
+   {
+    "title": "Pathways to Prosperity: Rural and Agricultural Finance State of the Sector Report",
+    "publisher": "ISF Advisors and Mastercard Foundation Rural and Agricultural Finance Learning Lab",
+    "year": "2019",
+    "url": "https://smallfoundation.ie/wp-content/uploads/2022/10/2019_RAFState-of-the-Sector-1.pdf",
+    "supports": "Lists 'internal factors such as poor management capacity and record keeping' among reasons financial institutions perceive high risk in agri-SME lending."
+   },
+   {
+    "title": "Financing SMEs in a context of strong information asymmetry (J. Lefilleur, Private Sector & Development)",
+    "publisher": "Proparco",
+    "year": "2009",
+    "url": "https://proparco.fr/en/article/financing-smes-context-strong-information-asymmetry",
+    "supports": "Says most SMEs operate informally and often cannot provide the basic information banks require."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "insufficient_collateral",
+  "title": "Not enough acceptable collateral",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "export_credit"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "trade_finance",
+   "guarantee"
+  ],
+  "why_funders_care": "Banks often use collateral as a secondary source of repayment and to offset information gaps; many SMEs lack assets of the type and value lenders accept.",
+  "warning_signs": [
+   "Few fixed assets or assets without clear title",
+   "Land held under customary or unregistered title",
+   "Requested loan far exceeds pledgeable asset value",
+   "Assets already pledged to other lenders"
+  ],
+  "mitigations": [
+   "Use movable collateral (equipment, inventory, receivables) where a registry exists",
+   "Seek a partial credit guarantee from a DFI or national scheme",
+   "Use cash-flow or contract-based lenders, e.g. purchase order or receivables finance",
+   "Offer personal or corporate guarantees where appropriate"
+  ],
+  "evidence_to_prepare": [
+   "Asset register with valuations and title documents",
+   "Existing charges/encumbrance search",
+   "Receivables and inventory reports",
+   "Details of any guarantee scheme eligibility"
+  ],
+  "sources": [
+   {
+    "title": "MSME Finance Gap: Assessment of the Shortfalls and Opportunities in Financing Micro, Small and Medium Enterprises in Emerging Markets",
+    "publisher": "International Finance Corporation (IFC)",
+    "year": "2017",
+    "url": "https://www.ifc.org/content/dam/ifc/doclink/2018/msme-finance-gap-report.pdf",
+    "supports": "States that 'MSMEs find it difficult to provide high-quality collateral at all times' and lists high collateral requirements among terms that discourage applications."
+   },
+   {
+    "title": "The Trade Finance Program and Its Role in Lifting Impediments to Trade (ADB Briefs No. 82)",
+    "publisher": "Asian Development Bank (ADB)",
+    "year": "2017",
+    "url": "https://www.adb.org/sites/default/files/publication/351001/trade-finance-program-impediments.pdf",
+    "supports": "Reports that trade finance rejections were mainly attributed to inability to meet standard bank requirements, including collateral (47% of respondents)."
+   },
+   {
+    "title": "Financing SMEs in a context of strong information asymmetry (J. Lefilleur, Private Sector & Development)",
+    "publisher": "Proparco",
+    "year": "2009",
+    "url": "https://proparco.fr/en/article/financing-smes-context-strong-information-asymmetry",
+    "supports": "Says collateral is often a prerequisite for loans, which 'excludes the majority of entrepreneurs', and that mortgages are hard to enforce in Sub-Saharan Africa."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "weak_debt_service_coverage",
+  "title": "Cash flow too thin to cover repayments",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "export_credit"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "trade_finance",
+   "quasi_equity"
+  ],
+  "why_funders_care": "Lenders' primary repayment source is operating cash flow; if cash flow does not comfortably exceed scheduled debt service, the loan is unaffordable.",
+  "warning_signs": [
+   "EBITDA or operating cash flow below 1.1-1.25x annual debt service",
+   "Recent losses or volatile margins",
+   "Existing debt repayments already absorb most cash flow",
+   "Repayment relies on projected rather than historical cash flow"
+  ],
+  "mitigations": [
+   "Ask for a smaller amount, longer tenor or grace period matched to cash generation",
+   "Restructure or refinance expensive existing debt",
+   "Raise equity alongside debt",
+   "Show seasonal cash-flow profile and align repayments to it"
+  ],
+  "evidence_to_prepare": [
+   "DSCR calculation on historical and projected cash flow",
+   "Monthly cash-flow forecast for loan tenor",
+   "Debt schedule of all existing obligations",
+   "Sensitivity analysis on sales and margins"
+  ],
+  "sources": [
+   {
+    "title": "Best Practices: SOP 50 10 8 Update - New 7(a) Small Loan Underwriting Requirements",
+    "publisher": "Starfield & Smith",
+    "year": "2026",
+    "url": "https://starfieldsmith.com/2026/01/best-practices-sop-50-10-8-update-new-7a-small-loan-underwriting-requirements/",
+    "supports": "Law-firm summary of SBA SOP 50 10 8 stating that for 7(a) Small Loans the DSCR 'must be equal to or greater than 1.1:1 on an historical and/or projected cash flow basis'."
+   },
+   {
+    "title": "The 5 C's of Credit",
+    "publisher": "CDC Small Business Finance (SBA lender)",
+    "year": "2020",
+    "url": "https://cdcloans.com/5-cs-of-credit/",
+    "supports": "SBA lender describes 'Capacity' as 'a measure of your ability to pay the lender back', comparing income to expenses and asking for two years of filed taxes and interim financials."
+   },
+   {
+    "title": "Small business finance: what today's lenders look for",
+    "publisher": "THP Chartered Accountants",
+    "year": "2025",
+    "url": "https://www.thp.co.uk/small-business-finance-what-lenders-look-for/",
+    "supports": "UK accountants' guide says lenders want evidence that 'dependable cash flow and consistent profits show you can afford repayments'."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "high_leverage",
+  "title": "Already too much debt relative to equity",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "pe",
+   "impact_fund"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "quasi_equity",
+   "equity"
+  ],
+  "why_funders_care": "High existing debt leaves little capacity to absorb shocks and reduces the owner's stake at risk; lenders look for meaningful owner capital ('skin in the game').",
+  "warning_signs": [
+   "Debt-to-equity or debt-to-EBITDA well above sector norms",
+   "Negative or very thin net worth",
+   "Shareholder loans used instead of equity",
+   "Little owner cash contribution to the project being financed"
+  ],
+  "mitigations": [
+   "Convert shareholder loans to equity or subordinate them",
+   "Raise new equity or quasi-equity before adding senior debt",
+   "Retain earnings rather than distribute",
+   "Show owner contribution to the project"
+  ],
+  "evidence_to_prepare": [
+   "Balance sheet with debt schedule",
+   "Leverage ratios vs. sector peers",
+   "Subordination agreements for shareholder loans",
+   "Evidence of owner equity injection"
+  ],
+  "sources": [
+   {
+    "title": "SBA SOP 50 10 8 Lender and Development Company Loan Programs (copy hosted by Coleman Report)",
+    "publisher": "U.S. Small Business Administration",
+    "year": "2025",
+    "url": "https://colemanreport.com/wp-content/uploads/2025/04/SOP-50-10-8-effective-6.1.2025-Final.pdf",
+    "supports": "SBA SOP 50 10 8 lists 'leverage ratio' among examples of 'other factors' (with credit history and management experience) that lenders may consider as credit weaknesses."
+   },
+   {
+    "title": "The 5 C's of Credit",
+    "publisher": "CDC Small Business Finance (SBA lender)",
+    "year": "2020",
+    "url": "https://cdcloans.com/5-cs-of-credit/",
+    "supports": "SBA lender explains 'Capital' as 'how much skin you are willing to put in the game', noting banks often look for a 30% down payment (CDC: 10%, 20% for startups)."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "currency_mismatch",
+  "title": "Borrowing in hard currency but earning in local currency",
+  "funder_types": [
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "bank"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "quasi_equity"
+  ],
+  "why_funders_care": "A devaluation can sharply raise the local-currency cost of hard-currency debt for a business with local revenues, a known driver of debt distress.",
+  "warning_signs": [
+   "USD/EUR loan requested by a business with mainly local-currency sales",
+   "No natural hedge (exports or hard-currency pricing)",
+   "History of sharp local currency depreciation",
+   "No hedging plan or budget"
+  ],
+  "mitigations": [
+   "Seek local-currency lending or hedged products (e.g. via TCX-backed lenders)",
+   "Match currency of debt to currency of revenues",
+   "Price contracts in or index them to hard currency where legitimate",
+   "Stress-test repayments under devaluation scenarios"
+  ],
+  "evidence_to_prepare": [
+   "Revenue and cost breakdown by currency",
+   "FX sensitivity analysis",
+   "Export contracts or hard-currency receipts",
+   "Hedging quotes or local-currency term sheets"
+  ],
+  "sources": [
+   {
+    "title": "African Development Bank approves equity investment in the Currency Exchange Fund (TCX) to support access to local currency financing across Africa",
+    "publisher": "African Development Bank Group",
+    "year": "2025",
+    "url": "https://afdb.africa-newsroom.com/press/african-development-bank-approves-equity-investment-in-the-currency-exchange-fund-to-support-access-to-local-currency-financing-across-africa",
+    "supports": "AfDB says its TCX investment aims to 'mitigate the foreign exchange risks faced by borrowers in Africa' and reduce 'the mismatch between the currency of debt and revenue for local borrowers', including MSMEs."
+   },
+   {
+    "title": "Key Financing Policy Reforms and Solutions for the Fourth International Conference on Financing for Development",
+    "publisher": "Collaborative for Frontier Finance",
+    "year": "2024",
+    "url": "https://financing.desa.un.org/sites/default/files/2024-10/Collaborative%20for%20Frontier%20Finance_FfD4_Input%20Paper%20vF.pdf",
+    "supports": "Recommends DFIs expand access to currency hedging platforms and local-currency capital for local capital providers serving small and growing businesses."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "ticket_too_small",
+  "title": "Deal is too small for the funder",
+  "funder_types": [
+   "dfi",
+   "pe",
+   "vc",
+   "impact_fund",
+   "bank"
+  ],
+  "instruments": [
+   "debt",
+   "equity",
+   "quasi_equity"
+  ],
+  "why_funders_care": "Due diligence and monitoring costs are similar for small and large deals, so small tickets can be uneconomic; many DFIs and funds have explicit minimum ticket sizes.",
+  "warning_signs": [
+   "Amount sought is below the funder's stated minimum",
+   "Need is in the $20k-$2m 'missing middle' range but approaching large DFIs directly",
+   "High due-diligence cost relative to deal size"
+  ],
+  "mitigations": [
+   "Target funders whose ticket range fits (local capital providers, small business funds, SME banks)",
+   "Access large DFIs indirectly via their funds or on-lending partners",
+   "Combine needs into a larger, staged facility only if justified"
+  ],
+  "evidence_to_prepare": [
+   "Clear statement of amount and staging",
+   "Shortlist of funders with matching ticket ranges",
+   "Standardised data room to lower due-diligence cost"
+  ],
+  "sources": [
+   {
+    "title": "The Missing Middles: Segmenting Enterprises to Better Understand Their Financial Needs (Summary Report)",
+    "publisher": "Collaborative for Frontier Finance / Omidyar Network / Dalberg",
+    "year": "2018",
+    "url": "https://omidyar.com/wp-content/uploads/2020/09/Enterprise_Segmentation_Summary_Report.pdf",
+    "supports": "States that 'transaction costs for very small ticket financing often exceed the income that financial service providers can obtain' and that many dynamic enterprises are not large or high-yielding enough to justify those costs."
+   },
+   {
+    "title": "Partner with us",
+    "publisher": "Norfund",
+    "year": "n.d.",
+    "url": "https://www.norfund.no/contact-us",
+    "supports": "Norfund states equity tickets 'from USD 5-50 million' and loans from USD 5 million, illustrating DFI minimum ticket sizes."
+   },
+   {
+    "title": "Financing SMEs in a context of strong information asymmetry (J. Lefilleur, Private Sector & Development)",
+    "publisher": "Proparco",
+    "year": "2009",
+    "url": "https://proparco.fr/en/article/financing-smes-context-strong-information-asymmetry",
+    "supports": "Says information asymmetry raises transaction costs and, because SME loan amounts are small, creates 'a problem of economies of scale'."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "stage_mismatch",
+  "title": "Company's stage or growth profile does not fit the funder",
+  "funder_types": [
+   "vc",
+   "pe",
+   "impact_fund",
+   "dfi",
+   "bank"
+  ],
+  "instruments": [
+   "equity",
+   "debt",
+   "quasi_equity",
+   "grant"
+  ],
+  "why_funders_care": "Funders target particular stages and growth profiles; applying venture-capital expectations to moderate-growth or asset-heavy businesses, or bank criteria to pre-revenue ventures, creates mismatch.",
+  "warning_signs": [
+   "Pre-revenue company seeking bank debt",
+   "Steady, moderate-growth business pitching to VCs",
+   "Asset-heavy model with long payback approaching funds with short horizons",
+   "Requesting growth equity before product-market fit"
+  ],
+  "mitigations": [
+   "Identify which enterprise segment you are and target matching capital",
+   "Consider revenue-based finance, mezzanine or blended capital for moderate-growth firms",
+   "Use grants or early-stage risk capital before seeking debt"
+  ],
+  "evidence_to_prepare": [
+   "Stage-appropriate milestones and metrics",
+   "Funding roadmap by stage",
+   "Rationale for instrument choice"
+  ],
+  "sources": [
+   {
+    "title": "The Missing Middles: Segmenting Enterprises to Better Understand Their Financial Needs (Summary Report)",
+    "publisher": "Collaborative for Frontier Finance / Omidyar Network / Dalberg",
+    "year": "2018",
+    "url": "https://omidyar.com/wp-content/uploads/2020/09/Enterprise_Segmentation_Summary_Report.pdf",
+    "supports": "Segments SGBs into high-growth ventures, niche ventures, dynamic enterprises and livelihood-sustaining enterprises with different needs, and identifies a mismatch from applying 'Silicon Valley' VC growth and timeline expectations to asset-heavy ventures."
+   },
+   {
+    "title": "Key Financing Policy Reforms and Solutions for the Fourth International Conference on Financing for Development",
+    "publisher": "Collaborative for Frontier Finance",
+    "year": "2024",
+    "url": "https://financing.desa.un.org/sites/default/files/2024-10/Collaborative%20for%20Frontier%20Finance_FfD4_Input%20Paper%20vF.pdf",
+    "supports": "Describes the 'missing middle' of SGBs 'too large for microfinance and too small or risky for PE/VC investments and banks'."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "weak_governance",
+  "title": "Weak governance and controls",
+  "funder_types": [
+   "dfi",
+   "impact_fund",
+   "pe",
+   "vc",
+   "impact_lender",
+   "bank"
+  ],
+  "instruments": [
+   "equity",
+   "quasi_equity",
+   "debt"
+  ],
+  "why_funders_care": "Weak governance raises risks of fraud, regulatory non-compliance and value loss; DFIs and impact investors assess governance and integrity alongside financials.",
+  "warning_signs": [
+   "No board, or board made up only of founders/family",
+   "No financial controls, segregation of duties or approval limits",
+   "Unclear decision rights between owners and managers",
+   "No conflict-of-interest policy"
+  ],
+  "mitigations": [
+   "Set up an advisory board or board with at least one independent member",
+   "Adopt basic financial controls and delegation of authority",
+   "Introduce a conflicts-of-interest and related-party policy",
+   "Hold and minute regular board meetings"
+  ],
+  "evidence_to_prepare": [
+   "Board composition and minutes",
+   "Governance charter / shareholders' agreement",
+   "Internal control and approval policies",
+   "Organisation chart"
+  ],
+  "sources": [
+   {
+    "title": "IFC Family Business Governance Handbook (2nd edition)",
+    "publisher": "International Finance Corporation (IFC)",
+    "year": "2008",
+    "url": "https://documents1.worldbank.org/curated/zh/461311468313533527/pdf/450770WP0ENGLI1siness1200801PUBLIC1.pdf",
+    "supports": "Cites a study that 'an active and outside (non-family-controlled) board was the most critical element' for long-lived family firms, and says investors highly value board, shareholder-rights and disclosure practices."
+   },
+   {
+    "title": "Governance red flags in venture capital start-ups: interpreting and acting on warning signs",
+    "publisher": "British International Investment (BII)",
+    "year": "c. 2023",
+    "url": "https://www.bii.co.uk/en/news-insight/insight/articles/governance-red-flags-in-venture-capital-start-ups-interpreting-and-acting-on-warning-signs/",
+    "supports": "BII guidance says weak governance can lead to fraud, regulatory non-compliance, financial and impact losses and reputational damage, and that investors should proactively identify governance red flags."
+   },
+   {
+    "title": "VC Governance Guidance Note",
+    "publisher": "FMO (Dutch entrepreneurial development bank)",
+    "year": "c. 2023",
+    "url": "https://www.fmo.nl/vc-governance-guidance-note",
+    "supports": "FMO note says investors should 'help founders shape governance and internal controls as the company grows' and that 'gaps are typically only addressed when issues arise'."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "key_person_dependence",
+  "title": "Business depends on one person",
+  "funder_types": [
+   "vc",
+   "pe",
+   "impact_fund",
+   "dfi",
+   "bank",
+   "impact_lender"
+  ],
+  "instruments": [
+   "equity",
+   "debt",
+   "quasi_equity"
+  ],
+  "why_funders_care": "If the founder holds all relationships, knowledge and decisions, illness, departure or death could stop the business; succession is a well-known weakness of founder- and family-run firms.",
+  "warning_signs": [
+   "Founder signs all contracts and holds all key relationships",
+   "No deputy, successor or documented processes",
+   "No key-person insurance",
+   "Founder also personally guarantees most obligations"
+  ],
+  "mitigations": [
+   "Develop a second line of management and delegate authority",
+   "Document processes and customer relationships",
+   "Put a succession plan in place",
+   "Consider key-person life/disability insurance"
+  ],
+  "evidence_to_prepare": [
+   "Organisation chart with deputies",
+   "Succession plan",
+   "Key-person insurance policy",
+   "Process documentation"
+  ],
+  "sources": [
+   {
+    "title": "IFC Family Business Governance Handbook (2nd edition)",
+    "publisher": "International Finance Corporation (IFC)",
+    "year": "2008",
+    "url": "https://documents1.worldbank.org/curated/zh/461311468313533527/pdf/450770WP0ENGLI1siness1200801PUBLIC1.pdf",
+    "supports": "Notes '95 percent of family businesses do not survive the third generation of ownership' and that founders 'should make the necessary efforts to plan for their succession', warning many put it off until the last minute."
+   },
+   {
+    "title": "How Do Venture Capitalists Make Decisions? (Gompers, Gornall, Kaplan, Strebulaev)",
+    "publisher": "NBER conference paper / Harvard Business School et al.",
+    "year": "2016",
+    "url": "https://conference.nber.org/conf_papers/f88660/f88660.pdf",
+    "supports": "Survey of VCs finds the team is the top driver of both success (96%) and failure (92%); general support for funders' focus on people, not specifically on single-person dependence."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "management_depth",
+  "title": "Management team lacks depth or relevant experience",
+  "funder_types": [
+   "vc",
+   "pe",
+   "impact_fund",
+   "dfi",
+   "bank",
+   "impact_lender"
+  ],
+  "instruments": [
+   "equity",
+   "debt",
+   "quasi_equity",
+   "working_capital"
+  ],
+  "why_funders_care": "Investors rate the management team as the most important selection factor, and lenders treat poor management capacity as a risk driver.",
+  "warning_signs": [
+   "No finance lead or CFO-type role",
+   "Key roles held by family members without relevant skills",
+   "Team lacks industry experience",
+   "High turnover of senior staff"
+  ],
+  "mitigations": [
+   "Hire or contract a qualified finance manager",
+   "Add advisors or non-executive directors with sector experience",
+   "Set merit-based roles and pay for family members",
+   "Show a hiring plan funded by the raise"
+  ],
+  "evidence_to_prepare": [
+   "CVs of the management team",
+   "Organisation chart and hiring plan",
+   "Advisory board list",
+   "Evidence of past execution"
+  ],
+  "sources": [
+   {
+    "title": "How Do Venture Capitalists Make Decisions?",
+    "publisher": "Harvard Law School Forum on Corporate Governance",
+    "year": "2019",
+    "url": "https://corpgov.law.harvard.edu/2019/08/20/how-do-venture-capitalists-make-decisions",
+    "supports": "Reports the management team was mentioned as important by 95% of VC firms and as the most important factor by 47%."
+   },
+   {
+    "title": "How Do Venture Capitalists Make Decisions? (NBER Digest)",
+    "publisher": "National Bureau of Economic Research",
+    "year": "2016",
+    "url": "https://www.nber.org/digest/dec16/w22587.html",
+    "supports": "Says 'VCs view the quality of the management team as more important than the business model, product, or market', valuing ability, industry experience and passion."
+   },
+   {
+    "title": "Pathways to Prosperity: Rural and Agricultural Finance State of the Sector Report",
+    "publisher": "ISF Advisors and Mastercard Foundation Rural and Agricultural Finance Learning Lab",
+    "year": "2019",
+    "url": "https://smallfoundation.ie/wp-content/uploads/2022/10/2019_RAFState-of-the-Sector-1.pdf",
+    "supports": "Lists 'poor management capacity' among internal factors behind lenders' high perceived risk in agri-SME lending."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "tax_or_regulatory_noncompliance",
+  "title": "Tax arrears or regulatory non-compliance",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "vc",
+   "pe",
+   "export_credit"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "equity",
+   "trade_finance",
+   "grant"
+  ],
+  "why_funders_care": "Unpaid taxes signal cash strain and create liabilities that can rank ahead of lenders or trigger penalties; lenders often ask for tax clearance.",
+  "warning_signs": [
+   "Outstanding VAT, payroll or corporate tax",
+   "No valid tax clearance/compliance certificate",
+   "Expired licences or permits",
+   "Ongoing disputes with regulators"
+  ],
+  "mitigations": [
+   "Agree a payment plan with the tax authority and stick to it",
+   "Obtain a current tax clearance certificate",
+   "Renew licences and keep a compliance calendar",
+   "Disclose any disputes upfront with legal assessment"
+  ],
+  "evidence_to_prepare": [
+   "Tax clearance/compliance certificate",
+   "Tax authority statement of account and payment plan",
+   "Licences and permits register",
+   "Legal opinion on any disputes"
+  ],
+  "sources": [
+   {
+    "title": "Small business finance: what today's lenders look for",
+    "publisher": "THP Chartered Accountants",
+    "year": "2025",
+    "url": "https://www.thp.co.uk/small-business-finance-what-lenders-look-for/",
+    "supports": "UK accountants state that unpaid tax liabilities such as VAT or Corporation Tax 'are a major red flag to lenders'."
+   },
+   {
+    "title": "Why SARS Compliance Matters for SMEs Seeking Business Funding",
+    "publisher": "Vodafone V-Hub (South Africa)",
+    "year": "2025",
+    "url": "https://za.snb.v-hub.vodafone.com/knowledge-centre/why-sars-compliance-matters-for-smes-seeking-business-funding",
+    "supports": "South African SME guide says lenders use SARS records as a key indicator, that tax debt 'suggests potential financial instability', and that without a path to compliance most applications are declined; lists a valid Tax Clearance Certificate among documents."
+   },
+   {
+    "title": "SBA SOP 50 10 8 Lender and Development Company Loan Programs (copy hosted by Coleman Report)",
+    "publisher": "U.S. Small Business Administration",
+    "year": "2025",
+    "url": "https://colemanreport.com/wp-content/uploads/2025/04/SOP-50-10-8-effective-6.1.2025-Final.pdf",
+    "supports": "SBA SOP 50 10 8 states operating company financial statements 'are subject to tax verification'; general support that lenders verify figures against tax records."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "esg_standards_gap",
+  "title": "Environmental, social or governance standards not met",
+  "funder_types": [
+   "dfi",
+   "impact_fund",
+   "impact_lender",
+   "pe",
+   "export_credit",
+   "bank"
+  ],
+  "instruments": [
+   "debt",
+   "equity",
+   "quasi_equity",
+   "guarantee",
+   "grant"
+  ],
+  "why_funders_care": "DFIs and many impact investors require clients to identify and manage environmental and social risks to recognised standards such as the IFC Performance Standards.",
+  "warning_signs": [
+   "No environmental and social policy or management system",
+   "Labour issues (no contracts, unsafe conditions, child or forced labour risk in supply chain)",
+   "No grievance mechanism",
+   "Pollution, land or community impacts not assessed"
+  ],
+  "mitigations": [
+   "Adopt an E&S policy and a management system proportionate to risk",
+   "Run an E&S risk assessment and action plan",
+   "Set up worker and community grievance mechanisms",
+   "Train staff on health and safety and labour standards"
+  ],
+  "evidence_to_prepare": [
+   "E&S policy and ESMS documentation",
+   "E&S action plan",
+   "Health & safety records and HR policies",
+   "Permits and any impact assessments"
+  ],
+  "sources": [
+   {
+    "title": "IFC Performance Standards on Environmental and Social Sustainability",
+    "publisher": "International Finance Corporation (IFC)",
+    "year": "2012",
+    "url": "https://www.ifc.org/content/dam/ifc/doc/mgrt/ifc-performance-standards.pdf",
+    "supports": "PS1 requires clients to establish an Environmental and Social Management System, policy, risk identification, stakeholder engagement and grievance mechanism; PS2 covers labour conditions including child and forced labour and occupational health and safety."
+   },
+   {
+    "title": "Norfund Risk Appetite Statement",
+    "publisher": "Norfund",
+    "year": "2022",
+    "url": "https://www.norfund.no/wp-content/uploads/2023/10/Norfund-Risk-Appetite-Statement.pdf",
+    "supports": "Norfund states it must minimise 'risks related to environmental, social and governance (ESG) compliance, as well as climate risk at investee level'."
+   },
+   {
+    "title": "Root Capital: partnering with small and growing agribusinesses to address social and environmental challenges",
+    "publisher": "International Institute for Environment and Development (IIED)",
+    "year": "2024",
+    "url": "https://www.iied.org/root-capital-partnering-small-growing-agribusinesses-address-social-environmental-challenges",
+    "supports": "Notes Root Capital runs impact due diligence including a 'negative screen' for practices that could harm communities or the environment."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "excluded_activity",
+  "title": "Business activity is on a funder exclusion list",
+  "funder_types": [
+   "dfi",
+   "impact_fund",
+   "impact_lender",
+   "bank",
+   "pe",
+   "export_credit"
+  ],
+  "instruments": [
+   "debt",
+   "equity",
+   "quasi_equity",
+   "trade_finance",
+   "guarantee",
+   "grant"
+  ],
+  "why_funders_care": "DFIs and their intermediaries will not finance activities on their exclusion lists (e.g. weapons, tobacco, gambling, certain alcohol), regardless of financial strength.",
+  "warning_signs": [
+   "Revenue from weapons, tobacco, gambling, spirits or other listed activities",
+   "Products banned under host-country law or international conventions",
+   "Use of forced or harmful child labour",
+   "Commercial logging in primary tropical moist forest"
+  ],
+  "mitigations": [
+   "Check each target funder's exclusion list early",
+   "If the activity is ancillary, quantify and ring-fence it",
+   "Target funders whose mandate permits the activity"
+  ],
+  "evidence_to_prepare": [
+   "Revenue breakdown by product/activity",
+   "Statement of compliance with exclusion lists",
+   "Supply-chain and sourcing documentation"
+  ],
+  "sources": [
+   {
+    "title": "IFC Exclusion List (2007)",
+    "publisher": "International Finance Corporation (IFC)",
+    "year": "2007",
+    "url": "https://www.ifc.org/exclusionlist",
+    "supports": "Lists excluded activities including weapons and munitions, tobacco, alcoholic beverages (except beer and wine), gambling, unbonded asbestos fibres and illegal products; ancillary activities may be exempt, and financial intermediaries must also exclude forced/harmful child labour."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "unclear_use_of_funds",
+  "title": "Unclear or unjustified use of funds",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "vc",
+   "pe",
+   "export_credit"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "trade_finance",
+   "equity",
+   "quasi_equity",
+   "grant"
+  ],
+  "why_funders_care": "Funders need to know exactly what the money will pay for, so they can judge whether it generates the cash to repay or the growth to return capital.",
+  "warning_signs": [
+   "Request for a round number with no breakdown",
+   "Funds partly to repay owners or old debts without explanation",
+   "Mismatch between instrument and purpose (e.g. short-term loan for long-term capex)",
+   "No link between spending and revenue impact"
+  ],
+  "mitigations": [
+   "Provide an itemised use-of-funds table with quotes",
+   "Tie each spend to milestones and revenue or cost impact",
+   "Match instrument tenor to the asset or need financed"
+  ],
+  "evidence_to_prepare": [
+   "Use-of-funds table with supplier quotes",
+   "Milestone plan",
+   "Business plan section linking spend to returns"
+  ],
+  "sources": [
+   {
+    "title": "Start your journey",
+    "publisher": "Better Business Finance (supported by UK Finance and UK banks)",
+    "year": "n.d.",
+    "url": "https://www.betterbusinessfinance.co.uk/start-your-journey",
+    "supports": "UK industry guidance says lenders 'will want to understand how you plan to use the finance you have requested' (premises, equipment, stock, cash flow)."
+   },
+   {
+    "title": "Credit Risk I: Sample Loan Policy Outline (FDIC guidance outline for loan policies)",
+    "publisher": "CDFI Fund, U.S. Treasury",
+    "year": "n.d.",
+    "url": "https://www.cdfifund.gov/sites/cdfi/files/documents/fdic-guidance-outline-for-loan-policies.pdf",
+    "supports": "Sample loan policy outline calls for a statement of the 'Purpose of loan' in applications and 'Acceptable types of loans and purposes' in policy."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "unrealistic_projections",
+  "title": "Projections look unrealistic",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "vc",
+   "pe"
+  ],
+  "instruments": [
+   "debt",
+   "equity",
+   "quasi_equity",
+   "working_capital"
+  ],
+  "why_funders_care": "Funders discount forecasts that diverge sharply from history or sector norms; investors report that most portfolio companies miss their projections.",
+  "warning_signs": [
+   "Hockey-stick revenue growth with no supporting pipeline",
+   "Margins far above sector peers",
+   "Projections inconsistent with historical accounts",
+   "No downside scenario"
+  ],
+  "mitigations": [
+   "Build forecasts bottom-up from pipeline, capacity and pricing",
+   "Benchmark against peers and history",
+   "Show base, upside and downside cases",
+   "State key assumptions explicitly"
+  ],
+  "evidence_to_prepare": [
+   "Forecast model with documented assumptions",
+   "Sales pipeline and signed orders",
+   "Sensitivity analysis",
+   "Track record of past forecast vs actual"
+  ],
+  "sources": [
+   {
+    "title": "How Do Venture Capitalists Make Decisions? (Gompers, Gornall, Kaplan, Strebulaev)",
+    "publisher": "NBER conference paper / Harvard Business School et al.",
+    "year": "2016",
+    "url": "https://conference.nber.org/conf_papers/f88660/f88660.pdf",
+    "supports": "Reports that fewer than 30% of VC portfolio companies meet their projections (26% early-stage, 33% late-stage)."
+   },
+   {
+    "title": "Small business finance: what today's lenders look for",
+    "publisher": "THP Chartered Accountants",
+    "year": "2025",
+    "url": "https://www.thp.co.uk/small-business-finance-what-lenders-look-for/",
+    "supports": "Warns against 'asking for unrealistic amounts of funding' and says 'sudden spikes in revenue or costs will raise questions - lenders like stability'."
+   },
+   {
+    "title": "Start your journey",
+    "publisher": "Better Business Finance (supported by UK Finance and UK banks)",
+    "year": "n.d.",
+    "url": "https://www.betterbusinessfinance.co.uk/start-your-journey",
+    "supports": "Says lenders may ask for financial forecasts to see where the business is heading and that a cash-flow forecast helps a responsible lender minimise the risk of missed repayments."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "no_exit_path",
+  "title": "No credible exit for equity investors",
+  "funder_types": [
+   "vc",
+   "pe",
+   "impact_fund",
+   "dfi"
+  ],
+  "instruments": [
+   "equity",
+   "quasi_equity"
+  ],
+  "why_funders_care": "Equity investors must return capital to their own investors; where IPOs are rare and buyers are few, they need a credible route to sell their stake.",
+  "warning_signs": [
+   "No identifiable strategic or financial buyers",
+   "Minority stake with no exit rights",
+   "Founders unwilling to consider sale or buy-back",
+   "Business too small or founder-dependent to be sold"
+  ],
+  "mitigations": [
+   "Identify likely acquirers and comparable transactions",
+   "Offer structured exits (buy-backs, revenue-based redemption, put options)",
+   "Professionalise management and systems to make the business saleable",
+   "Consider self-liquidating instruments instead of pure equity"
+  ],
+  "evidence_to_prepare": [
+   "Exit analysis with potential buyers",
+   "Shareholders' agreement exit clauses",
+   "Comparable transactions in the sector/region"
+  ],
+  "sources": [
+   {
+    "title": "The answer to the 'exit challenge' in Africa (A. Caude, Adenia Partners)",
+    "publisher": "African Private Capital Association (AVCA) blog",
+    "year": "c. 2022",
+    "url": "https://www.avca.africa/news-insights/afri-spective-blog/the-answer-to-the-exit-challenge-in-africa/",
+    "supports": "Reports 'limited exit opportunities' were named by 76% of LPs as the biggest challenge for Africa fund managers and that none of 33 African PE exits in the prior year was via IPO."
+   },
+   {
+    "title": "How Do Venture Capitalists Make Decisions? (Gompers, Gornall, Kaplan, Strebulaev)",
+    "publisher": "NBER conference paper / Harvard Business School et al.",
+    "year": "2016",
+    "url": "https://conference.nber.org/conf_papers/f88660/f88660.pdf",
+    "supports": "Finds exit considerations are the top factor VCs use in valuation (86% important) and reports an average exit mix of 15% IPO, 53% M&A, 32% failure."
+   },
+   {
+    "title": "The Missing Middles: Segmenting Enterprises to Better Understand Their Financial Needs (Summary Report)",
+    "publisher": "Collaborative for Frontier Finance / Omidyar Network / Dalberg",
+    "year": "2018",
+    "url": "https://omidyar.com/wp-content/uploads/2020/09/Enterprise_Segmentation_Summary_Report.pdf",
+    "supports": "Notes that many SGBs lack the return and exit prospects venture capitalists seek."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "valuation_expectations",
+  "title": "Valuation expectations out of line with investors",
+  "funder_types": [
+   "vc",
+   "pe",
+   "impact_fund"
+  ],
+  "instruments": [
+   "equity",
+   "quasi_equity"
+  ],
+  "why_funders_care": "Investors price deals off exit prospects, comparables and target ownership; an asking valuation that cannot deliver their required return blocks the deal.",
+  "warning_signs": [
+   "Valuation based on headline multiples from other markets",
+   "Small equity stake offered for a large amount",
+   "No comparable transactions to support price",
+   "Valuation not linked to cash flows or exit value"
+  ],
+  "mitigations": [
+   "Benchmark against regional comparable deals",
+   "Show the investor's path to target return",
+   "Consider instruments that defer valuation (convertibles, SAFEs, revenue-based finance)",
+   "Be flexible on structure rather than headline price"
+  ],
+  "evidence_to_prepare": [
+   "Valuation model with comparables",
+   "Cap table and dilution analysis",
+   "Exit scenarios with return calculations"
+  ],
+  "sources": [
+   {
+    "title": "How Do Venture Capitalists Make Decisions? (Gompers, Gornall, Kaplan, Strebulaev)",
+    "publisher": "NBER conference paper / Harvard Business School et al.",
+    "year": "2016",
+    "url": "https://conference.nber.org/conf_papers/f88660/f88660.pdf",
+    "supports": "Finds VCs value deals mainly via exit considerations and comparables, require on average 31% IRR and about 5.5x cash-on-cash, and that valuation matters more for late-stage investors."
+   },
+   {
+    "title": "How Do Venture Capitalists Make Decisions?",
+    "publisher": "Harvard Law School Forum on Corporate Governance",
+    "year": "2019",
+    "url": "https://corpgov.law.harvard.edu/2019/08/20/how-do-venture-capitalists-make-decisions",
+    "supports": "Reports valuation ranked fifth overall among selection factors but third for later-stage deals."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "commodity_price_and_seasonality",
+  "title": "Exposure to commodity prices and seasonal cash flows",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "export_credit"
+  ],
+  "instruments": [
+   "working_capital",
+   "trade_finance",
+   "debt"
+  ],
+  "why_funders_care": "Price swings and seasonal harvest cycles create volatile cash flows; lenders see climate and price volatility as major risks in agricultural lending.",
+  "warning_signs": [
+   "Single commodity dominates revenue",
+   "Fixed-price sales contracts with no hedge",
+   "Repayment schedule not aligned with harvest",
+   "Large stock held through price swings"
+  ],
+  "mitigations": [
+   "Align repayments to the harvest and sales cycle",
+   "Use price-indexed contracts or hedging where available",
+   "Diversify crops or products",
+   "Hold stock only against confirmed sales"
+  ],
+  "evidence_to_prepare": [
+   "Seasonal cash-flow forecast",
+   "Price history and sensitivity analysis",
+   "Sales contracts showing pricing terms",
+   "Hedging or insurance arrangements"
+  ],
+  "sources": [
+   {
+    "title": "Pathways to Prosperity: Rural and Agricultural Finance State of the Sector Report",
+    "publisher": "ISF Advisors and Mastercard Foundation Rural and Agricultural Finance Learning Lab",
+    "year": "2019",
+    "url": "https://smallfoundation.ie/wp-content/uploads/2022/10/2019_RAFState-of-the-Sector-1.pdf",
+    "supports": "Cites 'external factors such as climate change and price volatility' as reasons lenders perceive high risk in agri-SME lending."
+   },
+   {
+    "title": "Improving coffee farmer welfare with innovative credit solutions in developing countries (Blouin, Macchiavello, McCreless)",
+    "publisher": "International Growth Centre (IGC)",
+    "year": "2017",
+    "url": "https://www.theigc.org/sites/default/files/2019/10/blouin-et-al-2017-policy-brief.pdf",
+    "supports": "Finds a 10% unexpected coffee price rise raises default probability by almost three percentage points on fixed-price contracts, and that fixed-price contracts alone do not provide price insurance."
+   },
+   {
+    "title": "Our Expertise",
+    "publisher": "Root Capital",
+    "year": "n.d.",
+    "url": "https://rootcapital.org/how-to-apply-for-a-loan/our-expertise",
+    "supports": "Root Capital describes seasonal loans 'tailored to your harvest and sales cycles', showing repayment alignment to seasonal cash flow."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "supply_or_side_selling_risk",
+  "title": "Supply shortfalls or side-selling",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "export_credit"
+  ],
+  "instruments": [
+   "working_capital",
+   "trade_finance",
+   "debt"
+  ],
+  "why_funders_care": "Where loans are repaid from sales to a specific buyer, farmers or enterprises selling elsewhere when prices rise can cause strategic default.",
+  "warning_signs": [
+   "Aggregator relies on farmers without supply agreements",
+   "History of failing to deliver contracted volumes",
+   "Spot prices often exceed contract prices",
+   "No tracking of supplier deliveries"
+  ],
+  "mitigations": [
+   "Strengthen supplier relationships (pre-finance, services, prompt payment)",
+   "Use price-indexed contracts",
+   "Track deliveries and loyalty by supplier",
+   "Use tripartite buyer-enterprise-lender arrangements"
+  ],
+  "evidence_to_prepare": [
+   "Supplier register and delivery history",
+   "Supply agreements",
+   "Contract fulfilment record with buyers"
+  ],
+  "sources": [
+   {
+    "title": "Improving coffee farmer welfare with innovative credit solutions in developing countries (Blouin, Macchiavello, McCreless)",
+    "publisher": "International Growth Centre (IGC)",
+    "year": "2017",
+    "url": "https://www.theigc.org/sites/default/files/2019/10/blouin-et-al-2017-policy-brief.pdf",
+    "supports": "Describes loans from buyers as 'susceptible to side-selling' when prices rise and estimates 'roughly half of the observed defaults are strategic'; notes bundling buyer, enterprise and lender relationships reduces this risk."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "no_offtake_or_export_contract",
+  "title": "No firm offtake or export contract",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "export_credit",
+   "impact_fund"
+  ],
+  "instruments": [
+   "trade_finance",
+   "working_capital",
+   "debt"
+  ],
+  "why_funders_care": "Contract-based lenders use signed sales contracts or purchase orders from creditworthy buyers in place of hard collateral; without them, repayment is uncertain.",
+  "warning_signs": [
+   "Sales based on informal or spot buyers",
+   "No purchase orders from established buyers",
+   "Buyer creditworthiness unknown",
+   "Contract terms not assignable to a lender"
+  ],
+  "mitigations": [
+   "Secure written offtake agreements or purchase orders",
+   "Build relationships with established buyers and get references",
+   "Agree payment through a lender-controlled account",
+   "Use letters of credit where appropriate"
+  ],
+  "evidence_to_prepare": [
+   "Signed offtake/export contracts or purchase orders",
+   "Buyer references and payment history",
+   "Draft tripartite or assignment agreements"
+  ],
+  "sources": [
+   {
+    "title": "Root Capital: partnering with small and growing agribusinesses to address social and environmental challenges",
+    "publisher": "International Institute for Environment and Development (IIED)",
+    "year": "2024",
+    "url": "https://www.iied.org/root-capital-partnering-small-growing-agribusinesses-address-social-environmental-challenges",
+    "supports": "Says Root Capital 'uses businesses' sales contracts to mitigate risk, rather than insisting on the collateral', pre-finances using purchase orders from international buyers, and requires 'strong relationships with established buyers'."
+   },
+   {
+    "title": "Improving coffee farmer welfare with innovative credit solutions in developing countries (Blouin, Macchiavello, McCreless)",
+    "publisher": "International Growth Centre (IGC)",
+    "year": "2017",
+    "url": "https://www.theigc.org/sites/default/files/2019/10/blouin-et-al-2017-policy-brief.pdf",
+    "supports": "Describes lending models where buyer, enterprise and lender relationships are bundled so the buyer contract underpins repayment."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "country_risk",
+  "title": "Country, political or transfer risk",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "export_credit",
+   "pe",
+   "vc",
+   "impact_fund"
+  ],
+  "instruments": [
+   "trade_finance",
+   "debt",
+   "equity",
+   "guarantee"
+  ],
+  "why_funders_care": "Foreign banks and investors factor in a country's credit rating, political stability and FX convertibility; poor country ratings constrain cross-border finance regardless of company quality.",
+  "warning_signs": [
+   "Operating in a low-rated, fragile or sanctioned country",
+   "History of FX controls or transfer restrictions",
+   "Dependence on a weak local bank for letters of credit"
+  ],
+  "mitigations": [
+   "Use DFI guarantees or political risk insurance",
+   "Work with confirming banks or DFI trade finance programmes",
+   "Hold revenues offshore where legal (exporters)",
+   "Target funders whose mandate includes your country"
+  ],
+  "evidence_to_prepare": [
+   "Country risk summary and mitigants",
+   "Evidence of hard-currency receipts",
+   "Details of guarantee/insurance eligibility"
+  ],
+  "sources": [
+   {
+    "title": "The Trade Finance Program and Its Role in Lifting Impediments to Trade (ADB Briefs No. 82)",
+    "publisher": "Asian Development Bank (ADB)",
+    "year": "2017",
+    "url": "https://www.adb.org/sites/default/files/publication/351001/trade-finance-program-impediments.pdf",
+    "supports": "Reports country credit rating (82%) and issuing bank rating (85%) among reasons banks cited as impediments to trade finance."
+   },
+   {
+    "title": "Norfund Risk Appetite Statement",
+    "publisher": "Norfund",
+    "year": "2022",
+    "url": "https://www.norfund.no/wp-content/uploads/2023/10/Norfund-Risk-Appetite-Statement.pdf",
+    "supports": "Norfund lists 'Country & political risk' as a risk it accepts under its mandate, citing Sub-Saharan Africa and LDCs, showing it is a recognised underwriting dimension."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "unclear_ownership_kyc",
+  "title": "Unclear ownership or beneficial owners",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "vc",
+   "pe",
+   "export_credit"
+  ],
+  "instruments": [
+   "debt",
+   "trade_finance",
+   "equity",
+   "working_capital"
+  ],
+  "why_funders_care": "Regulated funders must identify and verify the natural persons who ultimately own or control a borrower; if they cannot, they may refuse or exit the relationship.",
+  "warning_signs": [
+   "Shares held by nominees or offshore entities without disclosure",
+   "Share register out of date or not matching registry filings",
+   "Undocumented verbal ownership arrangements",
+   "Complex group structure with no organogram"
+  ],
+  "mitigations": [
+   "Update the share register and registry filings",
+   "Prepare a beneficial-ownership declaration down to natural persons",
+   "Provide a group structure chart with percentages",
+   "Certify foreign documents via lawyer/notary"
+  ],
+  "evidence_to_prepare": [
+   "Certificate of incorporation, memorandum and articles",
+   "Register of members / official registry extract",
+   "Beneficial-ownership declaration and IDs",
+   "Group structure chart"
+  ],
+  "sources": [
+   {
+    "title": "Guidance on Beneficial Ownership",
+    "publisher": "Central Bank of Kenya",
+    "year": "2025",
+    "url": "https://www.centralbank.go.ke/wp-content/uploads/2025/08/Guidance-on-Beneficial-Ownership.pdf",
+    "supports": "Requires banks to identify beneficial owners (more than 10% ownership, control, or senior managing official), lists documents to collect, and says banks may need to end relationships in high-risk cases where ownership cannot be established."
+   },
+   {
+    "title": "The Trade Finance Program and Its Role in Lifting Impediments to Trade (ADB Briefs No. 82)",
+    "publisher": "Asian Development Bank (ADB)",
+    "year": "2017",
+    "url": "https://www.adb.org/sites/default/files/publication/351001/trade-finance-program-impediments.pdf",
+    "supports": "Reports AML/KYC (90%) as the top regulatory reason banks cited as an impediment to trade finance."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "related_party_and_commingling",
+  "title": "Related-party dealings or mixing personal and business money",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund",
+   "pe",
+   "vc"
+  ],
+  "instruments": [
+   "debt",
+   "equity",
+   "quasi_equity",
+   "working_capital"
+  ],
+  "why_funders_care": "Commingled funds and undisclosed related-party transactions make cash flows unreliable and can divert value from the company and its funders.",
+  "warning_signs": [
+   "Business assets used for owners' personal needs",
+   "Purchases from or sales to owner-related companies without arm's-length terms",
+   "Loans to or from directors without documentation",
+   "Personal and business payments in one bank account"
+  ],
+  "mitigations": [
+   "Separate personal and business accounts",
+   "Adopt a related-party transaction policy with board approval",
+   "Document and price related-party dealings at arm's length",
+   "Disclose related parties to funders"
+  ],
+  "evidence_to_prepare": [
+   "Related-party transaction register",
+   "Director loan agreements",
+   "Separate bank statements",
+   "Conflict-of-interest declarations"
+  ],
+  "sources": [
+   {
+    "title": "IFC Family Business Governance Handbook (2nd edition)",
+    "publisher": "International Finance Corporation (IFC)",
+    "year": "2008",
+    "url": "https://documents1.worldbank.org/curated/zh/461311468313533527/pdf/450770WP0ENGLI1siness1200801PUBLIC1.pdf",
+    "supports": "Contrasts 'Family First' firms where business resources may be used 'for family members' personal needs (housing, cars, personal purchases, etc.)' with 'Business First' firms with 'a clear separation of business and family assets', and requires directors to disclose conflicts of interest."
+   }
+  ],
+  "evidence_strength": "limited"
+ },
+ {
+  "id": "small_addressable_market",
+  "title": "Market too small for the funder's return target",
+  "funder_types": [
+   "vc",
+   "pe",
+   "impact_fund"
+  ],
+  "instruments": [
+   "equity",
+   "quasi_equity"
+  ],
+  "why_funders_care": "Venture investors need large markets to generate outsized returns; businesses with limited addressable markets may be good companies but poor fits for VC.",
+  "warning_signs": [
+   "Serviceable market small relative to amount raised",
+   "Growth plan depends on capturing an implausible share of market",
+   "No credible expansion path beyond a niche"
+  ],
+  "mitigations": [
+   "Size the market bottom-up with credible data",
+   "Show adjacent markets or geographies",
+   "Target funders suited to niche or moderate-growth businesses"
+  ],
+  "evidence_to_prepare": [
+   "Market sizing (TAM/SAM/SOM) with sources",
+   "Customer and expansion evidence",
+   "Competitive landscape"
+  ],
+  "sources": [
+   {
+    "title": "The Missing Middles: Segmenting Enterprises to Better Understand Their Financial Needs (Summary Report)",
+    "publisher": "Collaborative for Frontier Finance / Omidyar Network / Dalberg",
+    "year": "2018",
+    "url": "https://omidyar.com/wp-content/uploads/2020/09/Enterprise_Segmentation_Summary_Report.pdf",
+    "supports": "Describes niche ventures whose growth tapers because the addressable market has limited upside, and a mismatch from 'applying venture capital scale expectations to businesses with smaller addressable markets'."
+   },
+   {
+    "title": "How Do Venture Capitalists Make Decisions?",
+    "publisher": "Harvard Law School Forum on Corporate Governance",
+    "year": "2019",
+    "url": "https://corpgov.law.harvard.edu/2019/08/20/how-do-venture-capitalists-make-decisions",
+    "supports": "Reports 68% of VC firms cite market as an important selection factor."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "kyc_aml_documentation_gaps",
+  "title": "Missing KYC/AML documents",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "export_credit",
+   "impact_fund"
+  ],
+  "instruments": [
+   "trade_finance",
+   "debt",
+   "working_capital",
+   "equity"
+  ],
+  "why_funders_care": "KYC and anti-money-laundering requirements are among the most-cited reasons banks reject transactions, especially in trade finance; incomplete documents stall or end applications.",
+  "warning_signs": [
+   "Missing IDs or proof of address for directors/owners",
+   "Inconsistent company names or numbers across documents",
+   "Unexplained source of funds",
+   "Counterparties in high-risk jurisdictions"
+  ],
+  "mitigations": [
+   "Prepare a complete KYC pack before approaching funders",
+   "Keep registry records current",
+   "Document source of funds and wealth",
+   "Screen own counterparties for sanctions"
+  ],
+  "evidence_to_prepare": [
+   "Certified IDs of directors and beneficial owners",
+   "Proof of address",
+   "Company registry extracts",
+   "Source-of-funds explanation",
+   "AML/sanctions policy if relevant"
+  ],
+  "sources": [
+   {
+    "title": "The Trade Finance Program and Its Role in Lifting Impediments to Trade (ADB Briefs No. 82)",
+    "publisher": "Asian Development Bank (ADB)",
+    "year": "2017",
+    "url": "https://www.adb.org/sites/default/files/publication/351001/trade-finance-program-impediments.pdf",
+    "supports": "Reports regulatory reasons for trade finance rejections including AML/KYC at 90%, and client-side issues including documentation (37%) and valid company records (34%)."
+   },
+   {
+    "title": "Trade Finance Gaps Continue Despite Fintech Breakthroughs",
+    "publisher": "Asian Development Bank (Asian Development Blog)",
+    "year": "2017",
+    "url": "https://blogs.adb.org/node/2956",
+    "supports": "Lists know-your-customer (KYC) concerns, additional collateral and low margins among reasons for rejected trade finance transactions; only 20% of rejected deals were considered unbankable."
+   },
+   {
+    "title": "Business integrity (impact specialism page)",
+    "publisher": "British International Investment (BII)",
+    "year": "n.d.",
+    "url": "https://www.bii.co.uk/en/our-impact/our-impact-specialisms/business-integrity/",
+    "supports": "BII describes business integrity risk management as covering 'financial crime, regulatory and reputational risks' and requires investees to implement its integrity risk requirements."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "poor_credit_history",
+  "title": "Poor or missing credit history of the business or owners",
+  "funder_types": [
+   "bank",
+   "impact_lender",
+   "dfi"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital",
+   "trade_finance"
+  ],
+  "why_funders_care": "Lenders check business and personal credit histories as a proxy for willingness to repay; where credit bureaus are weak, missing history also counts against applicants.",
+  "warning_signs": [
+   "Past defaults, arrears or write-offs",
+   "Low business or personal credit score",
+   "Unresolved judgments",
+   "No bureau record at all"
+  ],
+  "mitigations": [
+   "Obtain and correct your credit report",
+   "Settle or restructure outstanding arrears",
+   "Build history with small facilities repaid on time",
+   "Provide supplier and landlord references"
+  ],
+  "evidence_to_prepare": [
+   "Credit bureau reports (business and owners)",
+   "Evidence of settled arrears",
+   "Trade references"
+  ],
+  "sources": [
+   {
+    "title": "The 5 C's of Credit",
+    "publisher": "CDC Small Business Finance (SBA lender)",
+    "year": "2020",
+    "url": "https://cdcloans.com/5-cs-of-credit/",
+    "supports": "SBA lender says 'Character' is 'essentially your credit history', with lenders weighing personal credit scores."
+   },
+   {
+    "title": "Start your journey",
+    "publisher": "Better Business Finance (supported by UK Finance and UK banks)",
+    "year": "n.d.",
+    "url": "https://www.betterbusinessfinance.co.uk/start-your-journey",
+    "supports": "Says lenders run a credit check on the business, or personally for sole traders and partnerships."
+   },
+   {
+    "title": "Financing SMEs in a context of strong information asymmetry (J. Lefilleur, Private Sector & Development)",
+    "publisher": "Proparco",
+    "year": "2009",
+    "url": "https://proparco.fr/en/article/financing-smes-context-strong-information-asymmetry",
+    "supports": "Notes that in Sub-Saharan Africa 'credit bureaus either do not exist or are ineffective', so banks lack tools to check new clients' payment behaviour."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "climate_and_weather_risk",
+  "title": "Exposure to climate and weather shocks",
+  "funder_types": [
+   "bank",
+   "dfi",
+   "impact_lender",
+   "impact_fund"
+  ],
+  "instruments": [
+   "working_capital",
+   "debt",
+   "trade_finance",
+   "equity"
+  ],
+  "why_funders_care": "Weather shocks can destroy production and repayment capacity, and DFIs increasingly assess climate risk at investee level.",
+  "warning_signs": [
+   "Rain-fed production in drought- or flood-prone areas",
+   "Single-site operations exposed to extreme weather",
+   "No insurance",
+   "No adaptation measures"
+  ],
+  "mitigations": [
+   "Take up index or crop insurance where available",
+   "Diversify sourcing locations",
+   "Invest in irrigation, storage or other adaptation",
+   "Include weather scenarios in forecasts"
+  ],
+  "evidence_to_prepare": [
+   "Climate risk assessment",
+   "Insurance policies",
+   "Adaptation investment plan",
+   "Historical yield data"
+  ],
+  "sources": [
+   {
+    "title": "Pathways to Prosperity: Rural and Agricultural Finance State of the Sector Report",
+    "publisher": "ISF Advisors and Mastercard Foundation Rural and Agricultural Finance Learning Lab",
+    "year": "2019",
+    "url": "https://smallfoundation.ie/wp-content/uploads/2022/10/2019_RAFState-of-the-Sector-1.pdf",
+    "supports": "Cites climate change among external factors that make financial institutions perceive high risk in agri-SME lending."
+   },
+   {
+    "title": "Norfund Risk Appetite Statement",
+    "publisher": "Norfund",
+    "year": "2022",
+    "url": "https://www.norfund.no/wp-content/uploads/2023/10/Norfund-Risk-Appetite-Statement.pdf",
+    "supports": "Norfund states it seeks to minimise ESG compliance risks 'as well as climate risk at investee level'."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "long_tenor_request",
+  "title": "Loan tenor too long for the lender's comfort",
+  "funder_types": [
+   "bank",
+   "impact_lender",
+   "dfi"
+  ],
+  "instruments": [
+   "debt",
+   "working_capital"
+  ],
+  "why_funders_care": "Longer loans to SMEs carry more uncertainty; in agri-SME portfolios, loans over 12 months were far more likely to fall into arrears.",
+  "warning_signs": [
+   "Multi-year loan requested by a young or seasonal business",
+   "Working-capital need financed with long-term debt",
+   "Asset life shorter than the requested tenor"
+  ],
+  "mitigations": [
+   "Match tenor to the asset life or cash cycle",
+   "Split need into short-term working capital and medium-term asset finance",
+   "Use leasing or asset finance for equipment"
+  ],
+  "evidence_to_prepare": [
+   "Asset life schedule",
+   "Cash conversion cycle analysis",
+   "Proposed repayment schedule"
+  ],
+  "sources": [
+   {
+    "title": "Pathways to Prosperity: Rural and Agricultural Finance State of the Sector Report",
+    "publisher": "ISF Advisors and Mastercard Foundation Rural and Agricultural Finance Learning Lab",
+    "year": "2019",
+    "url": "https://smallfoundation.ie/wp-content/uploads/2022/10/2019_RAFState-of-the-Sector-1.pdf",
+    "supports": "Reports that 'loans with tenors of more than 12 months were over four times more likely to fall into arrears' in the agri-SME portfolio analysed."
+   },
+   {
+    "title": "OECD Financing SMEs and Entrepreneurs Scoreboard: 2025 Highlights",
+    "publisher": "OECD",
+    "year": "2025",
+    "url": "https://www.oecd.org/en/publications/oecd-financing-smes-and-entrepreneurs-scoreboard-2025-highlights_64c9063c-en.html",
+    "supports": "Notes SMEs are shifting toward smaller, short-term financing amid a restrictive environment; general context only."
+   }
+  ],
+  "evidence_strength": "good"
+ },
+ {
+  "id": "outside_funder_mandate",
+  "title": "Company falls outside the funder's mandate",
+  "funder_types": [
+   "dfi",
+   "impact_fund",
+   "vc",
+   "pe",
+   "impact_lender"
+  ],
+  "instruments": [
+   "debt",
+   "equity",
+   "quasi_equity",
+   "grant",
+   "guarantee"
+  ],
+  "why_funders_care": "DFIs and funds invest only in defined countries, sectors and instruments; applications outside the mandate are usually not pursued regardless of quality.",
+  "warning_signs": [
+   "Sector not among the funder's priority sectors",
+   "Country outside eligible list (e.g. not ODA-eligible)",
+   "Requested instrument or ownership stake not offered"
+  ],
+  "mitigations": [
+   "Read each funder's stated sectors, geographies, ticket sizes and instruments before applying",
+   "Approach the funder's fund or bank partners if direct investment is out of scope"
+  ],
+  "evidence_to_prepare": [
+   "One-page fit summary mapping the company to the funder's criteria"
+  ],
+  "sources": [
+   {
+    "title": "Partner with us",
+    "publisher": "Norfund",
+    "year": "n.d.",
+    "url": "https://www.norfund.no/contact-us",
+    "supports": "Norfund invests in ODA-eligible developing countries in defined sectors, with a maximum 35% equity stake, and says submissions outside its scope 'will generally not be followed up further'."
+   }
+  ],
+  "evidence_strength": "limited"
+ }
+]

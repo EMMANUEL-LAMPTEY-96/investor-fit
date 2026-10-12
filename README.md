@@ -26,17 +26,23 @@ One zip file, uploaded to Claude. No server, no API key, no cost.
    would unlock each one: audited accounts, years trading, export history, revenue, impact
    evidence. It also lists **documents** the funder needs that the company doesn't have yet.
    Every institution you named is always reported, including those ruled out, with the reason.
-4. **Checks any checklist** you give it: a bank's requirements, a grant's eligibility rules, an
+4. **Runs a pre-mortem** on each shortlisted funder: the objections it is likely to raise (for
+   example "one customer is 45% of revenue", "dollar loan against cedi revenue", "collateral
+   covers 80% of the loan"), why funders care, how to answer, and the evidence to prepare. It
+   draws on 32 patterns from public sources: development finance institutions, SME finance
+   research and lender guidance. See
+   [`references/objections.md`](skill/investor-fit-advisor/references/objections.md).
+5. **Checks any checklist** you give it: a bank's requirements, a grant's eligibility rules, an
    investor's document list, your own policy. Each item is marked met, missing, unknown or
    needs review, with the evidence and the fix.
-5. **Builds a financial model** if the company has none: a 5-year, three-statement Excel model
+6. **Builds a financial model** if the company has none: a 5-year, three-statement Excel model
    with live formulas and a funding check.
-6. **Reviews an existing model** in two ways:
+7. **Reviews an existing model** in two ways:
    - **Mechanics:** formula errors, numbers typed over formulas, broken patterns, hidden
      assumptions, and a balance sheet that doesn't balance.
    - **Fit with the ask:** whether growth is believable, whether the loan can be repaid (DSCR),
      whether the amount asked matches the real cash need, and whether the use of funds adds up.
-7. **Writes an investor-targeting memo** with a readiness plan and next steps.
+8. **Writes an investor-targeting memo** with a readiness plan and next steps.
 
 Example from the included sample company: it plans to raise **$500K**, but its own cash flow
 shows a peak need of about **$182K**. Debt service cover also falls to **1.04x** in 2028,
@@ -81,6 +87,7 @@ For structured input, use the templates in
 | Script | Purpose |
 |---|---|
 | `match_funders.py` | Rank funders from your list, the built-in list and live research. Shows score breakdown, readiness gaps, documents, sources and conflicts |
+| `pre_mortem.py` | Likely objections for one funder or funder type, with how to answer and evidence to prepare |
 | `check_checklist.py` | Test the company against any checklist |
 | `build_model.py` | Build the Excel financial model from assumptions |
 | `review_model.py` | Mechanical review of any Excel model, or a funder-style review of its numbers |
@@ -115,7 +122,7 @@ A new version of the zip picks up the changes.
 ```bash
 git clone https://github.com/EMMANUEL-LAMPTEY-96/investor-fit && cd investor-fit
 pip install -r requirements.txt pytest
-pytest -q                          # 56 tests (Excel recalculation tests need LibreOffice)
+pytest -q                          # 63 tests (Excel recalculation tests need LibreOffice)
 python scripts/package_skill.py    # rebuild dist/investor-fit-advisor.zip
 ```
 
