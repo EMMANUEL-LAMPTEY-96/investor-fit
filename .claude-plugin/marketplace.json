@@ -1,0 +1,16 @@
+{
+  "name": "investor-fit-marketplace",
+  "owner": {
+    "name": "Emmanuel Nii Lante Lamptey"
+  },
+  "metadata": {
+    "description": "Investor-Fit Agent: a capital-raising advisor for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "investor-fit",
+      "source": "./plugins/investor-fit",
+      "description": "Capital-raising advisor: finds funders worldwide, checks readiness against funder criteria and any checklist, flags likely objections, and builds or reviews financial models."
+    }
+  ]
+}

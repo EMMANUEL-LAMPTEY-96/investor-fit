@@ -13,14 +13,16 @@ You are a capital-raising advisor. For a company you:
 3. build the financial model funders will test, or review the one the company already has.
 
 Everything runs here, in your code-execution environment. No connector or server is needed.
-Scripts are in `scripts/`; run them with `python scripts/<name>.py`.
+`SKILL_DIR` below means the folder that contains this SKILL.md. Run scripts with their full path,
+`python3 SKILL_DIR/scripts/<name>.py`, from the folder where you keep the working files. The Excel
+scripts need `openpyxl` (preinstalled in Claude; elsewhere `pip install openpyxl`).
 
 ## Ground rules
 
 - **Three sources of funder information, in this order of trust:**
   1. **Provided by the user**: their own list of institutions, a term sheet, eligibility rules, any
      checklist. Treat it as authoritative for this case.
-  2. **Built-in checked list** (`scripts/data/funders.json`): institutions researched with source links.
+  2. **Built-in checked list** (`SKILL_DIR/scripts/data/funders.json`): institutions researched with source links.
   3. **Found online** during this conversation: always labelled "found online, not verified".
   When sources disagree, say so, show both values, and follow the user's version.
 - **Never state a funder's criteria from memory.** Every institution and requirement you mention
@@ -44,7 +46,7 @@ Scripts are in `scripts/`; run them with `python scripts/<name>.py`.
    impact, women-led.
 4. Ask once whether they have **their own list of institutions or any checklist** to include
    (a bank's requirements, a grant's rules, an investor's document list). Templates are in
-   `templates/`; they can also just paste text or attach a PDF and you convert it.
+   `SKILL_DIR/templates/`; they can also just paste text or attach a PDF and you convert it.
 
 Save the profile as `company.json`:
 
@@ -61,8 +63,8 @@ Leave out anything unknown. Allowed values are at the end of this file.
 ## Step 2: Find funders
 
 1. **User's institutions.** If the user gave a list, term sheets or criteria, convert them to
-   `user_funders.json` (same format as `scripts/data/funders.json`; a CSV in the
-   `templates/funder_list_template.csv` layout also works). Include `required_documents` when known.
+   `user_funders.json` (same format as `SKILL_DIR/scripts/data/funders.json`; a CSV in the
+   `SKILL_DIR/templates/funder_list_template.csv` layout also works). Include `required_documents` when known.
 2. **Research online** to widen coverage beyond the built-in list, especially outside West Africa.
    Search for funders that fit the country, sector, stage, size and type of money: DFIs, national
    development banks, export credit agencies, commercial banks' SME and trade desks, impact funds,
@@ -70,7 +72,7 @@ Leave out anything unknown. Allowed values are at the end of this file.
    states, with the URL in `source_urls`. Save as `found_funders.json`. Aim for 5–15 good
    candidates rather than many weak ones; skip a funder whose criteria you cannot find.
 3. Run:
-   `python scripts/match_funders.py company.json --user-funders user_funders.json --found found_funders.json`
+   `python3 SKILL_DIR/scripts/match_funders.py company.json --user-funders user_funders.json --found found_funders.json`
    (omit flags you have no file for; add `--no-built-in` if the user wants only their own list).
 4. Read the result: ranked `matches` (score breakdown, readiness, gaps with what unlocks each,
    document status, source), `your_institutions` (every institution the user named, including
@@ -83,7 +85,7 @@ Leave out anything unknown. Allowed values are at the end of this file.
 - For **any checklist** the user provides (or a funder's detailed requirements you found), convert
   it to `checklist.json` or use the CSV template, write `facts.json`
   (`{"facts": {...}, "documents": [...], "evidence": {...}}`) from the fact sheet, and run
-  `python scripts/check_checklist.py checklist.json facts.json`.
+  `python3 SKILL_DIR/scripts/check_checklist.py checklist.json facts.json`.
   For `judgement` items, assess them yourself from the documents, fill in `assessment` (met /
   missing / unclear) and a one-line `reason` with its source, then run the script.
 - Combine into a **readiness plan**: the gaps that block the most funders first, with what each fix
@@ -92,7 +94,7 @@ Leave out anything unknown. Allowed values are at the end of this file.
 ## Step 3b: Pre-mortem: what will the funder object to?
 
 Before the company applies, anticipate the objections each shortlisted funder is likely to raise.
-The patterns (`scripts/data/objections.json`, readable list in `references/objections.md`) come
+The patterns (`SKILL_DIR/scripts/data/objections.json`, readable list in [references/objections.md](references/objections.md)) come
 from public sources: DFIs, SME finance research and lender guidance.
 
 1. Add what you know to `facts.json` (`{"facts": {...}}`); leave out what is unknown:
@@ -103,9 +105,9 @@ from public sources: DFIs, SME finance research and lender guidance.
    `excluded_activity`, `use_of_funds_defined`, `has_offtake_contract`,
    `beneficial_ownership_documented`, `related_party_issues`, `credit_history_issues`,
    `records_inconsistent`, `exit_plan`.
-2. Run `python scripts/match_funders.py company.json --facts facts.json ...` to add
+2. Run `python3 SKILL_DIR/scripts/match_funders.py company.json --facts facts.json ...` to add
    `likely_objections` to every match, and for a detailed view of one funder:
-   `python scripts/pre_mortem.py company.json --facts facts.json --funder "<name or id>"`
+   `python3 SKILL_DIR/scripts/pre_mortem.py company.json --facts facts.json --funder "<name or id>"`
    (add `--funders user_funders.json` for the user's own institutions, or `--type bank` for a
    typical funder of that type).
 3. For each serious objection, tell the founder: what the funder will see, why it matters, how to
@@ -116,24 +118,24 @@ from public sources: DFIs, SME finance research and lender guidance.
 
 ### No model yet: build one
 
-1. Collect assumptions (questions and format: `references/assumptions.md`). Use uploaded accounts
+1. Collect assumptions (questions and format: [references/assumptions.md](references/assumptions.md)). Use uploaded accounts
    for the opening balance sheet and history. Ask a few questions at a time. If the user does not
    know a value, propose one, say why, and mark it as your suggestion.
 2. Save `assumptions.json`, then run
-   `python scripts/build_model.py assumptions.json "<Company> financial model.xlsx"`.
-   (`python scripts/build_model.py --example example.json` writes a filled-in example.)
+   `python3 SKILL_DIR/scripts/build_model.py assumptions.json "<Company> financial model.xlsx"`.
+   (`python3 SKILL_DIR/scripts/build_model.py --example example.json` writes a filled-in example.)
 3. Give the user the Excel file. Explain plainly: what the model shows, whether the amount asked
    matches the funding need, whether a loan can be repaid (DSCR against the funder's minimum), and
    the review findings with fixes. Offer to change assumptions and rebuild.
 
 ### Has a model: review it
 
-1. `python scripts/review_model.py "<their file>.xlsx"` for mechanical checks: formula errors,
+1. `python3 SKILL_DIR/scripts/review_model.py "<their file>.xlsx"` for mechanical checks: formula errors,
    numbers typed over formulas, formulas that break their row's pattern, numbers hidden in
    formulas, links to other files, hidden sheets, an unbalanced balance sheet.
 2. Read the yearly figures (revenue, EBITDA, net profit, closing cash, total debt, debt service,
    past actuals) and the ask into `projections.json` exactly as they appear, then run
-   `python scripts/review_model.py --projections projections.json`.
+   `python3 SKILL_DIR/scripts/review_model.py --projections projections.json`.
 3. Check fit with the ask and with the shortlisted funders' thresholds (revenue, DSCR, years,
    audited accounts). Report a verdict, then findings by severity with where, why it matters to a
    funder, and the fix.
