@@ -52,7 +52,7 @@ against a 1.25x lender minimum. The agent flags both and suggests fixes.
 
 **In Claude (web, desktop or mobile), for founders, advisors and anyone else:**
 
-1. Download the skill: **[investor-fit-advisor.zip](https://github.com/EMMANUEL-LAMPTEY-96/investor-fit/releases/latest/download/investor-fit-advisor.zip)**
+1. Download the skill: **[investor-fit-advisor.zip](https://github.com/EMMANUEL-LAMPTEY-96/investor-fit/raw/main/dist/investor-fit-advisor.zip)**
 2. In Claude, go to **Settings → Capabilities** and switch on **Code execution and file
    creation**. Keep web search on for live funder research.
 3. Go to **Customize → Skills → + → Create skill → Upload a skill** and choose the zip.
@@ -142,8 +142,7 @@ python scripts/package_skill.py    # rebuild the skill zip and the Claude Code p
 **Project layout.** `skill/investor-fit-advisor/` is the source of the skill. `investor_fit/` holds
 the shared engine (matching, objections, checklists, financial models). `scripts/package_skill.py`
 builds `dist/investor-fit-advisor.zip` and the Claude Code plugin in `plugins/investor-fit/` (listed
-in `.claude-plugin/marketplace.json`). Pushing a tag such as `v0.4.0` publishes a GitHub release
-with the zip attached.
+in `.claude-plugin/marketplace.json`). Publishing a GitHub release attaches the zip to it automatically.
 
 **Optional connector (MCP server).** The same engine is also available as a remote connector for
 Claude, Claude Desktop and Claude Code (`investor_fit/server.py`). It offers 10 tools, including
