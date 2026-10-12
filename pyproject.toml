@@ -1,7 +1,7 @@
 [project]
 name = "investor-fit-agent"
-version = "0.2.0"
-description = "Claude connector and skill: match companies to funders worldwide, check readiness, and build or review financial models."
+version = "0.3.0"
+description = "Capital-raising advisor for Claude: match companies to funders worldwide, check any checklist, and build or review financial models."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }

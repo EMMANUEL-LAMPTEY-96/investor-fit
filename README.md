@@ -1,152 +1,138 @@
 # Investor-Fit Agent
 
-**A capital-raising advisor that lives inside Claude.** It finds the funders that fit a company,
-checks the company's documents against each funder's requirements, and builds or reviews the
-financial model funders will test.
+**A capital-raising advisor that runs inside Claude.** It finds the funders that fit a company,
+checks the company against each funder's requirements, and against any checklist you give it,
+using the company's own documents. It also builds or reviews the financial model funders will
+test.
 
-Two parts, both free:
+One zip file, uploaded to Claude. No server, no API key, no cost.
 
-| Part | What it does | Install |
-|---|---|---|
-| **Connector** (MCP server) | Funder database and matching, readiness gaps, scoring of any funder worldwide, projections and funding checks | Paste one URL into Claude |
-| **Skill** | The advisor workflow, plus scripts that build an editable Excel model and review a company's own model | Upload one zip into Claude |
+## What it does
 
-## What a founder can do
-
-> "Here are our 2024 and 2025 accounts, our registration certificate and our business plan. We
+> "Here are our accounts, registration certificate, business plan, and Stanbic's term sheet. We
 > process cashew in Ghana and need $500K of working capital. Who should we approach, are we ready,
 > and does our plan hold up?"
 
-1. **Find funders.** Claude reads the documents and builds a fact sheet in which every figure
-   cites its source. The agent ranks funders from the verified database, and Claude searches the
-   web for others and scores them the same way, labelled as unverified.
-2. **Check readiness.** For each funder, it shows which requirements are met, which are missing,
-   and what would unlock each gap: audited accounts, years trading, export history, revenue,
-   impact evidence. It also lists which documents the funder asks for and which ones the
-   company has.
-3. **Build a financial model** if the company doesn't have one. Claude collects the assumptions
-   and the skill produces a 5-year, three-statement Excel model with live formulas: assumptions,
-   income statement, balance sheet, cash flow, debt schedule, ratios and a funding check.
-4. **Review an existing model.** The review covers two things:
-   - **Mechanics:** formula errors, numbers typed over formulas, formulas that break their row's
-     pattern, assumptions hidden inside formulas, links to other files, hidden sheets, and a
-     balance sheet that doesn't balance.
-   - **Fit with the ask:** whether growth and margins are believable, whether the business can
-     service the loan (DSCR), whether the amount asked matches the cash the plan actually needs,
-     and whether the use of funds adds up.
+1. **Reads the documents** and builds a fact sheet in which every figure cites its file and page.
+2. **Finds funders from three sources**, in this order of trust:
+   - **Your own list:** institutions, term sheets or criteria you provide. These are treated as
+     authoritative for your case.
+   - **A built-in checked list** of institutions, each with source links.
+   - **Live research:** Claude searches the web, reads funders' official criteria pages and adds
+     the ones that fit, labelled "found online, not verified".
+
+   If sources disagree, the agent shows both versions and follows yours.
+3. **Scores each funder from 0 to 100** and explains why. It lists **readiness gaps**, with what
+   would unlock each one: audited accounts, years trading, export history, revenue, impact
+   evidence. It also lists **documents** the funder needs that the company doesn't have yet.
+   Every institution you named is always reported, including those ruled out, with the reason.
+4. **Checks any checklist** you give it: a bank's requirements, a grant's eligibility rules, an
+   investor's document list, your own policy. Each item is marked met, missing, unknown or
+   needs review, with the evidence and the fix.
+5. **Builds a financial model** if the company has none: a 5-year, three-statement Excel model
+   with live formulas and a funding check.
+6. **Reviews an existing model** in two ways:
+   - **Mechanics:** formula errors, numbers typed over formulas, broken patterns, hidden
+     assumptions, and a balance sheet that doesn't balance.
+   - **Fit with the ask:** whether growth is believable, whether the loan can be repaid (DSCR),
+     whether the amount asked matches the real cash need, and whether the use of funds adds up.
+7. **Writes an investor-targeting memo** with a readiness plan and next steps.
 
 Example from the included sample company: it plans to raise **$500K**, but its own cash flow
-shows a peak need of about **$182K**. Debt service cover also drops to **1.04x** in 2028, below
-the usual 1.25x lender test. The agent flags both and suggests fixes: a longer grace period, a
-smaller loan, or part equity.
-
-## Why it is built this way
-
-- **No invented funders or numbers.** Funder facts come from a source-linked database or a page
-  Claude has just read. Company figures come from the user or their documents, with citations.
-- **Calculations are code, not guesses.** Matching, scoring, projections and checks are plain,
-  tested Python. Claude explains the results; it doesn't make them up.
-- **Spreadsheets that hold up.** Every number in the built model is a live formula driven by the
-  blue input cells. The tests recalculate each workbook in LibreOffice and check it against the
-  Python engine to the cent.
-- **Private by design.** Documents stay in the user's own Claude. The server receives only the
-  facts it needs and stores nothing.
-- **Free to run.** Each user's Claude does the reading and writing; the server only does
-  arithmetic.
+shows a peak need of about **$182K**. Debt service cover also falls to **1.04x** in 2028,
+against a 1.25x lender minimum. The agent flags both and suggests fixes.
 
 ## Install
 
-**Connector.** In Claude, open **Customize → Connectors → Add custom connector**. Name it
-`Investor-Fit Agent` and use the URL `https://<your-deployment>/mcp`. Works on claude.ai and
-Claude Desktop, including the Free plan, which allows one custom connector.
-For Claude Code: `claude mcp add --transport http investor-fit https://<your-deployment>/mcp`
+1. Download [`dist/investor-fit-advisor.zip`](dist/investor-fit-advisor.zip).
+2. In Claude, go to **Settings → Capabilities** and switch on **Code execution and file
+   creation**. Keep web search on for live funder research.
+3. Go to **Customize → Skills → + → Create skill → Upload a skill** and choose the zip.
+4. Start a chat: *"Help me find funding for my company"*, and attach your documents.
 
-**Skill.** Download `dist/investor-fit-advisor.zip`. In Claude, open
-**Customize → Skills → + → Upload a skill** and choose the zip. The skill needs
-**Code execution** switched on under Settings → Capabilities.
+This works on claude.ai and Claude Desktop, on every plan including Free.
 
-## Connector tools
+### Bring your own lists
 
-| Tool | Purpose |
+Attach anything: a list of banks, a term sheet, a PDF of eligibility rules. Claude converts it.
+For structured input, use the templates in
+[`skill/investor-fit-advisor/templates`](skill/investor-fit-advisor/templates):
+
+- `funder_list_template.csv`: the institutions you want checked.
+- `checklist_template.csv`: any checklist, using item types: minimum or maximum value, equals,
+  one of, yes, document held, or judgement.
+
+## Why it is built this way
+
+- **No invented funders or numbers.** Every institution and requirement comes from your
+  material, the checked list, or a web page read during the conversation, with a source. Company
+  figures come from your documents, with citations.
+- **Calculations are code, not guesses.** Matching, scoring, checklists, projections and model
+  checks are plain, tested Python inside the skill. Claude explains the results and handles the
+  judgement calls.
+- **Spreadsheets that hold up.** Every number in a built model is a live formula driven by blue
+  input cells. The tests recalculate each workbook in LibreOffice and compare it with the Python
+  engine to the cent.
+- **Nothing to host, nothing leaves your Claude.** Documents and data stay in your own
+  conversation.
+
+## Scripts inside the skill
+
+| Script | Purpose |
 |---|---|
-| `match_company` | Rank the database's funders for a company: score breakdown, readiness, gaps, how to apply |
-| `check_readiness` | One company against one funder, requirement by requirement |
-| `score_found_funder` | Score any funder worldwide from criteria Claude read on its website (labelled unverified) |
-| `search_funders` / `get_funder` | Browse the database / full record with sources |
-| `financial_model_guide` | The questions to ask and a worked example of model assumptions |
-| `project_financials` | 3-statement projection, funding analysis and funder-style review from assumptions |
-| `review_projections` | Funder-style review of the numbers in a company's own model |
-| `list_options`, `memo_template` | Allowed values; memo format |
+| `match_funders.py` | Rank funders from your list, the built-in list and live research. Shows score breakdown, readiness gaps, documents, sources and conflicts |
+| `check_checklist.py` | Test the company against any checklist |
+| `build_model.py` | Build the Excel financial model from assumptions |
+| `review_model.py` | Mechanical review of any Excel model, or a funder-style review of its numbers |
 
-## Matching method
+### Matching method
 
-Funders are first filtered out if they don't cover the country, the type of money, the sector
-or the stage, or if their deal size is more than 2× away from the amount sought. Excluded funders
-are still reported with the reason. The rest are scored out of 100:
+A funder is ruled out if it doesn't cover the country, the type of money, the sector or the
+stage, or if its deal size is more than 2× away from the amount sought. The rest are scored out
+of 100: sector 30, stage 20, ticket size 20, impact 15, geography 15 (country named 15,
+sub-region 12, region 9–10, emerging markets or global 6). Readiness is `ready`, `check_first`
+(some information is missing) or `not_yet` (a stated requirement is not met, with what would
+unlock it). Regions cover every country.
 
-| Factor | Points |
-|---|---|
-| Sector | 30: exact sector 30, related 18, sector-agnostic 15 |
-| Stage | 20: preferred stage 20, one step away 8, not stated 10 |
-| Ticket size | 20: inside the range 12–20 (higher near the middle), near miss 4 |
-| Impact | 15: impact investor and impact story 15, no mandate 10 |
-| Geography | 15: country named 15, sub-region 12, wider region 9–10, emerging markets or global 6 |
+### Financial model conventions
 
-Readiness is `ready`, `check_first` (some information is missing) or `not_yet` (a stated
-requirement is not met, with what would unlock it).
-
-Regions cover every country: West, East, Central, Southern and North Africa; MENA; South,
-Southeast, East and Central Asia; Europe and the EU; North America; Latin America and the
-Caribbean; Oceania; emerging markets; global.
-
-## Financial model conventions
-
-Annual periods, 3–10 years. New loans are drawn at the start of the drawdown year and repaid in
-equal instalments after the grace period. Interest is charged on the balance outstanding during
-the year, so there are no circular references. Depreciation is straight line. Tax is charged only
-on positive profit, with no loss carry-forward. No dividends. Working capital is driven by
-receivable, inventory and payable days. The full list of assumptions is in
+Annual periods, 3–10 years. Loans are drawn at the start of the drawdown year and repaid in equal
+instalments after the grace period. Interest is charged on the balance outstanding during the
+year, so there are no circular references. Depreciation is straight line. Tax is charged only on
+positive profit, with no loss carry-forward. No dividends. Full list:
 `skill/investor-fit-advisor/references/assumptions.md`.
 
-## Funder data
+## The built-in list
 
-The verified core currently holds 22 records, strongest on Ghana, Nigeria and Côte d'Ivoire:
-DFIs, export credit agencies, impact lenders and funds, and VC/PE. Each record carries source
-links, a `confidence` level, a `last_checked` date and a `verification_status`. Run
-`python scripts/export_review_sheet.py` to get a spreadsheet for review. To add or correct a
-funder, see [CONTRIBUTING.md](CONTRIBUTING.md).
+22 checked records to start, strongest on Ghana, Nigeria and Côte d'Ivoire: DFIs, export credit
+agencies, impact lenders and funds, and VC/PE. Each record has source links, a confidence level
+and a `last_checked` date (`data/funders.json`; `python scripts/export_review_sheet.py` exports
+it as a spreadsheet). To add or correct an institution, see [CONTRIBUTING.md](CONTRIBUTING.md).
+A new version of the zip picks up the changes.
 
-## Run it yourself
+## For developers
 
 ```bash
 git clone https://github.com/EMMANUEL-LAMPTEY-96/investor-fit && cd investor-fit
-pip install -r requirements.txt
-
-python -m investor_fit.server                         # local (stdio) for Claude Desktop / Code
-MCP_TRANSPORT=http python -m investor_fit.server      # web server at http://localhost:8000/mcp
-
-pip install pytest && pytest -q                       # 49 tests (Excel tests need LibreOffice)
-python scripts/smoke_test.py http://localhost:8000/mcp
-python scripts/package_skill.py                       # rebuild dist/investor-fit-advisor.zip
-
-# Build or review a model without Claude
-python skill/investor-fit-advisor/scripts/build_model.py --example a.json
-python skill/investor-fit-advisor/scripts/build_model.py a.json model.xlsx
-python skill/investor-fit-advisor/scripts/review_model.py model.xlsx
+pip install -r requirements.txt pytest
+pytest -q                          # 56 tests (Excel recalculation tests need LibreOffice)
+python scripts/package_skill.py    # rebuild dist/investor-fit-advisor.zip
 ```
 
-(Run `python scripts/package_skill.py` once before using the skill scripts from the repo. It
-copies the shared model code into the skill folder.)
-
-**Deploy:** Vercel (free; `vercel.json` and `api/index.py` included) or any container host using
-the `Dockerfile`. The server is stateless.
+**Optional connector (MCP server).** The same engine is also available as a remote connector for
+Claude, Claude Desktop and Claude Code (`investor_fit/server.py`). It offers 10 tools, including
+`match_company`, `score_found_funder`, `project_financials` and `review_projections`. It's useful
+if you want one hosted, always-current list for many users. Run it with
+`MCP_TRANSPORT=http python -m investor_fit.server`, or deploy it with the included `vercel.json`
+or `Dockerfile`. The skill does not need it.
 
 ## Limits
 
-- The verified database is a starting core. Funders found online are labelled unverified until
-  reviewed.
+- The built-in list is a starting set. Funders found online are labelled unverified.
+- Results depend on what funders publish; many banks share full criteria only on request. Add
+  those through your own list.
 - The model is a planning tool built from the company's own assumptions. It is not audited.
-- **This is not financial or investment advice.** Always confirm criteria with the funder.
+- **This is not financial or investment advice.** Always confirm requirements with the funder.
 
 ## Licence
 

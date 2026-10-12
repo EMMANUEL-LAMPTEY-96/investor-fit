@@ -57,7 +57,7 @@ mcp = MCPServer(
     description="Match companies to funders worldwide, check readiness, and build or review financial models.",
     instructions=INSTRUCTIONS,
     website_url="https://github.com/EMMANUEL-LAMPTEY-96/investor-fit",
-    version="0.2.0",
+    version="0.3.0",
 )
 
 READ_ONLY = ToolAnnotations(readOnlyHint=True, openWorldHint=False, idempotentHint=True)

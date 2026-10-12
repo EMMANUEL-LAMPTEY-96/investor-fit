@@ -4,4 +4,5 @@ __pycache__/
 .env
 .pytest_cache/
 .vercel/
-skill/investor-fit-advisor/scripts/finmodel/
+skill/investor-fit-advisor/scripts/investor_fit/
+skill/investor-fit-advisor/scripts/data/

@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from finmodel.review import assess_projections, scan_workbook  # noqa: E402
+from investor_fit.finmodel.review import assess_projections, scan_workbook  # noqa: E402
 
 
 def main(argv):
