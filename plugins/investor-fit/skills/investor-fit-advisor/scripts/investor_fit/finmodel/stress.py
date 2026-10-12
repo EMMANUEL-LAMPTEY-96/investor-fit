@@ -53,7 +53,7 @@ def stress_tests(raw: dict[str, Any]) -> list[dict[str, Any]]:
     a = base["assumptions"]
     rows = [{"test": "Plan as submitted (base case)", **_summary(base, a["minimum_dscr"], a["minimum_cash"])}]
     for label, shock in STRESS_TESTS:
-        if "fx_devaluation" in shock and not a["foreign_currency"]:
+        if "fx_devaluation" in shock and not a["foreign_currencies"]:
             continue  # nothing is in foreign currency, so a devaluation changes nothing
         r = run(raw, shocks=shock)
         rows.append({"test": label, **_summary(r, a["minimum_dscr"], a["minimum_cash"])})
@@ -89,8 +89,8 @@ def breaking_points(raw: dict[str, Any]) -> list[dict[str, Any]]:
     a = run(raw)["assumptions"]
     has_debt = any(d is not None for d in run(raw)["ratios"]["dscr"])
     checks = [("price", "fall in selling prices", -1), ("volume", "fall in volumes", -1)]
-    if a["foreign_currency"]:
-        checks.append(("fx_devaluation", f"fall of the {a['currency']} against the {a['foreign_currency']}", 1))
+    if a["foreign_currencies"]:
+        checks.append(("fx_devaluation", f"fall of the {a['currency']} against the {' and '.join(a['foreign_currencies'])}", 1))
     tests = []
     if has_debt:
         tests.append(("dscr", a["minimum_dscr"], f"debt cover below the lender minimum of {a['minimum_dscr']:.2f}x"))
@@ -143,7 +143,7 @@ def loan_structures(raw: dict[str, Any], max_options: int = 5) -> dict[str, Any]
                 for grace in range(0, min(3, tenor)):
                     mod = {"tenor_years": tenor, "grace_years": grace, "amount": round(nd["amount"] * share, 2)}
                     if ccy != nd["currency"]:
-                        mod.update(currency=ccy, amount=round(nd["amount"] * share * a["fx"]["rate"], 2),
+                        mod.update(currency=ccy, amount=round(nd["amount"] * share * a["fx"][nd["currency"]]["rate"], 2),
                                    interest_rate=float(local_rate))
                     if mod["tenor_years"] == nd["tenor_years"] and mod["grace_years"] == nd["grace_years"] \
                             and share == 1.0 and ccy == nd["currency"]:
@@ -224,7 +224,7 @@ def stress_findings(raw: dict[str, Any], analysis: dict[str, Any] | None = None)
                 f"A {b['breaks_at']} {b['shock']} is enough to leave repayments uncovered",
                 "There is almost no room for error; small, normal swings would put the loan at risk.",
                 "Build headroom: lower debt service, higher margins or more equity.")
-    if a["foreign_currency"] and a["new_debt"]["currency"] != a["currency"]:
+    if a["foreign_currencies"] and a["new_debt"]["currency"] != a["currency"]:
         fx_test = next((t for t in analysis["stress_tests"] if t["test"].startswith("Local currency falls")), None)
         if fx_test and not fx_test["passes_lender_test"]:
             add("high", "Currency risk", "Local currency falls 30%",

@@ -5,8 +5,10 @@ the user's Claude code-execution sandbox.
 
 The model reports in one currency (`currency`, normally the company's local currency). A loan or a
 revenue stream can be in another currency (e.g. a USD loan, or export sales priced in USD); it is
-converted with `fx`: `rate` = local units per 1 foreign unit at the start, `depreciation` = expected
-yearly fall of the local currency (0.08 = 8% a year). Rates are fractions: 0.15 means 15%.
+converted with `fx`, per foreign currency: {"USD": {"rate": 12, "depreciation": 0.08}, "EUR": {...}}.
+`rate` = local units per 1 foreign unit at the start, `depreciation` = expected yearly fall of the
+local currency against it (0.08 = 8% a year). With a single foreign currency the short form
+{"rate": 12, "depreciation": 0.08} also works. Rates are fractions: 0.15 means 15%.
 A value that varies by year can be a single number (same every year) or a list, one per year.
 
 Scenarios: `scenarios` sets the shocks for "downside" and "upside" (defaults below). Shock keys:
@@ -119,7 +121,7 @@ DEFAULTS: dict[str, Any] = {
     "use_of_funds": [],
     "minimum_dscr": 1.25,
     "minimum_cash": 0,
-    "fx": {"rate": 1.0, "depreciation": 0.0},
+    "fx": {},
 }
 
 OPENING_KEYS = ("cash", "receivables", "inventory", "ppe_net", "payables")
@@ -233,15 +235,23 @@ def normalize(raw: dict[str, Any]) -> dict[str, Any]:
     a["currency"] = home
     ed["currency"] = (ed.get("currency") or home).upper()
     nd["currency"] = (nd.get("currency") or home).upper()
-    foreign = {c for c in [ed["currency"], nd["currency"]] + [s["currency"] for s in streams] if c != home}
-    if len(foreign) > 1:
-        problems.append(f"only one foreign currency is supported per model (found {', '.join(sorted(foreign))})")
-    fx = a.get("fx") or {}
-    a["foreign_currency"] = next(iter(foreign), None)
-    a["fx"] = {"rate": float(fx.get("rate") or 0) if foreign else 1.0,
-               "depreciation": series(fx.get("depreciation", 0), n, "fx depreciation")}
-    if foreign and a["fx"]["rate"] <= 0:
-        problems.append(f"fx.rate is required: {home} per 1 {a['foreign_currency']} at the start of the first year")
+    foreign = sorted({c for c in [ed["currency"], nd["currency"]] + [s["currency"] for s in streams] if c != home})
+    fx_in = a.get("fx") or {}
+    if "rate" in fx_in or "depreciation" in fx_in:  # one-currency form: {"rate": .., "depreciation": ..}
+        if len(foreign) > 1:
+            problems.append("several foreign currencies are used, so give fx per currency, e.g. "
+                            '{"USD": {"rate": 12, "depreciation": 0.08}, "EUR": {"rate": 13, "depreciation": 0.06}}')
+        fx_in = {c: fx_in for c in foreign}
+    fx_in = {str(k).upper(): v for k, v in fx_in.items()}
+    a["fx"] = {}
+    for c in foreign:
+        spec = fx_in.get(c) or {}
+        rate = float(spec.get("rate") or 0)
+        if rate <= 0:
+            problems.append(f"fx.{c}.rate is required: {home} per 1 {c} at the start of the first year")
+        a["fx"][c] = {"rate": rate, "depreciation": series(spec.get("depreciation", 0), n, f"fx {c} depreciation")}
+    a["foreign_currencies"] = foreign
+    a["foreign_currency"] = foreign[0] if foreign else None  # kept for older callers
 
     sc = {k: dict(v) for k, v in DEFAULT_SCENARIOS.items()}
     for name, shocks in (a.get("scenarios") or {}).items():

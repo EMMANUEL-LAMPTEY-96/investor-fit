@@ -63,12 +63,17 @@ def test_bad_assumptions_are_explained():
 
 # ---------- Excel matches the engine
 
-CASES = [("seed1", 1), ("seed7", 7), ("fx", "fx")]
+CASES = [("seed1", 1), ("seed7", 7), ("fx", "fx"), ("two_ccy", "two")]
 
 
 def _case(key):
     if key == "fx":
         return copy.deepcopy(EXAMPLE_FX)
+    if key == "two":  # USD exports, EUR loan, cedi model
+        a = copy.deepcopy(EXAMPLE_FX)
+        a["new_debt"].update(currency="EUR", amount=450000)
+        a["fx"] = {"USD": {"rate": 12.0, "depreciation": 0.08}, "EUR": {"rate": 13.0, "depreciation": 0.06}}
+        return a
     a = random_assumptions(key)
     if key == 7:  # also exercise a foreign-currency loan on a random case
         a.update(currency="KES", fx={"rate": 130, "depreciation": 0.06})
@@ -119,7 +124,7 @@ def test_excel_formulas_match_engine(tmp_path, name, key, selector, scenario):
         else:
             assert got == pytest.approx(expected, abs=0.01), f"{sheet}/{label}"
 
-    if scenario == "base" and name != "fx":
+    if scenario == "base" and name not in ("fx", "two_ccy"):
         # The reviewer finds nothing wrong with a model we built.
         assert scan_workbook(str(out / "model.xlsx"))["findings"] == []
 

@@ -57,7 +57,7 @@ mcp = MCPServer(
     description="Match companies to funders worldwide, check readiness, and build or review financial models.",
     instructions=INSTRUCTIONS,
     website_url="https://github.com/EMMANUEL-LAMPTEY-96/investor-fit",
-    version="0.5.0",
+    version="0.6.0",
 )
 
 READ_ONLY = ToolAnnotations(readOnlyHint=True, openWorldHint=False, idempotentHint=True)
@@ -219,6 +219,23 @@ def review_projections(projections: dict[str, Any]) -> dict[str, Any]:
         return assess_projections(projections)
     except Exception as e:  # malformed input from the caller
         return {"error": f"Could not read the projections: {e}. Check that each series is a list of numbers."}
+
+
+@mcp.tool(annotations=READ_ONLY)
+def check_documents(evidence: dict[str, Any]) -> dict[str, Any]:
+    """Check the figures read from a company's documents: what is missing, inconsistent or implausible.
+
+    Read every document first and pass what they say (format: documents, facts with metric/period/
+    value/document/page, optional bank statement summary; see the skill's references/evidence.md).
+    Returns a verdict, every issue with where it is and a question for the user, and the
+    high-priority questions. Work through them with the user before building a model.
+    """
+    from .evidence import check
+
+    try:
+        return check(evidence)
+    except Exception as e:  # malformed input from the caller
+        return {"error": f"Could not read the evidence: {e}"}
 
 
 @mcp.tool(annotations=READ_ONLY)

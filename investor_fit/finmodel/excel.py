@@ -93,8 +93,11 @@ class Layout:
         return r if sheet == here else f"{sheet}!{r}"
 
 
-def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None) -> str:
-    """analysis: output of stress.full_analysis(raw); computed here if not given."""
+def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None,
+                   sources: dict | None = None, quality: dict | None = None) -> str:
+    """analysis: output of stress.full_analysis(raw); computed here if not given.
+    sources: {"register": [...], "history": {...}} from from_evidence.derive (model built from documents).
+    quality: the data-quality report from evidence.check."""
     a = normalize(raw)
     if analysis is None:
         from .stress import full_analysis
@@ -109,6 +112,28 @@ def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None)
 
     idx = lambda t, here: L.a(S, "idx", t, here)  # noqa: E731
 
+    # One exchange-rate row per foreign currency (the code sits in column B, today's rate in C).
+    fx_codes = a["foreign_currencies"] or [a["currency"]]
+    fx_spec = {c: a["fx"].get(c, {"rate": 1.0, "depreciation": [0.0] * n}) for c in fx_codes}
+
+    def _fx_rows():
+        r1, rk = L.rows[(S, "fx0")], L.rows[(S, f"fx{len(fx_codes) - 1}")]
+        return r1, rk
+
+    def FX(ccy_ref: str, t: int, here: str) -> str:
+        """Rate for the currency named in ccy_ref in year t (1 if it is the model currency)."""
+        r1, rk = _fx_rows()
+        p = "" if here == S else f"{S}!"
+        return (f"IF({ccy_ref}={A('ccy', None, here)},1,INDEX({p}{col(t)}${r1}:{col(t)}${rk},"
+                f"MATCH({ccy_ref},{p}$B${r1}:$B${rk},0)))")
+
+    def FX0(ccy_ref: str, here: str | None) -> str:
+        """Today's rate for the currency named in ccy_ref (1 if it is the model currency)."""
+        r1, rk = _fx_rows()
+        p = "" if here == S else f"{S}!"
+        return (f"IF({ccy_ref}={A('ccy', None, here)},1,INDEX({p}$C${r1}:$C${rk},"
+                f"MATCH({ccy_ref},{p}$B${r1}:$B${rk},0)))")
+
     # ------------------------------------------------------------------ Assumptions
     asum: list = [
         ("section", "General"),
@@ -117,13 +142,14 @@ def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None)
         ("line", "tax_rate", "Corporate tax rate", "%", ("C", a["tax_rate"], PCT), None),
         ("section", "Currency (rows below only matter if a loan or a sale is in a foreign currency)"),
         ("line", "ccy", "Model currency (all figures are in this)", "code", ("C", a["currency"], TXT), None),
-        ("line", "fccy", "Foreign currency", "code", ("C", a["foreign_currency"] or a["currency"], TXT), None),
-        ("line", "fx_spot", "Exchange rate at start (model currency per 1 foreign)", "rate",
-         ("C", a["fx"]["rate"], NUM2), None),
-        ("line", "fx_dep", "Expected yearly fall of the model currency", "%", None, ("inputs", a["fx"]["depreciation"], PCT)),
-        ("line", "fx", "Exchange rate used (includes the scenario)", "rate", None,
-         ("formula", lambda t, r: (f"=$C${L.rows[(S, 'fx_spot')]}*(1+{SH('fx_devaluation')})*(1+{col(1)}{L.rows[(S, 'fx_dep')]})"
-                                   if t == 1 else f"={col(t - 1)}{r}*(1+{col(t)}{L.rows[(S, 'fx_dep')]})"), NUM2)),
+        *[("line", f"fx_dep{j}", f"{c}: expected yearly fall of the {a['currency']}", "%", None,
+           ("inputs", fx_spec[c]["depreciation"], PCT)) for j, c in enumerate(fx_codes)],
+        *[("line", f"fx{j}", f"{c}: exchange rate ({a['currency']} per 1 {c}); C = today, then rate used",
+           c, ("C", fx_spec[c]["rate"], NUM2),
+           ("formula", (lambda j: lambda t, r: (
+               f"=$C${r}*(1+{SH('fx_devaluation')})*(1+{col(1)}{L.rows[(S, f'fx_dep{j}')]})" if t == 1
+               else f"={col(t - 1)}{r}*(1+{col(t)}{L.rows[(S, f'fx_dep{j}')]})"))(j), NUM2))
+          for j, c in enumerate(fx_codes)],
         ("section", "Revenue"),
     ]
     for i, s in enumerate(a["revenue_streams"], 1):
@@ -197,7 +223,7 @@ def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None)
     for i, s in enumerate(a["revenue_streams"], 1):
         inc.append(("line", f"rev{i}", s["name"], lambda t, i=i: (
             f"={A(f's{i}_vol', t, I)}*(1+{SH('volume')})*{A(f's{i}_price', t, I)}*(1+{SH('price')})"
-            f"*IF({A(f's{i}_ccy', None, I)}={A('ccy', None, I)},1,{A('fx', t, I)})"), NUM, None))
+            f"*{FX(A(f's{i}_ccy', None, I), t, I)}"), NUM, None))
     rev_keys = [f"rev{i}" for i in range(1, len(a["revenue_streams"]) + 1)]
     inc += [
         ("line", "revenue", "Total revenue", lambda t: "=" + "+".join(L.a(I, k, t, I) for k in rev_keys), NUM, "total"),
@@ -236,12 +262,11 @@ def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None)
     prev = lambda key, t: (None if t == 1 else L.a(D, key, t - 1, D))  # noqa: E731
     def rates(prefix):
         """Exchange-rate rows for one loan: start-of-year and during-year rates (1 if same currency)."""
-        same = f"{A(prefix + '_ccy', None, D)}={A('ccy', None, D)}"
+        ref = A(prefix + "_ccy", None, D)
         return [
             ("line", f"{prefix}_f0", "Exchange rate at start of year",
-             lambda t: (f"=IF({same},1,{A('fx_spot', None, D)})" if t == 1
-                        else f"=IF({same},1,{A('fx', t - 1, D)})"), NUM2, None),
-            ("line", f"{prefix}_f", "Exchange rate during year", lambda t: f"=IF({same},1,{A('fx', t, D)})", NUM2, None),
+             lambda t: (f"={FX0(ref, D)}" if t == 1 else f"={FX(ref, t - 1, D)}"), NUM2, None),
+            ("line", f"{prefix}_f", "Exchange rate during year", lambda t: f"={FX(ref, t, D)}", NUM2, None),
         ]
 
     def local(prefix):
@@ -311,7 +336,7 @@ def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None)
          lambda: f"=SUM(C{L.rows[(B, 'cash')]}:C{L.rows[(B, 'ppe')]})"),
         ("section", "Liabilities and equity"),
         ("line", "ap", "Payables", lambda t: f"={L.a(I, 'cogs', t, B)}*{A('ap_days', None, B)}/365", NUM, None, lambda: f"={A('ob_ap', None, B)}"),
-        ("line", "debt", "Debt", lambda t: f"={L.a(D, 'debt_total', t, B)}", NUM, "link", lambda: f"={A('ed_bal', None, B)}*IF({A('ed_ccy', None, B)}={A('ccy', None, B)},1,{A('fx_spot', None, B)})"),
+        ("line", "debt", "Debt", lambda t: f"={L.a(D, 'debt_total', t, B)}", NUM, "link", lambda: f"={A('ed_bal', None, B)}*{FX0(A('ed_ccy', None, B), B)}"),
         ("line", "equity", "Equity",
          lambda t: f"={bprev('equity', t)}+{L.a('CashFlow', 'eq_in', t, B)}+{L.a(I, 'ni', t, B)}", NUM, None,
          lambda: f"=C{L.rows[(B, 'ta')]}-C{L.rows[(B, 'ap')]}-C{L.rows[(B, 'debt')]}"),
@@ -549,7 +574,7 @@ def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None)
     r += 1
     checks = [
         ("New money raised (loan + equity, at the starting exchange rate)",
-         f"={A('nd_amt')}*IF({A('nd_ccy')}={A('ccy')},1,{A('fx_spot')})+{A('ne_amt')}", NUM),
+         f"={A('nd_amt')}*{FX0(A('nd_ccy'), None)}+{A('ne_amt')}", NUM),
         ("Total use of funds", f"={A('uof_total')}", NUM),
         ("Raised minus use of funds", f"=C{r}-C{r + 1}", NUM),
         ("Lowest cash without the new funding (approx.)", f"=MIN({L.rng(C, 'cash_ex')})", NUM),
@@ -680,6 +705,88 @@ def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None)
             put([o["description"], o["base_min_dscr"], o["downside_min_dscr"]], [None, MULT, MULT])
     put([ls.get("note", "")], [None])
 
+    # ------------------------------------------------------------------ Data quality and Sources (built from documents)
+    SEV_FILL = {"critical": "F4CCCC", "high": "FCE4D6", "medium": "FFF2CC", "low": "EDEDED"}
+    ORIGIN_FILL = {"document": "E2EFDA", "derived": "DDEBF7", "user": "EDE7F6", "suggested": "FFF2CC", "placeholder": "F4CCCC"}
+
+    def table_sheet(title, subtitle, widths):
+        ws = wb.create_sheet(title)
+        ws.sheet_view.showGridLines = False
+        for i, w in enumerate(widths):
+            ws.column_dimensions[get_column_letter(i + 1)].width = w
+        ws["A1"] = a["company_name"]
+        ws["A1"].font = TITLE
+        ws["A2"] = subtitle
+        ws["A2"].font = GREY
+        return ws
+
+    def header_row(ws, r, cols):
+        for c, h in enumerate(cols, 1):
+            cell = ws.cell(row=r, column=c, value=h)
+            cell.fill, cell.font = HEAD_FILL, HEAD
+
+    if quality:
+        dq = table_sheet("Data quality", quality.get("verdict", ""), (10, 13, 46, 30, 58, 58))
+        header_row(dq, 4, ["Priority", "Type", "Issue", "Where", "Detail", "Question / what to provide"])
+        for r_, x in enumerate(quality.get("items", []), 5):
+            vals = [x["severity"].upper(), x["category"], x["issue"], x.get("where") or "", x["detail"], x["question_for_user"]]
+            for c, v in enumerate(vals, 1):
+                cell = dq.cell(row=r_, column=c, value=v)
+                cell.font = BLACK
+                cell.alignment = Alignment(wrap_text=True, vertical="top")
+            dq.cell(row=r_, column=1).fill = PatternFill("solid", fgColor=SEV_FILL.get(x["severity"], "FFFFFF"))
+        dq.freeze_panes = "A5"
+
+    if sources:
+        so = table_sheet("Sources", "Where every assumption came from. Green = read from a document, blue = calculated "
+                         "from documents, purple = given by the company, yellow = suggested (please confirm), "
+                         "red = placeholder (unknown).", (40, 34, 14, 44, 60))
+        header_row(so, 4, ["Assumption", "Value", "Origin", "Source", "How it was worked out"])
+        r_ = 5
+        for x in sources.get("register", []):
+            v = x["value"]
+            if isinstance(v, list):
+                parts = []
+                for it in v:
+                    if isinstance(it, dict):
+                        name = it.get("item") or it.get("name") or ""
+                        amt = it.get("amount", it.get("amounts"))
+                        if isinstance(amt, list):
+                            amt = " / ".join(f"{float(z):,.0f}" for z in amt)
+                        elif isinstance(amt, (int, float)):
+                            amt = f"{amt:,.0f}"
+                        parts.append(f"{name}: {amt}")
+                    else:
+                        parts.append(str(it))
+                v = "; ".join(parts) or "none"
+            elif isinstance(v, dict):
+                v = ", ".join(f"{k}: {val}" for k, val in v.items())
+            vals = [x["label"], v, x["origin"], x.get("source") or "", x.get("method") or ""]
+            for c, val in enumerate(vals, 1):
+                cell = so.cell(row=r_, column=c, value=val)
+                cell.font = BLACK
+                cell.alignment = Alignment(wrap_text=True, vertical="top")
+                if c == 2 and isinstance(val, float) and abs(val) < 1:
+                    cell.number_format = "0.0%"
+                elif c == 2 and isinstance(val, (int, float)):
+                    cell.number_format = NUM
+            so.cell(row=r_, column=3).fill = PatternFill("solid", fgColor=ORIGIN_FILL.get(x["origin"], "FFFFFF"))
+            r_ += 1
+        hist = sources.get("history") or {}
+        if hist.get("rows"):
+            r_ += 2
+            so.cell(row=r_, column=1, value=f"Historical figures used ({a['currency']}, best source per figure)").font = SECTION
+            r_ += 1
+            header_row(so, r_, ["Item"] + list(hist["periods"]) + ["Source (latest year)"])
+            for row_ in hist["rows"]:
+                r_ += 1
+                so.cell(row=r_, column=1, value=row_["metric"].replace("_", " ").capitalize()).font = BLACK
+                for c, v in enumerate(row_["values"], 2):
+                    cell = so.cell(row=r_, column=c, value=v)
+                    cell.font, cell.number_format = BLACK, NUM
+                so.cell(row=r_, column=len(hist["periods"]) + 2, value=row_["sources"][-1] or "").font = GREY
+        so.freeze_panes = "A5"
+
     # ------------------------------------------------------------------ Cover
     cover.sheet_view.showGridLines = False
     cover.column_dimensions["A"].width = 3
@@ -699,6 +806,9 @@ def build_workbook(raw: dict[str, Any], path: str, analysis: dict | None = None)
         ("Scenarios: one switch moves the whole model between the base plan, a downside and an upside case", BLACK),
         ("Assumptions · Income · Debt · Balance · CashFlow · Ratios", BLACK),
         ("Stress tests: what happens under each shock, where the plan breaks, and loan terms that would pass", BLACK),
+        *([("Data quality: what is missing, inconsistent or implausible in the documents, with what to provide", BLACK)]
+          if quality else []),
+        *([("Sources: where every assumption came from, and the historical figures used", BLACK)] if sources else []),
         ("", None),
         ("Conventions", SECTION),
         ("Annual periods. New loans are drawn at the start of the drawdown year; repayments at year end.", BLACK),

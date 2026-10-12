@@ -116,14 +116,61 @@ from public sources: DFIs, SME finance research and lender guidance.
 
 ## Step 4: Financial model
 
-### No model yet: build one
+### The company shared documents: build the model from them
+
+Use this whenever the user provides financial documents. The documents, not a questionnaire, are
+the starting point.
+
+1. **Read every document** and write `evidence.json` (format:
+   [references/evidence.md](references/evidence.md); example: `SKILL_DIR/examples/evidence_example.json`):
+   - one entry per document: type, period, currency, unit ("in thousands" → 1000), audited, signed,
+     audit opinion, expiry date;
+   - one fact per figure: metric, period, value as printed, document, page. Record the same figure
+     from every document that states it — the differences are what the checks look for;
+   - **bank statements:** if there are 300 transactions or fewer, record each one; if more,
+     record monthly totals (deposits, withdrawals, closing balance) plus the unusual items
+     (large or one-off amounts, returned or unpaid items, transfers to owners, months with no
+     income).
+2. **Check:** `python3 SKILL_DIR/scripts/check_documents.py evidence.json`. It lists what is missing,
+   inconsistent (between and within documents) and implausible, plus document problems (expired,
+   unsigned, qualified audit opinion) and bank-statement warnings.
+3. **Work through the findings with the user before building.** This is a conversation, not a
+   form:
+   - start with the critical and high items; explain each in plain words (what you found, where,
+     why a funder would care);
+   - ask the question, and suggest where the answer may be (a note in the accounts, the
+     accountant, a bank letter, last year's tax return);
+   - when two documents disagree, say which you would use and why (audited accounts beat
+     management accounts beat the business plan) and let the user decide;
+   - brainstorm explanations together (a dividend? a one-off order? sales banked elsewhere?) and
+     record what you agree; new documents go into `evidence.json` and you re-run the check.
+   Keep going until the important points are resolved or the user cannot resolve them.
+4. **Build:** `python3 SKILL_DIR/scripts/build_from_documents.py evidence.json --out "<Company> financial model.xlsx" --answers answers.json`
+   - assumptions are worked out from the documents (growth from history, cost ratios, payment
+     days, tax rate, opening balances, existing debt) and each one is recorded with its source;
+   - if it returns `needs_input`, the questions are things only the user knows (the funding
+     sought, what the money is for, planned investment, loan terms). Ask them, put the answers in
+     `answers.json` (same layout as the assumptions) and run again;
+   - **placeholders only as a last resort:** if, after working through it, the user cannot
+     provide something, explain what a placeholder means, and with their agreement add
+     `--allow-placeholders`. Placeholders are listed in the output and shown in red on the
+     Sources sheet. Never present a model with placeholders as final.
+5. **Deliver:** the Excel file has every sheet of a normal model plus **Data quality** (all
+   findings, with what to provide) and **Sources** (where every assumption came from, colour-coded,
+   and the historical figures used). In the chat, summarise: the verdict, what was fixed together,
+   what is still open, the assumptions to confirm (suggested or placeholder), then the model's
+   findings as for any built model (funding need, debt cover, stress tests, loan options).
+   `<file>_assumptions.json` can be edited and rebuilt with `build_model.py`.
+
+### No documents and no model: build one from the user's answers
 
 1. Collect assumptions (questions and format: [references/assumptions.md](references/assumptions.md)).
    Use uploaded accounts for the opening balance sheet and history. Ask a few questions at a time.
    If the user does not know a value, propose one, say why, and mark it as your suggestion.
-   - **Currency:** model in the company's own currency. If the loan, or some sales, are in another
-     currency, set that item's `currency`, and `fx.rate` (local per 1 foreign unit today) and
-     `fx.depreciation` (expected yearly fall; use the currency's recent history and say so).
+   - **Currency:** model in the company's own currency, any currency code. If a loan or some sales
+     are in another currency, set that item's `currency` and give `fx` per foreign currency:
+     `{"USD": {"rate": 12, "depreciation": 0.08}, "EUR": {...}}` (local per 1 unit today, and the
+     expected yearly fall; look up today's rate and the recent trend, and cite the source).
    - **Scenarios:** the default downside is a realistic bad year (prices −10%, volumes −15%,
      direct costs +3 points, fixed costs +5%, customers 15 days slower, rates +2 points, a 20%
      currency fall). Adjust `scenarios` to the sector if the user or the evidence suggests it.
