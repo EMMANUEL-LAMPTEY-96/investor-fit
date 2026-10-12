@@ -89,6 +89,29 @@ Leave out anything unknown. Allowed values are at the end of this file.
 - Combine into a **readiness plan**: the gaps that block the most funders first, with what each fix
   unlocks.
 
+## Step 3b: Pre-mortem: what will the funder object to?
+
+Before the company applies, anticipate the objections each shortlisted funder is likely to raise.
+The patterns (`scripts/data/objections.json`, readable list in `references/objections.md`) come
+from public sources: DFIs, SME finance research and lender guidance.
+
+1. Add what you know to `facts.json` (`{"facts": {...}}`); leave out what is unknown:
+   `top_customer_share`, `top3_customer_share` (fractions of revenue), `collateral_cover`
+   (collateral ÷ loan), `dscr_min` (from the model), `debt_to_ebitda`, `debt_to_equity`,
+   `revenue_currency`, `loan_currency`, `revenue_cagr`, `loan_tenor_years`, `has_board`,
+   `founder_dependent`, `management_team_size`, `tax_clearance_current`, `esg_policy`,
+   `excluded_activity`, `use_of_funds_defined`, `has_offtake_contract`,
+   `beneficial_ownership_documented`, `related_party_issues`, `credit_history_issues`,
+   `records_inconsistent`, `exit_plan`.
+2. Run `python scripts/match_funders.py company.json --facts facts.json ...` to add
+   `likely_objections` to every match, and for a detailed view of one funder:
+   `python scripts/pre_mortem.py company.json --facts facts.json --funder "<name or id>"`
+   (add `--funders user_funders.json` for the user's own institutions, or `--type bank` for a
+   typical funder of that type).
+3. For each serious objection, tell the founder: what the funder will see, why it matters, how to
+   answer it, and which evidence to prepare. Mention when a pattern's evidence is `limited`.
+4. The `to_prepare` list is what the company should have ready even though nothing is wrong yet.
+
 ## Step 4: Financial model
 
 ### No model yet: build one
@@ -122,8 +145,8 @@ Write it for the founder, in plain language:
 1. **Snapshot**: the company in two lines.
 2. **Top matches**: table of rank, funder, source, fit score, readiness, ticket range, why it fits.
 3. **Your institutions**: every one the user named, with result.
-4. **Funder notes** for the top 3–5: why it fits, gaps and how to close them, documents still
-   needed, how to apply, source link.
+4. **Funder notes** for the top 3–5: why it fits, likely objections and how to answer them, gaps
+   and how to close them, documents still needed, how to apply, source link.
 5. **Checklist results**, if any.
 6. **Financial model**: verdict and key findings.
 7. **Readiness plan** and **next 30 days**: three concrete actions.

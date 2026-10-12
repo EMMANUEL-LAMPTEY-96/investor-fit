@@ -346,7 +346,11 @@ def _slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")
 
 
-def match(c: Any, funders: list[dict], top_n: int = 10, conflicts: list[dict] | None = None) -> dict[str, Any]:
+def match(c: Any, funders: list[dict], top_n: int = 10, conflicts: list[dict] | None = None,
+          facts: dict | None = None) -> dict[str, Any]:
+    """facts: optional extra company facts (see objections.py). When given, each match also lists
+    the objections that funder is likely to raise."""
+    raw = c.as_dict() if hasattr(c, "as_dict") else (c.model_dump() if hasattr(c, "model_dump") else dict(c))
     c = make_profile(c)
     results, excluded = [], {}
     for f in funders:
@@ -358,6 +362,17 @@ def match(c: Any, funders: list[dict], top_n: int = 10, conflicts: list[dict] | 
     results.sort(key=lambda r: (-r["fit_score"], READINESS_ORDER[r["readiness"]], r["name"]))
     for i, r in enumerate(results, 1):
         r["rank"] = i
+    if facts is not None:
+        from .objections import pre_mortem
+
+        by_id = {f.get("id") or _slug(f.get("name", "")): f for f in funders}
+        company_facts = {**raw, **facts}
+        for r in results[:top_n] + [x for x in results[top_n:] if x.get("source") == "user_provided"]:
+            pm = pre_mortem(company_facts, by_id.get(r["funder_id"], {}))
+            r["likely_objections"] = [
+                {"objection": o["objection"], "finding": o["finding"], "severity": o["severity"]}
+                for o in pm["likely_objections"]
+            ]
 
     missing_fields = [k for k in (
         "stage", "amount_usd", "annual_revenue_usd", "years_operating", "audited_years", "impact_focus",
@@ -370,7 +385,8 @@ def match(c: Any, funders: list[dict], top_n: int = 10, conflicts: list[dict] | 
         "matches": results[:top_n],
         # Institutions the user asked about are always reported, wherever they rank or if ruled out.
         "your_institutions": [
-            {k: r[k] for k in ("rank", "name", "fit_score", "readiness", "gaps", "documents", "access_route")}
+            {k: r.get(k) for k in ("rank", "name", "fit_score", "readiness", "gaps", "documents", "access_route",
+                                   "likely_objections")}
             for r in results if r.get("source") == "user_provided"
         ] + [
             {"name": x["funder"], "ruled_out_by": reason, "detail": x["detail"]}
