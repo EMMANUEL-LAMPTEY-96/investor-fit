@@ -9,7 +9,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from .models import CompanyProfile
+from .profile import Profile, make_profile
 from .vocab import INSTRUMENT_FAMILIES, REGION_SPECIFICITY, RELATED_SECTORS, STAGES, region_covers
 
 WEIGHTS = {"sector": 30, "stage": 20, "ticket": 20, "impact": 15, "geography": 15}
@@ -43,7 +43,7 @@ def _ticket_range(f: dict) -> str:
 
 # ---------------------------------------------------------------- filters
 
-def _geo(c: CompanyProfile, f: dict) -> tuple[bool, int, str]:
+def _geo(c: Profile, f: dict) -> tuple[bool, int, str]:
     geos = f.get("geographies") or []
     if c.country in [g.upper() for g in geos]:
         return True, 15, f"names {c.country} as a target country"
@@ -55,7 +55,7 @@ def _geo(c: CompanyProfile, f: dict) -> tuple[bool, int, str]:
     return False, 0, "does not cover this country"
 
 
-def _instrument(c: CompanyProfile, f: dict) -> tuple[bool, str]:
+def _instrument(c: Profile, f: dict) -> tuple[bool, str]:
     offered = set(f.get("instruments") or [])
     if not c.instruments_wanted:
         return True, "open to any instrument"
@@ -68,7 +68,7 @@ def _instrument(c: CompanyProfile, f: dict) -> tuple[bool, str]:
     return False, "offers " + (", ".join(sorted(offered)) or "nothing stated") + ", not what the company wants"
 
 
-def _sector(c: CompanyProfile, f: dict) -> tuple[bool, int, str]:
+def _sector(c: Profile, f: dict) -> tuple[bool, int, str]:
     secs = set(f.get("sectors") or [])
     if c.sector in secs:
         return True, 30, f"targets {c.sector}"
@@ -80,7 +80,7 @@ def _sector(c: CompanyProfile, f: dict) -> tuple[bool, int, str]:
     return False, 0, "sector not covered"
 
 
-def _stage(c: CompanyProfile, f: dict) -> tuple[bool, int, str]:
+def _stage(c: Profile, f: dict) -> tuple[bool, int, str]:
     stages = f.get("stages") or []
     if c.stage is None:
         return True, 10, "company stage not given"
@@ -95,7 +95,7 @@ def _stage(c: CompanyProfile, f: dict) -> tuple[bool, int, str]:
     return False, 0, f"prefers {', '.join(stages)}"
 
 
-def _ticket(c: CompanyProfile, f: dict) -> tuple[bool, int, str, bool]:
+def _ticket(c: Profile, f: dict) -> tuple[bool, int, str, bool]:
     """Returns (keep, points, reason, outside_range)."""
     lo, hi, amt = f.get("ticket_min_usd"), f.get("ticket_max_usd"), c.amount_usd
     if amt is None:
@@ -116,7 +116,7 @@ def _ticket(c: CompanyProfile, f: dict) -> tuple[bool, int, str, bool]:
     return True, 16, f"{_usd(amt)} fits their range ({_ticket_range(f)})", False
 
 
-def _impact(c: CompanyProfile, f: dict) -> tuple[int, str]:
+def _impact(c: Profile, f: dict) -> tuple[int, str]:
     req = (f.get("requirements") or {}).get("impact_required")
     if req:
         if c.impact_focus is True:
@@ -129,7 +129,7 @@ def _impact(c: CompanyProfile, f: dict) -> tuple[int, str]:
 
 # ---------------------------------------------------------------- gaps
 
-def readiness_gaps(c: CompanyProfile, f: dict) -> dict[str, Any]:
+def readiness_gaps(c: Profile, f: dict) -> dict[str, Any]:
     """Compare the company with each stated requirement and say what would unlock it."""
     r = f.get("requirements") or {}
     gaps: list[dict[str, Any]] = []
@@ -223,10 +223,25 @@ def readiness_gaps(c: CompanyProfile, f: dict) -> dict[str, Any]:
     }
 
 
+def _documents(c: Profile, f: dict) -> list[dict[str, str]] | None:
+    """The funder's document list, marked against the documents the company says it holds."""
+    req = f.get("required_documents") or []
+    if not req:
+        return None
+    held = [d.lower() for d in (getattr(c, "documents", None) or [])]
+    out = []
+    for doc in req:
+        words = [w for w in doc.lower().replace("/", " ").split() if len(w) > 2]
+        have = any(doc.lower() == h or (words and all(w in h for w in words)) for h in held)
+        out.append({"document": doc, "status": "have" if have else ("missing" if held else "unknown")})
+    return out
+
+
 # ---------------------------------------------------------------- main entry
 
-def evaluate(c: CompanyProfile, f: dict) -> dict[str, Any]:
+def evaluate(c: Any, f: dict) -> dict[str, Any]:
     """Score one funder for one company. Returns excluded=True with a reason if a hard filter fails."""
+    c = make_profile(c)
     ok_geo, geo_pts, geo_why = _geo(c, f)
     if not ok_geo:
         return {"excluded": True, "reason": "geography", "detail": geo_why}
@@ -260,16 +275,19 @@ def evaluate(c: CompanyProfile, f: dict) -> dict[str, Any]:
         })
         ready["readiness"] = "not_yet"
 
+    docs = _documents(c, f)
     return {
         "excluded": False,
-        "funder_id": f["id"],
-        "name": f["name"],
-        "type": f["type"],
+        "source": f.get("source", "built_in"),
+        "funder_id": f.get("id") or _slug(f.get("name", "funder")),
+        "name": f.get("name", "Unnamed funder"),
+        "type": f.get("type"),
         "fit_score": score,
         "score_breakdown": breakdown,
         "ticket_range": _ticket_range(f),
         "instruments": f.get("instruments", []),
         **ready,
+        "documents": docs,
         "how_to_apply": f.get("how_to_apply"),
         "apply_url": f.get("apply_url"),
         "sources": f.get("source_urls", []),
@@ -283,12 +301,58 @@ def evaluate(c: CompanyProfile, f: dict) -> dict[str, Any]:
 READINESS_ORDER = {"ready": 0, "check_first": 1, "not_yet": 2}
 
 
-def match(c: CompanyProfile, funders: list[dict], top_n: int = 10) -> dict[str, Any]:
+SOURCE_LABEL = {
+    "user_provided": "provided by the user (treated as authoritative for this case)",
+    "built_in": "built-in checked list",
+    "found_online": "found online during this conversation (not verified)",
+}
+
+
+def combine_sources(built_in: list[dict], user: list[dict] | None = None,
+                    found: list[dict] | None = None) -> tuple[list[dict], list[dict]]:
+    """Merge funder lists. The same institution from several sources keeps the most trusted
+    version (user > built-in > found online); differing facts are reported as conflicts."""
+    order = [("user_provided", user or []), ("built_in", built_in or []), ("found_online", found or [])]
+    chosen: dict[str, dict] = {}
+    conflicts: list[dict] = []
+    keys = ("ticket_min_usd", "ticket_max_usd", "geographies", "sectors", "stages", "instruments")
+    rkeys = ("min_revenue_usd", "min_years_operating", "audited_years", "export_history_required", "impact_required")
+    for source, items in order:
+        for raw in items:
+            f = {**raw, "source": source}
+            f.setdefault("requirements", {})
+            f.setdefault("id", _slug(f.get("name", "funder")))
+            key = _slug(f.get("name") or f["id"])
+            if key not in chosen:
+                chosen[key] = f
+                continue
+            kept = chosen[key]
+            diffs = []
+            for k in keys:
+                if f.get(k) not in (None, []) and kept.get(k) not in (None, []) and f.get(k) != kept.get(k):
+                    diffs.append({"field": k, kept["source"]: kept.get(k), source: f.get(k)})
+            for k in rkeys:
+                a, b = (kept.get("requirements") or {}).get(k), (f.get("requirements") or {}).get(k)
+                if a is not None and b is not None and a != b:
+                    diffs.append({"field": f"requirements.{k}", kept["source"]: a, source: b})
+            if diffs:
+                conflicts.append({"funder": kept.get("name"), "used": kept["source"], "differences": diffs})
+    return list(chosen.values()), conflicts
+
+
+def _slug(text: str) -> str:
+    import re
+
+    return re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")
+
+
+def match(c: Any, funders: list[dict], top_n: int = 10, conflicts: list[dict] | None = None) -> dict[str, Any]:
+    c = make_profile(c)
     results, excluded = [], {}
     for f in funders:
         r = evaluate(c, f)
         if r["excluded"]:
-            excluded.setdefault(r["reason"], []).append({"funder": f["name"], "detail": r["detail"]})
+            excluded.setdefault(r["reason"], []).append({"funder": f.get("name", "Unnamed funder"), "source": f.get("source", "built_in"), "detail": r["detail"]})
         else:
             results.append(r)
     results.sort(key=lambda r: (-r["fit_score"], READINESS_ORDER[r["readiness"]], r["name"]))
@@ -304,6 +368,18 @@ def match(c: CompanyProfile, funders: list[dict], top_n: int = 10) -> dict[str, 
         "funders_screened": len(funders),
         "matches_found": len(results),
         "matches": results[:top_n],
+        # Institutions the user asked about are always reported, wherever they rank or if ruled out.
+        "your_institutions": [
+            {k: r[k] for k in ("rank", "name", "fit_score", "readiness", "gaps", "documents", "access_route")}
+            for r in results if r.get("source") == "user_provided"
+        ] + [
+            {"name": x["funder"], "ruled_out_by": reason, "detail": x["detail"]}
+            for reason, xs in excluded.items() for x in xs if x.get("source") == "user_provided"
+        ],
+        "sources_used": {s: sum(1 for f in funders if f.get("source", "built_in") == s) for s in SOURCE_LABEL
+                         if any(f.get("source", "built_in") == s for f in funders)},
+        "source_labels": SOURCE_LABEL,
+        "conflicts": conflicts or [],
         "excluded_summary": {k: len(v) for k, v in excluded.items()},
         "excluded_detail": excluded,
         "profile_fields_missing": missing_fields,

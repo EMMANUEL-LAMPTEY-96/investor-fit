@@ -12,16 +12,17 @@ from .vocab import region_covers
 DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "funders.json"
 
 
-@lru_cache(maxsize=1)
-def load_funders() -> list[dict[str, Any]]:
-    with open(DATA_FILE, encoding="utf-8") as fh:
+@lru_cache(maxsize=4)
+def load_funders(path: str | None = None) -> list[dict[str, Any]]:
+    """The built-in checked list (or another file in the same format)."""
+    with open(path or DATA_FILE, encoding="utf-8") as fh:
         return json.load(fh)
 
 
 def get_funder(funder_id: str) -> dict[str, Any] | None:
     fid = funder_id.strip().lower()
     for f in load_funders():
-        if f["id"] == fid:
+        if f.get("id") == fid:
             return f
     return None
 
@@ -44,7 +45,7 @@ def search(
         if funder_type and f.get("type") != funder_type:
             continue
         if text:
-            hay = " ".join([f["name"], f.get("notes") or "", " ".join(f["requirements"].get("other") or [])]).lower()
+            hay = " ".join([f.get("name", ""), f.get("notes") or "", " ".join((f.get("requirements") or {}).get("other") or [])]).lower()
             if text.lower() not in hay:
                 continue
         out.append(f)
@@ -56,9 +57,9 @@ def brief(f: dict[str, Any]) -> dict[str, Any]:
     from .matching import _ticket_range
 
     return {
-        "funder_id": f["id"],
-        "name": f["name"],
-        "type": f["type"],
+        "funder_id": f.get("id"),
+        "name": f.get("name"),
+        "type": f.get("type"),
         "geographies": f.get("geographies"),
         "sectors": f.get("sectors"),
         "stages": f.get("stages"),

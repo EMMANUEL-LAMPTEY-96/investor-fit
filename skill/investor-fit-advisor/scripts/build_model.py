@@ -14,10 +14,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from finmodel.assumptions import EXAMPLE, AssumptionError  # noqa: E402
-from finmodel.engine import funding_analysis, run  # noqa: E402
-from finmodel.excel import build_workbook  # noqa: E402
-from finmodel.review import assess_projections, from_engine  # noqa: E402
+from investor_fit.finmodel.assumptions import EXAMPLE, AssumptionError  # noqa: E402
+from investor_fit.finmodel.engine import funding_analysis, run  # noqa: E402
+from investor_fit.finmodel.excel import build_workbook  # noqa: E402
+from investor_fit.finmodel.review import assess_projections, from_engine  # noqa: E402
 
 
 def main(argv):
