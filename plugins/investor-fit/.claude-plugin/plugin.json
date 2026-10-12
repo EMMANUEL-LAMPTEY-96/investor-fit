@@ -1,6 +1,6 @@
 {
   "name": "investor-fit",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Capital-raising advisor: finds funders worldwide, checks readiness against funder criteria and any checklist, flags likely objections, and builds or reviews financial models.",
   "author": {
     "name": "Emmanuel Nii Lante Lamptey"

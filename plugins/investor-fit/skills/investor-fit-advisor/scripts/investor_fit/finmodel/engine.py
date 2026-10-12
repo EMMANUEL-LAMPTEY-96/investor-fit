@@ -10,8 +10,8 @@ Conventions (also written on the workbook's Cover sheet):
 - Depreciation is straight line, a full year in the year of purchase.
 - Tax is charged on positive profit only; losses are not carried forward (conservative).
 - No dividends.
-- Foreign currency: the rate starts at fx.rate, falls by any scenario devaluation in year 1, then
-  by fx.depreciation each year. Sales, interest and repayments use each year's rate; a loan drawn
+- Foreign currencies: each rate starts at fx[ccy].rate, falls by any scenario devaluation in year 1,
+  then by fx[ccy].depreciation each year. Sales, interest and repayments use each year's rate; a loan drawn
   at the start of a year converts at the opening rate. The balance outstanding is revalued each
   year; the change is an exchange loss (or gain) in the income statement, which is not cash and is
   added back in the cash flow.
@@ -89,18 +89,20 @@ def run(raw: dict[str, Any], *, include_new_funding: bool = True, scenario: str 
     yrs = list(range(1, n + 1))
     home = a["currency"]
 
-    # Exchange rate: local units per 1 foreign unit
-    spot = a["fx"]["rate"]
-    fx_rate = []
-    for t in yrs:
-        prev = spot if t == 1 else fx_rate[-1]
-        fx_rate.append(prev * (1 + (sh["fx_devaluation"] if t == 1 else 0)) * (1 + a["fx"]["depreciation"][t - 1]))
+    # Exchange rates: local units per 1 unit of each foreign currency
+    fx_rate: dict[str, list[float]] = {}
+    for c, spec in a["fx"].items():
+        path = []
+        for t in yrs:
+            prev = spec["rate"] if t == 1 else path[-1]
+            path.append(prev * (1 + (sh["fx_devaluation"] if t == 1 else 0)) * (1 + spec["depreciation"][t - 1]))
+        fx_rate[c] = path
 
     def factor(ccy):
-        return [1.0] * n if ccy == home else fx_rate
+        return [1.0] * n if ccy == home else fx_rate[ccy]
 
     def factor0(ccy):
-        return 1.0 if ccy == home else spot
+        return 1.0 if ccy == home else a["fx"][ccy]["rate"]
 
     # Revenue
     streams = []
@@ -203,7 +205,7 @@ def run(raw: dict[str, Any], *, include_new_funding: bool = True, scenario: str 
         "shocks": sh,
         "years": [a["first_year"] + i for i in range(n)],
         "currency": home,
-        "fx_rate": fx_rate if a["foreign_currency"] else None,
+        "fx_rate": fx_rate or None,
         "income_statement": {
             "revenue_by_stream": {s["name"]: s["revenue"] for s in streams},
             "revenue": revenue, "cogs": cogs, "gross_profit": gross, "variable_opex": var_opex,
@@ -262,14 +264,15 @@ def funding_analysis(raw: dict[str, Any], scenario: str = "base") -> dict[str, A
     worst_year = base["years"][without["balance_sheet"]["cash"].index(min_cash_without)]
     need = max(0.0, a["minimum_cash"] - min_cash_without)
     nd = a["new_debt"]
-    loan_local_at_start = nd["amount"] * (a["fx"]["rate"] if nd["currency"] != a["currency"] else 1.0)
+    spot = a["fx"][nd["currency"]]["rate"] if nd["currency"] != a["currency"] else 1.0
+    loan_local_at_start = nd["amount"] * spot
     raised = loan_local_at_start + a["new_equity"]["amount"]
     uof = sum(u["amount"] for u in a["use_of_funds"])
     m = key_metrics(base)
     return {
         "currency": a["currency"],
         "funding_raised": raised,
-        "funding_raised_note": (f"loan of {nd['amount']:,.0f} {nd['currency']} converted at {a['fx']['rate']:g}"
+        "funding_raised_note": (f"loan of {nd['amount']:,.0f} {nd['currency']} converted at {spot:g}"
                                 if nd["currency"] != a["currency"] else None),
         "funding_need": need,
         "funding_need_year": worst_year if need > 0 else None,

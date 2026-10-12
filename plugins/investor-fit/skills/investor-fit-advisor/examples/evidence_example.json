@@ -1,0 +1,72 @@
+{
+  "company": "Example Cashew Processing Ltd",
+  "currency": "GHS",
+  "as_of": "2026-10-13",
+  "documents": [
+    {"id": "afs2024", "name": "Audited accounts 2024.pdf", "type": "audited_accounts", "period_end": "2024-12-31",
+     "currency": "GHS", "unit": 1000, "audited": true, "signed": true, "audit_opinion": "unqualified"},
+    {"id": "afs2025", "name": "Audited accounts 2025.pdf", "type": "audited_accounts", "period_end": "2025-12-31",
+     "currency": "GHS", "unit": 1000, "audited": true, "signed": false, "audit_opinion": "unqualified"},
+    {"id": "plan", "name": "Business plan 2026.pdf", "type": "business_plan", "currency": "GHS", "unit": 1},
+    {"id": "tcc", "name": "Tax clearance certificate.pdf", "type": "tax_clearance", "expiry_date": "2026-03-31"},
+    {"id": "loan", "name": "Ecobank loan agreement.pdf", "type": "loan_agreement"}
+  ],
+  "facts": [
+    {"metric": "revenue", "period": "2024", "value": 12100, "document": "afs2024", "page": 5},
+    {"metric": "cogs", "period": "2024", "value": 7800, "document": "afs2024", "page": 5},
+    {"metric": "gross_profit", "period": "2024", "value": 4300, "document": "afs2024", "page": 5},
+    {"metric": "operating_expenses", "period": "2024", "value": 2900, "document": "afs2024", "page": 5},
+    {"metric": "depreciation", "period": "2024", "value": 520, "document": "afs2024", "page": 5},
+    {"metric": "interest", "period": "2024", "value": 410, "document": "afs2024", "page": 5},
+    {"metric": "profit_before_tax", "period": "2024", "value": 470, "document": "afs2024", "page": 5},
+    {"metric": "tax", "period": "2024", "value": 118, "document": "afs2024", "page": 5},
+    {"metric": "net_income", "period": "2024", "value": 352, "document": "afs2024", "page": 5},
+    {"metric": "cash", "period": "2024", "value": 450, "document": "afs2024", "page": 6},
+    {"metric": "receivables", "period": "2024", "value": 1350, "document": "afs2024", "page": 6},
+    {"metric": "inventory", "period": "2024", "value": 1700, "document": "afs2024", "page": 6},
+    {"metric": "ppe_net", "period": "2024", "value": 5200, "document": "afs2024", "page": 6},
+    {"metric": "total_assets", "period": "2024", "value": 8700, "document": "afs2024", "page": 6},
+    {"metric": "payables", "period": "2024", "value": 900, "document": "afs2024", "page": 6},
+    {"metric": "total_debt", "period": "2024", "value": 1700, "document": "afs2024", "page": 6},
+    {"metric": "equity", "period": "2024", "value": 6100, "document": "afs2024", "page": 6},
+
+    {"metric": "revenue", "period": "2025", "value": 14200, "document": "afs2025", "page": 5},
+    {"metric": "cogs", "period": "2025", "value": 9100, "document": "afs2025", "page": 5},
+    {"metric": "gross_profit", "period": "2025", "value": 5100, "document": "afs2025", "page": 5},
+    {"metric": "operating_expenses", "period": "2025", "value": 3300, "document": "afs2025", "page": 5},
+    {"metric": "depreciation", "period": "2025", "value": 560, "document": "afs2025", "page": 5},
+    {"metric": "interest", "period": "2025", "value": 330, "document": "afs2025", "page": 5},
+    {"metric": "profit_before_tax", "period": "2025", "value": 910, "document": "afs2025", "page": 5},
+    {"metric": "tax", "period": "2025", "value": 228, "document": "afs2025", "page": 5},
+    {"metric": "net_income", "period": "2025", "value": 682, "document": "afs2025", "page": 5},
+    {"metric": "cash", "period": "2025", "value": 600, "document": "afs2025", "page": 6},
+    {"metric": "receivables", "period": "2025", "value": 1440, "document": "afs2025", "page": 6},
+    {"metric": "inventory", "period": "2025", "value": 1800, "document": "afs2025", "page": 6},
+    {"metric": "ppe_net", "period": "2025", "value": 4800, "document": "afs2025", "page": 6},
+    {"metric": "total_assets", "period": "2025", "value": 8640, "document": "afs2025", "page": 6},
+    {"metric": "payables", "period": "2025", "value": 960, "document": "afs2025", "page": 6},
+    {"metric": "total_debt", "period": "2025", "value": 1200, "document": "afs2025", "page": 6},
+    {"metric": "equity", "period": "2025", "value": 6250, "document": "afs2025", "page": 6},
+
+    {"metric": "revenue", "period": "2025", "value": 16800000, "document": "plan", "page": 12},
+    {"metric": "revenue", "period": "2027", "value": 31000000, "document": "plan", "page": 14}
+  ],
+  "bank": {
+    "account": "Ecobank operating account (GHS)",
+    "currency": "GHS",
+    "months": [
+      {"month": "2025-01", "deposits": 640000, "withdrawals": 610000, "closing_balance": 210000},
+      {"month": "2025-02", "deposits": 700000, "withdrawals": 690000, "closing_balance": 220000},
+      {"month": "2025-03", "deposits": 820000, "withdrawals": 760000, "closing_balance": 280000},
+      {"month": "2025-04", "deposits": 760000, "withdrawals": 800000, "closing_balance": 240000},
+      {"month": "2025-05", "deposits": 690000, "withdrawals": 720000, "closing_balance": 210000},
+      {"month": "2025-06", "deposits": 0, "withdrawals": 260000, "closing_balance": -50000},
+      {"month": "2025-07", "deposits": 710000, "withdrawals": 600000, "closing_balance": 60000},
+      {"month": "2025-08", "deposits": 780000, "withdrawals": 700000, "closing_balance": 140000},
+      {"month": "2025-09", "deposits": 2900000, "withdrawals": 900000, "closing_balance": 2140000},
+      {"month": "2025-10", "deposits": 720000, "withdrawals": 2300000, "closing_balance": 560000},
+      {"month": "2025-11", "deposits": 760000, "withdrawals": 740000, "closing_balance": 580000},
+      {"month": "2025-12", "deposits": 790000, "withdrawals": 770000, "closing_balance": 600000}
+    ]
+  }
+}

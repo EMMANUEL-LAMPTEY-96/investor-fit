@@ -27,7 +27,7 @@ def test_fx_loan_creates_exchange_loss_and_drawdown_at_opening_rate():
     assert sum(r["income_statement"]["fx_loss"]) > 0
     # revaluation: closing debt in cedis = USD balance x closing rate
     usd_close = r["debt"]["new_in_loan_currency"]["closing"][2]
-    assert r["debt"]["new"]["closing"][2] == pytest.approx(usd_close * r["fx_rate"][2])
+    assert r["debt"]["new"]["closing"][2] == pytest.approx(usd_close * r["fx_rate"]["USD"][2])
 
 
 def test_devaluation_hurts_a_local_earner_with_a_dollar_loan_but_helps_an_exporter():
@@ -40,10 +40,11 @@ def test_devaluation_hurts_a_local_earner_with_a_dollar_loan_but_helps_an_export
     assert hurt and helped
 
 
-def test_two_foreign_currencies_are_rejected():
+def test_missing_rate_for_a_second_currency_is_explained():
     a = copy.deepcopy(EXAMPLE_FX)
     a["existing_debt"]["currency"] = "EUR"
-    with pytest.raises(AssumptionError, match="one foreign currency"):
+    a["fx"] = {"USD": {"rate": 12}}
+    with pytest.raises(AssumptionError, match="fx.EUR.rate"):
         normalize(a)
 
 
@@ -90,3 +91,24 @@ def test_full_analysis_runs_fast():
     t = time.time()
     full_analysis(EXAMPLE_FX)
     assert time.time() - t < 5
+
+
+def _two_currency_example():
+    a = copy.deepcopy(EXAMPLE_FX)
+    a["new_debt"]["currency"] = "EUR"
+    a["new_debt"]["amount"] = 450000
+    a["fx"] = {"USD": {"rate": 12.0, "depreciation": 0.08}, "EUR": {"rate": 13.0, "depreciation": 0.06}}
+    return a
+
+
+def test_two_foreign_currencies_each_use_their_own_rate():
+    a = _two_currency_example()
+    r = run(a)
+    assert set(r["fx_rate"]) == {"USD", "EUR"}
+    assert r["debt"]["new"]["drawdown"][0] == pytest.approx(450000 * 13.0)
+    assert r["fx_rate"]["EUR"][0] == pytest.approx(13.0 * 1.06)
+    assert all(abs(x) < 0.01 for x in r["balance_sheet"]["balance_check"])
+    one_form = copy.deepcopy(a)
+    one_form["fx"] = {"rate": 12, "depreciation": 0.08}
+    with pytest.raises(AssumptionError, match="per currency"):
+        normalize(one_form)

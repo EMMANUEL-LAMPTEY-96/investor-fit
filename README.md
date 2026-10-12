@@ -35,23 +35,35 @@ One zip file, uploaded to Claude. No server, no API key, no cost.
 5. **Checks any checklist** you give it: a bank's requirements, a grant's eligibility rules, an
    investor's document list, your own policy. Each item is marked met, missing, unknown or
    needs review, with the evidence and the fix.
-6. **Builds a financial model** if the company has none: a 5-year, three-statement Excel model
+6. **Builds a financial model from the company's own documents.** Claude reads the accounts, tax
+   returns, management accounts, bank statements, loan agreements and business plan. The agent
+   then:
+   - **Checks the figures** and reports what's **missing** (years, statements, loan agreements),
+     what's **inconsistent** (a balance sheet that doesn't balance, revenue that differs between
+     the accounts and the plan, bank deposits far from reported sales) and what **doesn't make
+     sense** (margin jumps, unit mix-ups, plans far above the track record, expired certificates,
+     unsigned accounts, returned payments).
+   - **Works through the findings with the user first.** Placeholders are used only as a last
+     resort, and clearly marked.
+   - **Builds the model** with a **Data quality** sheet and a **Sources** sheet showing where
+     every assumption came from.
+7. **Builds a financial model** from the user's answers if there are no documents: a 5-year, three-statement Excel model
    with live formulas and a funding check. It also:
    - **Switches scenarios.** One cell moves the whole model between the base plan, a bad year and
      a good year.
    - **Runs stress tests.** Prices −10%, volumes −20%, costs up, customers paying later, rates up,
      and a 30% currency fall.
    - **Finds breaking points,** e.g. "a 2% price fall leaves repayments uncovered".
-   - **Handles currency risk.** It models in local currency with loans or export sales in dollars
-     or euros, shows exchange losses, and spots natural hedges.
+   - **Handles currency risk.** It models in any local currency, with loans or sales in one or
+     more foreign currencies. It shows exchange losses and spots natural hedges.
    - **Suggests loan structures.** It finds the tenor, grace period, amount or currency that would
      pass the lender's test, both in the plan and in a bad year.
-7. **Reviews an existing model** in two ways:
+8. **Reviews an existing model** in two ways:
    - **Mechanics:** formula errors, numbers typed over formulas, broken patterns, hidden
      assumptions, and a balance sheet that doesn't balance.
    - **Fit with the ask:** whether growth is believable, whether the loan can be repaid (DSCR),
      whether the amount asked matches the real cash need, and whether the use of funds adds up.
-8. **Writes an investor-targeting memo** with a readiness plan and next steps.
+9. **Writes an investor-targeting memo** with a readiness plan and next steps.
 
 Example from the included sample company: it plans to raise **$500K**, but its own cash flow
 shows a peak need of about **$182K**. Debt service cover is **1.04x** in 2028, against a 1.25x
@@ -113,6 +125,8 @@ For structured input, use the templates in
 | `match_funders.py` | Rank funders from your list, the built-in list and live research. Shows score breakdown, readiness gaps, documents, sources and conflicts |
 | `pre_mortem.py` | Likely objections for one funder or funder type, with how to answer and evidence to prepare |
 | `check_checklist.py` | Test the company against any checklist |
+| `check_documents.py` | Check figures read from the company's documents: missing, inconsistent, implausible |
+| `build_from_documents.py` | Build the model from the documents, asking for what only the user knows; Data quality and Sources sheets |
 | `build_model.py` | Build the Excel financial model from assumptions, with scenarios, stress tests, breaking points and loan options |
 | `review_model.py` | Mechanical review of any Excel model, or a funder-style review of its numbers |
 
@@ -149,7 +163,7 @@ A new version of the zip picks up the changes.
 ```bash
 git clone https://github.com/EMMANUEL-LAMPTEY-96/investor-fit && cd investor-fit
 pip install -r requirements.txt pytest
-pytest -q                          # 85 tests (Excel recalculation tests need LibreOffice)
+pytest -q                          # 97 tests (Excel recalculation tests need LibreOffice)
 python scripts/package_skill.py    # rebuild the skill zip and the Claude Code plugin (commit both)
 ```
 
